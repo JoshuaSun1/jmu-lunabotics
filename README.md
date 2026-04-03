@@ -2,18 +2,38 @@
 
 ROS 2 workspace source repository for Lunabotics autonomy and controls.
 
-## Development tooling
+## Quick Start
+
+Project baseline:
+- Ubuntu 24.04 LTS
+- ROS 2 Jazzy
+
+From this repository root, run:
+
+```bash
+bash scripts/bootstrap_dev.sh
+```
+
+Then in a new shell:
+
+```bash
+cd ~/dev_ws
+source /opt/ros/jazzy/setup.bash
+source install/setup.bash
+```
+
+Full setup and troubleshooting are documented in `docs/setup.md`.
+
+## Development Tooling
 
 This repo includes:
 - `.clang-format` for C/C++ formatting
-- `.pre-commit-config.yaml` for pre-commit checks (`black`, `clang-format`, and basic file hygiene checks)
+- `.pre-commit-config.yaml` for commit-time checks (`black`, `clang-format`, and file hygiene checks)
 
-Install and enable hooks:
+If you need to re-install hooks manually:
 
 ```bash
-sudo apt-get update
-sudo apt-get install -y python3-pip clang-format
-python3 -m pip install --user pre-commit
-~/.local/bin/pre-commit install
-~/.local/bin/pre-commit run --all-files
+export PATH="$HOME/.local/bin:$PATH"
+PRE_COMMIT_HOME=.pre-commit-cache pre-commit install -f --install-hooks
+PRE_COMMIT_HOME=.pre-commit-cache pre-commit run --all-files
 ```
