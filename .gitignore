@@ -1,0 +1,18 @@
+# ROS / colcon artifacts
+build/
+install/
+log/
+
+# Python artifacts
+__pycache__/
+*.py[cod]
+.venv/
+
+# Tool caches
+.pre-commit-cache/
+
+# IDE / OS
+.vscode/
+.DS_Store
+
+.codex
