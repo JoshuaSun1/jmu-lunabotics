@@ -1,12 +1,46 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROS_DISTRO="${ROS_DISTRO:-jazzy}"
-IMAGE_TOPIC="${IMAGE_TOPIC:-/camera/image_raw}"
-
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WEBCAM_DIR="${REPO_ROOT}/sensor/webcam"
+ROBOT_CONFIG_FILE="${ROBOT_CONFIG_FILE:-${SCRIPT_DIR}/robot_config.sh}"
+
+if [[ -f "${ROBOT_CONFIG_FILE}" ]]; then
+  # shellcheck source=robot_config.sh
+  source "${ROBOT_CONFIG_FILE}"
+else
+  echo "Robot config file not found: ${ROBOT_CONFIG_FILE}" >&2
+  exit 1
+fi
+
+: "${ROS_DISTRO:=jazzy}"
+: "${IMAGE_TOPIC:=/camera/image_raw}"
+
+is_enabled() {
+  case "${1,,}" in
+    true|1|yes|on|enabled)
+      return 0
+      ;;
+    false|0|no|off|disabled)
+      return 1
+      ;;
+    *)
+      echo "Invalid boolean setting: ${1}" >&2
+      echo "Use true or false in ${ROBOT_CONFIG_FILE}." >&2
+      exit 1
+      ;;
+  esac
+}
+
+CAMERA_PID=""
+
+export VIDEO_DEVICE
+
+if ! is_enabled "${ENABLE_CAMERA}"; then
+  echo "Camera launch disabled by ${ROBOT_CONFIG_FILE}."
+  exit 0
+fi
 
 if ! command -v ros2 >/dev/null 2>&1; then
   ROS_SETUP="/opt/ros/${ROS_DISTRO}/setup.bash"
@@ -24,12 +58,19 @@ fi
 CAMERA_PID="$!"
 
 cleanup() {
-  if kill -0 "${CAMERA_PID}" >/dev/null 2>&1; then
+  if [[ -n "${CAMERA_PID}" ]] && kill -0 "${CAMERA_PID}" >/dev/null 2>&1; then
     kill "${CAMERA_PID}" >/dev/null 2>&1 || true
     wait "${CAMERA_PID}" >/dev/null 2>&1 || true
   fi
 }
 trap cleanup EXIT INT TERM
+
+if ! is_enabled "${ENABLE_VIEW_IMAGE_RAW}"; then
+  echo "Image viewer disabled by ${ROBOT_CONFIG_FILE}."
+  echo "Camera publisher is running. Press Ctrl-C to stop."
+  wait "${CAMERA_PID}"
+  exit $?
+fi
 
 echo "Waiting for ${IMAGE_TOPIC}..."
 for _ in {1..60}; do
