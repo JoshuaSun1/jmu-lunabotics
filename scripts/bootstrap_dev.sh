@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# Make sure you are in ~/dev_ws/jmu-lunabotics
+# Run with: bash scripts/bootstrap_dev.sh
 set -euo pipefail
 
 if [[ "$(id -u)" -eq 0 ]]; then
@@ -10,7 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WORKSPACE_ROOT="$(cd "${REPO_ROOT}/../.." && pwd)"
 
-echo "[1/7] Installing base system packages"
+echo "[1/8] Installing base system packages"
 sudo apt-get update
 sudo apt-get install -y \
   software-properties-common \
@@ -25,26 +27,32 @@ sudo apt-get install -y \
   clang-format
 
 if ! dpkg -s ros-jazzy-desktop >/dev/null 2>&1; then
-  echo "[2/7] Adding ROS 2 apt repository"
+  echo "[2/8] Adding ROS 2 apt repository"
   sudo curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
     -o /usr/share/keyrings/ros-archive-keyring.gpg
   echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo ${UBUNTU_CODENAME}) main" \
     | sudo tee /etc/apt/sources.list.d/ros2.list >/dev/null
 
-  echo "[3/7] Installing ROS 2 Jazzy"
+  echo "[3/8] Installing ROS 2 Jazzy"
   sudo apt-get update
   sudo apt-get install -y ros-jazzy-desktop ros-dev-tools
 else
-  echo "[2/7] ROS 2 Jazzy already installed"
+  echo "[2/8] ROS 2 Jazzy already installed"
 fi
 
-echo "[4/7] Ensuring rosdep is initialized"
+echo "[4/8] Installing ROS camera drivers"
+sudo apt-get install -y \
+  ros-jazzy-usb-cam \
+  ros-jazzy-v4l2-camera \
+  ros-jazzy-rqt-image-view
+
+echo "[5/8] Ensuring rosdep is initialized"
 if [[ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]]; then
   sudo rosdep init
 fi
 rosdep update
 
-echo "[5/7] Installing pre-commit"
+echo "[6/8] Installing pre-commit"
 python3 -m pip install --user --break-system-packages pre-commit
 
 if ! grep -q 'source /opt/ros/jazzy/setup.bash' "${HOME}/.bashrc"; then
@@ -54,7 +62,7 @@ if ! grep -q 'export PATH="$HOME/.local/bin:$PATH"' "${HOME}/.bashrc"; then
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> "${HOME}/.bashrc"
 fi
 
-echo "[6/7] Installing repo hooks and ROS dependencies"
+echo "[7/8] Installing repo hooks and ROS dependencies"
 export PATH="${HOME}/.local/bin:${PATH}"
 PRE_COMMIT_HOME="${REPO_ROOT}/.pre-commit-cache" pre-commit install -f --install-hooks
 
@@ -62,7 +70,7 @@ source /opt/ros/jazzy/setup.bash
 cd "${WORKSPACE_ROOT}"
 rosdep install --from-paths src --ignore-src -r -y
 
-echo "[7/7] Building workspace"
+echo "[8/8] Building workspace"
 colcon build --symlink-install --merge-install
 
 echo
