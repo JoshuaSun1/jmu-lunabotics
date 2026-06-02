@@ -7,6 +7,11 @@
 # Sensors
 : "${ENABLE_CAMERA:=true}"
 : "${VIDEO_DEVICE:=/dev/video2}"
+: "${CAMERA_NAME:=webcamera1}"
+: "${ENABLE_APRILTAG:=true}"
+: "${APRILTAG_TAG_ID:=0}"
+: "${APRILTAG_TAG_FAMILY:=36h11}"
+: "${APRILTAG_TAG_SIZE_METERS:=0.250}"
 
 # Visualization
 : "${ENABLE_VIEW_IMAGE_RAW:=true}"
