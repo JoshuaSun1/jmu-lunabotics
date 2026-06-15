@@ -7,15 +7,19 @@ RECTIFY_NODE="${RECTIFY_NODE:-rectify_node}"
 APRILTAG_PKG="${APRILTAG_PKG:-apriltag_ros}"
 APRILTAG_NODE="${APRILTAG_NODE:-apriltag_node}"
 APRILTAG_NS="${APRILTAG_NS:-/apriltag}"
+POSE_PUBLISHER_SCRIPT="${POSE_PUBLISHER_SCRIPT:-$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/publish_apriltag_pose.py}"
 
 IMAGE_TOPIC="${IMAGE_TOPIC:-/camera/image_raw}"
 CAMERA_INFO_TOPIC="${CAMERA_INFO_TOPIC:-/camera/camera_info}"
 RECTIFIED_IMAGE_TOPIC="${RECTIFIED_IMAGE_TOPIC:-/camera/image_rect}"
+FRAME_ID="${FRAME_ID:-camera_link}"
 
 APRILTAG_TAG_ID="${APRILTAG_TAG_ID:-0}"
 APRILTAG_TAG_FAMILY="${APRILTAG_TAG_FAMILY:-36h11}"
 APRILTAG_TAG_SIZE_METERS="${APRILTAG_TAG_SIZE_METERS:-0.162}"
 APRILTAG_FRAME_NAME="${APRILTAG_FRAME_NAME:-apriltag_${APRILTAG_TAG_ID}}"
+APRILTAG_POSE_TOPIC="${APRILTAG_POSE_TOPIC:-${APRILTAG_NS}/camera_pose}"
+APRILTAG_DISTANCE_TOPIC="${APRILTAG_DISTANCE_TOPIC:-${APRILTAG_NS}/camera_distance}"
 APRILTAG_POSE_ESTIMATION_METHOD="${APRILTAG_POSE_ESTIMATION_METHOD:-pnp}"
 
 APRILTAG_THREADS="${APRILTAG_THREADS:-1}"
@@ -93,6 +97,8 @@ echo "  image rect:   ${RECTIFIED_IMAGE_TOPIC}"
 echo "  camera info:  ${CAMERA_INFO_TOPIC}"
 echo "  detections:   ${APRILTAG_NS}/detections"
 echo "  tf child:     ${APRILTAG_FRAME_NAME}"
+echo "  pose topic:   ${APRILTAG_POSE_TOPIC}"
+echo "  distance:     ${APRILTAG_DISTANCE_TOPIC}"
 echo "  tag size (m): ${APRILTAG_TAG_SIZE_METERS}"
 
 ros2 run "${IMAGE_PROC_PKG}" "${RECTIFY_NODE}" \
@@ -121,6 +127,11 @@ if ! ros2 topic list | grep -qx "${RECTIFIED_IMAGE_TOPIC}"; then
   exit 1
 fi
 
+if [[ ! -f "${POSE_PUBLISHER_SCRIPT}" ]]; then
+  echo "Pose publisher script not found: ${POSE_PUBLISHER_SCRIPT}" >&2
+  exit 1
+fi
+
 ros2 run "${APRILTAG_PKG}" "${APRILTAG_NODE}" \
   --ros-args \
   -r __ns:="${APRILTAG_NS}" \
@@ -130,4 +141,16 @@ ros2 run "${APRILTAG_PKG}" "${APRILTAG_NODE}" \
   --params-file "${CONFIG_FILE}" &
 APRILTAG_PID="$!"
 
-wait "${APRILTAG_PID}"
+sleep 1
+if ! kill -0 "${APRILTAG_PID}" >/dev/null 2>&1; then
+  echo "AprilTag detector exited during startup." >&2
+  wait "${APRILTAG_PID}"
+  exit 1
+fi
+
+export APRILTAG_FRAME_NAME
+export APRILTAG_POSE_TOPIC
+export APRILTAG_DISTANCE_TOPIC
+export FRAME_ID
+
+exec python3 "${POSE_PUBLISHER_SCRIPT}"

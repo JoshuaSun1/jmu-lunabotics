@@ -43,6 +43,8 @@ export CAMERA_INFO_URL
 export APRILTAG_TAG_ID
 export APRILTAG_TAG_FAMILY
 export APRILTAG_TAG_SIZE_METERS
+export APRILTAG_POSE_TOPIC
+export APRILTAG_DISTANCE_TOPIC
 
 if ! is_enabled "${ENABLE_CAMERA}"; then
   echo "Camera launch disabled by ${ROBOT_CONFIG_FILE}."

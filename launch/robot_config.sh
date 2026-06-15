@@ -17,6 +17,8 @@ DEFAULT_CAMERA_INFO_FILE="${ROBOT_CONFIG_DIR}/../sensor/webcam/webcam_calibratio
 : "${APRILTAG_TAG_ID:=0}"
 : "${APRILTAG_TAG_FAMILY:=36h11}"
 : "${APRILTAG_TAG_SIZE_METERS:=0.250}"
+: "${APRILTAG_POSE_TOPIC:=/apriltag/camera_pose}"
+: "${APRILTAG_DISTANCE_TOPIC:=/apriltag/camera_distance}"
 
 # Visualization
-: "${ENABLE_VIEW_IMAGE_RAW:=true}"
+: "${ENABLE_VIEW_IMAGE_RAW:=false}"

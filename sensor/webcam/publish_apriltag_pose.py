@@ -15,7 +15,7 @@ class AprilTagPosePublisher(Node):
         super().__init__("apriltag_pose_publisher")
 
         self._tag_frame = os.environ.get("APRILTAG_FRAME_NAME", "apriltag_0")
-        self._camera_frame = os.environ.get("FRAME_ID", "camera_link")
+        self._camera_frame = os.environ.get("FRAME_ID") or "camera_link"
         self._pose_topic = os.environ.get("APRILTAG_POSE_TOPIC", "/apriltag/camera_pose")
         self._distance_topic = os.environ.get(
             "APRILTAG_DISTANCE_TOPIC", "/apriltag/camera_distance"
