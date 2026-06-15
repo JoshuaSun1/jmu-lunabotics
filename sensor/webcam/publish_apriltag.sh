@@ -52,7 +52,12 @@ fi
 
 CONFIG_FILE="$(mktemp /tmp/apriltag_config.XXXXXX.yaml)"
 RECTIFY_PID=""
+APRILTAG_PID=""
 cleanup() {
+  if [[ -n "${APRILTAG_PID}" ]] && kill -0 "${APRILTAG_PID}" >/dev/null 2>&1; then
+    kill "${APRILTAG_PID}" >/dev/null 2>&1 || true
+    wait "${APRILTAG_PID}" >/dev/null 2>&1 || true
+  fi
   if [[ -n "${RECTIFY_PID}" ]] && kill -0 "${RECTIFY_PID}" >/dev/null 2>&1; then
     kill "${RECTIFY_PID}" >/dev/null 2>&1 || true
     wait "${RECTIFY_PID}" >/dev/null 2>&1 || true
@@ -116,10 +121,13 @@ if ! ros2 topic list | grep -qx "${RECTIFIED_IMAGE_TOPIC}"; then
   exit 1
 fi
 
-exec ros2 run "${APRILTAG_PKG}" "${APRILTAG_NODE}" \
+ros2 run "${APRILTAG_PKG}" "${APRILTAG_NODE}" \
   --ros-args \
   -r __ns:="${APRILTAG_NS}" \
   -r image_rect:="${RECTIFIED_IMAGE_TOPIC}" \
   -r camera_info:="${CAMERA_INFO_TOPIC}" \
   -r detections:="${APRILTAG_NS}/detections" \
-  --params-file "${CONFIG_FILE}"
+  --params-file "${CONFIG_FILE}" &
+APRILTAG_PID="$!"
+
+wait "${APRILTAG_PID}"

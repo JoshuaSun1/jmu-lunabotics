@@ -1,0 +1,56 @@
+Date: 2026-06-2
+Branch: sun/apriltag-1
+
+//TODO:
+- Fix the pose estimate system for apriltags
+
+AprilTag Integration
+
+    New AprilTag detection pipeline (sensor/webcam/publish_apriltag.sh): Publishes AprilTag detections from webcam frames using the apriltag_ros package
+        Rectifies raw camera images before processing
+        Configurable tag ID, family, and size
+        Multiple tuning parameters (threads, decimation, blur, refinement, etc.)
+        Outputs detections and transforms for detected tags
+        Republishes the selected tag transform as a camera-relative pose topic
+        Republishes camera-relative distance as a scalar topic for quick consumers
+
+New Pose Republisher
+
+    Added sensor/webcam/publish_apriltag_pose.py
+        Subscribes to /tf for the configured AprilTag frame
+        Publishes geometry_msgs/PoseStamped on /apriltag/camera_pose by default
+        Publishes std_msgs/Float64 on /apriltag/camera_distance by default
+
+Configuration Updates
+
+    Added new environment variables in launch/robot_config.sh:
+        ENABLE_APRILTAG, APRILTAG_TAG_ID, APRILTAG_TAG_FAMILY, APRILTAG_TAG_SIZE_METERS
+        APRILTAG_POSE_TOPIC, APRILTAG_DISTANCE_TOPIC
+        CAMERA_NAME for camera identification
+
+Camera Publishing Enhancements (sensor/webcam/publish_camera.sh)
+
+    Added camera name support (CAMERA_NAME parameter)
+    Added camera calibration file support with both file and URL options
+    Default calibration file: webcam_calibration.yaml
+    Calibration info logged on startup
+
+New Camera Calibration File
+
+    Added sensor/webcam/webcam_calibration.yaml with baseline calibration parameters for the webcamera
+    Includes camera matrix, distortion coefficients, and projection matrix
+
+Launcher Updates (launch/launch_sensors.sh)
+
+    Integrated AprilTag publisher alongside camera publisher
+    Added process management for AprilTag node
+    Updated messaging from "Camera publisher" to "Sensor publishers"
+    All AprilTag-related environment variables exported
+
+Bootstrap Script Updates (scripts/bootstrap_dev.sh)
+
+    Added helper function apt_get() with timeout handling (300s for package lock)
+    Added new ROS packages to installation:
+        ros-jazzy-apriltag-ros
+        ros-jazzy-camera-calibration
+        ros-jazzy-image-proc
