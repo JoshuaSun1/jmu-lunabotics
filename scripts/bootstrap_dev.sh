@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Make sure you are in ~/dev_ws/jmu-lunabotics
-# Run with: bash scripts/bootstrap_dev.sh
+# Run from the repository root, for example:
+#   cd ~/dev_ws/src/jmu-lunabotics
+#   bash scripts/bootstrap_dev.sh
 set -euo pipefail
 
 if [[ "$(id -u)" -eq 0 ]]; then
@@ -44,7 +45,7 @@ else
   echo "[2/8] ROS 2 Jazzy already installed"
 fi
 
-echo "[4/8] Installing ROS camera drivers"
+echo "[4/8] Installing ROS launch, vision, and visualization packages"
 apt_get install -y \
   ros-jazzy-apriltag-ros \
   ros-jazzy-camera-calibration \
