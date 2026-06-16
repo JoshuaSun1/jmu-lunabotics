@@ -34,8 +34,17 @@ is_enabled() {
 }
 
 CAMERA_PID=""
+APRILTAG_PID=""
 
 export VIDEO_DEVICE
+export CAMERA_NAME
+export CAMERA_INFO_FILE
+export CAMERA_INFO_URL
+export APRILTAG_TAG_ID
+export APRILTAG_TAG_FAMILY
+export APRILTAG_TAG_SIZE_METERS
+export APRILTAG_POSE_TOPIC
+export APRILTAG_DISTANCE_TOPIC
 
 if ! is_enabled "${ENABLE_CAMERA}"; then
   echo "Camera launch disabled by ${ROBOT_CONFIG_FILE}."
@@ -57,17 +66,26 @@ fi
 "${WEBCAM_DIR}/publish_camera.sh" &
 CAMERA_PID="$!"
 
+if is_enabled "${ENABLE_APRILTAG}"; then
+  "${WEBCAM_DIR}/publish_apriltag.sh" &
+  APRILTAG_PID="$!"
+fi
+
 cleanup() {
   if [[ -n "${CAMERA_PID}" ]] && kill -0 "${CAMERA_PID}" >/dev/null 2>&1; then
     kill "${CAMERA_PID}" >/dev/null 2>&1 || true
     wait "${CAMERA_PID}" >/dev/null 2>&1 || true
+  fi
+  if [[ -n "${APRILTAG_PID}" ]] && kill -0 "${APRILTAG_PID}" >/dev/null 2>&1; then
+    kill "${APRILTAG_PID}" >/dev/null 2>&1 || true
+    wait "${APRILTAG_PID}" >/dev/null 2>&1 || true
   fi
 }
 trap cleanup EXIT INT TERM
 
 if ! is_enabled "${ENABLE_VIEW_IMAGE_RAW}"; then
   echo "Image viewer disabled by ${ROBOT_CONFIG_FILE}."
-  echo "Camera publisher is running. Press Ctrl-C to stop."
+  echo "Sensor publishers are running. Press Ctrl-C to stop."
   wait "${CAMERA_PID}"
   exit $?
 fi

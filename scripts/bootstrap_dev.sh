@@ -12,9 +12,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WORKSPACE_ROOT="$(cd "${REPO_ROOT}/../.." && pwd)"
 
+apt_get() {
+  sudo apt-get -o DPkg::Lock::Timeout=300 "$@"
+}
+
 echo "[1/8] Installing base system packages"
-sudo apt-get update
-sudo apt-get install -y \
+apt_get update
+apt_get install -y \
   software-properties-common \
   curl \
   gnupg2 \
@@ -34,14 +38,17 @@ if ! dpkg -s ros-jazzy-desktop >/dev/null 2>&1; then
     | sudo tee /etc/apt/sources.list.d/ros2.list >/dev/null
 
   echo "[3/8] Installing ROS 2 Jazzy"
-  sudo apt-get update
-  sudo apt-get install -y ros-jazzy-desktop ros-dev-tools
+  apt_get update
+  apt_get install -y ros-jazzy-desktop ros-dev-tools
 else
   echo "[2/8] ROS 2 Jazzy already installed"
 fi
 
 echo "[4/8] Installing ROS camera drivers"
-sudo apt-get install -y \
+apt_get install -y \
+  ros-jazzy-apriltag-ros \
+  ros-jazzy-camera-calibration \
+  ros-jazzy-image-proc \
   ros-jazzy-usb-cam \
   ros-jazzy-v4l2-camera \
   ros-jazzy-rqt-image-view
