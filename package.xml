@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>jmu_lunabotics</name>
+  <version>0.1.0</version>
+  <description>ROS 2 launch and support package for the JMU Lunabotics robot stack.</description>
+
+  <maintainer email="team@example.com">JMU Lunabotics</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <exec_depend>apriltag_ros</exec_depend>
+  <exec_depend>geometry_msgs</exec_depend>
+  <exec_depend>image_proc</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>rqt_image_view</exec_depend>
+  <exec_depend>rviz2</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <exec_depend>tf2_msgs</exec_depend>
+  <exec_depend>tf2_ros</exec_depend>
+  <exec_depend>usb_cam</exec_depend>
+  <exec_depend>v4l2_camera</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

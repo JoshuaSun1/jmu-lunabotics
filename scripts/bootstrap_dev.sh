@@ -49,6 +49,7 @@ apt_get install -y \
   ros-jazzy-apriltag-ros \
   ros-jazzy-camera-calibration \
   ros-jazzy-image-proc \
+  ros-jazzy-rviz2 \
   ros-jazzy-usb-cam \
   ros-jazzy-v4l2-camera \
   ros-jazzy-rqt-image-view
@@ -78,7 +79,7 @@ cd "${WORKSPACE_ROOT}"
 rosdep install --from-paths src --ignore-src -r -y
 
 echo "[8/8] Building workspace"
-colcon build --symlink-install --merge-install
+colcon build --symlink-install
 
 echo
 echo "Bootstrap complete."

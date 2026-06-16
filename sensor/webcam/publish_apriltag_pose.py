@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import math
-import os
 
 import rclpy
 from geometry_msgs.msg import TransformStamped
@@ -16,11 +15,19 @@ class AprilTagPosePublisher(Node):
     def __init__(self) -> None:
         super().__init__("apriltag_pose_publisher")
 
-        self._tag_frame = os.environ.get("APRILTAG_FRAME_NAME", "apriltag_0")
-        self._camera_frame = os.environ.get("FRAME_ID") or "camera_link"
-        self._pose_topic = os.environ.get("APRILTAG_POSE_TOPIC", "/apriltag/camera_pose")
-        self._distance_topic = os.environ.get(
-            "APRILTAG_DISTANCE_TOPIC", "/apriltag/camera_distance"
+        self.declare_parameter("tag_frame", "apriltag_0")
+        self.declare_parameter("camera_frame", "camera_link")
+        self.declare_parameter("pose_topic", "/apriltag/camera_pose")
+        self.declare_parameter("distance_topic", "/apriltag/camera_distance")
+
+        self._tag_frame = self.get_parameter("tag_frame").get_parameter_value().string_value
+        self._camera_frame = (
+            self.get_parameter("camera_frame").get_parameter_value().string_value
+            or "camera_link"
+        )
+        self._pose_topic = self.get_parameter("pose_topic").get_parameter_value().string_value
+        self._distance_topic = (
+            self.get_parameter("distance_topic").get_parameter_value().string_value
         )
         self._camera_alias_broadcaster = StaticTransformBroadcaster(self)
         self._camera_alias_published = False
