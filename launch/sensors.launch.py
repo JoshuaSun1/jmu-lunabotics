@@ -148,7 +148,7 @@ def _launch_setup(context, *args, **kwargs):
                 ),
                 Node(
                     package="jmu_lunabotics",
-                    executable="publish_apriltag_pose.py",
+                    executable="apriltag_pose_node.py",
                     name="apriltag_pose_publisher",
                     output="screen",
                     parameters=[

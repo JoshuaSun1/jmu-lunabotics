@@ -14,7 +14,7 @@ install(
 )
 
 install(
-  PROGRAMS sensor/webcam/publish_apriltag_pose.py
+  PROGRAMS nodes/sensors/apriltag_pose_node.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
