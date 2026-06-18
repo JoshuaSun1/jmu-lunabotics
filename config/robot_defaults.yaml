@@ -1,0 +1,27 @@
+launch:
+  enable_camera: true
+  enable_apriltag: true
+  enable_view_image_raw: true
+  enable_rviz: false
+  webcam_driver: v4l2_camera
+  video_device: /dev/video2
+  camera_name: webcam
+  frame_id: camera_link
+  camera_info_file: config/webcam_calibration.yaml
+  image_topic: /camera/image_raw
+  camera_info_topic: /camera/camera_info
+  rectified_image_topic: /camera/image_rect
+  apriltag_ns: /apriltag
+  apriltag_tag_id: 0
+  apriltag_tag_family: 36h11
+  apriltag_tag_size_meters: 0.250
+  apriltag_pose_topic: /apriltag/camera_pose
+  apriltag_distance_topic: /apriltag/camera_distance
+  apriltag_pose_estimation_method: pnp
+  apriltag_threads: 1
+  apriltag_decimate: 2.0
+  apriltag_blur: 0.0
+  apriltag_refine: true
+  apriltag_sharpening: 0.25
+  apriltag_debug: false
+  apriltag_max_hamming: 0

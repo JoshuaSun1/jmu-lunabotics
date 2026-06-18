@@ -3,6 +3,9 @@
 Date: 2026-06-15
 Branch: sun/apriltag-2
 
+Historical note: this entry describes the last shell-managed bring-up revision.
+Current system startup uses `ros2 launch jmu_lunabotics master.launch.py`.
+
 ## Summary
 
 Reworked the AprilTag detection stack so it is more resilient during bring-up
@@ -12,8 +15,8 @@ inputs, image rectification, and camera-relative pose/distance publishing.
 
 ## Master Launcher Updates
 
-The sensor launcher now acts as a stronger master process for the camera and
-AprilTag stack.
+At that point, the sensor launcher acted as a stronger master process for the
+camera and AprilTag stack.
 
 It now:
 
@@ -82,7 +85,7 @@ needed.
 ## Configuration Updates
 
 Updated `launch/robot_config.sh` and `launch/launch_sensors.sh` so the AprilTag
-pipeline can be driven from shared configuration.
+pipeline could be driven from shared configuration.
 
 This includes:
 

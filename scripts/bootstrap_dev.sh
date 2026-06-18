@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
-# Make sure you are in ~/dev_ws/jmu-lunabotics
-# Run with: bash scripts/bootstrap_dev.sh
+# Run from the repository root, for example:
+#   cd ~/dev_ws/src/jmu-lunabotics
+#   bash scripts/bootstrap_dev.sh
 set -euo pipefail
 
 if [[ "$(id -u)" -eq 0 ]]; then
@@ -44,11 +45,12 @@ else
   echo "[2/8] ROS 2 Jazzy already installed"
 fi
 
-echo "[4/8] Installing ROS camera drivers"
+echo "[4/8] Installing ROS launch, vision, and visualization packages"
 apt_get install -y \
   ros-jazzy-apriltag-ros \
   ros-jazzy-camera-calibration \
   ros-jazzy-image-proc \
+  ros-jazzy-rviz2 \
   ros-jazzy-usb-cam \
   ros-jazzy-v4l2-camera \
   ros-jazzy-rqt-image-view
@@ -78,7 +80,7 @@ cd "${WORKSPACE_ROOT}"
 rosdep install --from-paths src --ignore-src -r -y
 
 echo "[8/8] Building workspace"
-colcon build --symlink-install --merge-install
+colcon build --symlink-install
 
 echo
 echo "Bootstrap complete."

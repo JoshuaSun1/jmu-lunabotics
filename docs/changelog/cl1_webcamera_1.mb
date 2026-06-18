@@ -3,6 +3,9 @@
 Date: 2026-05-27
 Branch: Sun/Webcamera-1
 
+Historical note: the shell scripts described below were later retired. Current
+bring-up uses `ros2 launch jmu_lunabotics master.launch.py`.
+
 ## Summary
 
 Set up the first webcam pipeline for the ROS 2 Jazzy workspace. The new tooling
@@ -96,7 +99,7 @@ This script starts the camera publisher, waits until `/camera/image_raw` exists,
 then opens the image viewer. When the viewer exits or the launcher is stopped,
 it cleans up the camera publisher process.
 
-Run the full flow with:
+At that point, the full flow was launched with:
 
 ```bash
 ~/dev_ws/src/jmu-lunabotics/launch/launch_sensors.sh

@@ -1,6 +1,9 @@
 Date: 2026-06-2
 Branch: sun/apriltag-1
 
+Historical note: the shell launch/config files referenced below were later
+replaced by the ROS 2 launch flow in `jmu_lunabotics`.
+
 //TODO:
 - Fix the pose estimate system for apriltags
 
