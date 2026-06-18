@@ -25,16 +25,18 @@ source install/setup.bash
 Primary robot bringup now goes through ROS 2 launch:
 
 ```bash
-ros2 launch jmu_lunabotics master.launch.py
+ros2 launch jmu_lunabotics robot.launch.py
 ```
 
 Optional features can be toggled at launch time:
 
 ```bash
-ros2 launch jmu_lunabotics master.launch.py enable_rviz:=true enable_view_image_raw:=true
+ros2 launch jmu_lunabotics robot.launch.py enable_rviz:=true enable_view_image_raw:=true
 ```
 
 Default robot bringup values now live in [config/robot_defaults.yaml](/home/jsun3/dev_ws/src/jmu-lunabotics/config/robot_defaults.yaml:1), so camera, AprilTag, and visualization settings have one ROS-native home.
+
+Current source layout is intentionally small: `launch/` owns bringup entry points, `config/` owns runtime defaults and calibration, and `nodes/` owns developed ROS nodes grouped by subsystem.
 
 Full setup and troubleshooting are documented in `docs/setup.md`.
 

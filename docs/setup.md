@@ -31,7 +31,7 @@ colcon build --symlink-install
 Run your launch command in the same sourced shell:
 
 ```bash
-ros2 launch jmu_lunabotics master.launch.py
+ros2 launch jmu_lunabotics robot.launch.py
 ```
 
 The default launch settings are stored in `src/jmu-lunabotics/config/robot_defaults.yaml`.
