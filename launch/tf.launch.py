@@ -3,42 +3,37 @@ from pathlib import Path
 import yaml
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import ExecuteProcess
 from launch_ros.actions import Node
 
 
-def _load_visualization_defaults():
+def _load_tf_defaults():
     package_share = Path(get_package_share_directory("jmu_lunabotics"))
     config_path = package_share / "config" / "robot_defaults.yaml"
     with config_path.open("r", encoding="utf-8") as config_file:
         config = yaml.safe_load(config_file)
-    return package_share, config["frames"], config["arena"]
+    return config["frames"], config["mounts"]["camera"]
 
 
 def generate_launch_description() -> LaunchDescription:
-    package_share, frames, arena = _load_visualization_defaults()
-    rviz_config_path = str(package_share / "rviz" / "lunabotics.rviz")
+    frames, camera_mount = _load_tf_defaults()
     return LaunchDescription(
         [
             Node(
                 package="jmu_lunabotics",
-                executable="arena_visualizer_node.py",
-                name="arena_visualizer",
+                executable="tf_backbone_node.py",
+                name="tf_backbone",
                 output="screen",
                 parameters=[
                     {
                         "map_frame": frames["map"],
+                        "odom_frame": frames["odom"],
                         "base_frame": frames["base_link"],
-                        "arena.width_m": arena["width_m"],
-                        "arena.height_m": arena["height_m"],
-                        "arena.resolution_m_per_cell": arena["resolution_m_per_cell"],
-                        "arena.origin_xyz": arena["origin_xyz"],
+                        "camera_parent_frame": camera_mount["parent"],
+                        "camera_frame": camera_mount["child"],
+                        "camera_xyz": camera_mount["xyz"],
+                        "camera_rpy": camera_mount["rpy"],
                     }
                 ],
-            ),
-            ExecuteProcess(
-                cmd=["ros2", "run", "rviz2", "rviz2", "-d", rviz_config_path],
-                output="screen",
-            ),
+            )
         ]
     )

@@ -27,6 +27,7 @@ def generate_launch_description() -> LaunchDescription:
     defaults = _load_robot_defaults()
     sensors_launch = str(package_share / "launch" / "sensors.launch.py")
     rviz_launch = str(package_share / "launch" / "rviz.launch.py")
+    tf_launch = str(package_share / "launch" / "tf.launch.py")
     return LaunchDescription(
         [
             DeclareLaunchArgument(
@@ -128,6 +129,9 @@ def generate_launch_description() -> LaunchDescription:
                 default_value=str(defaults["apriltag_max_hamming"]),
             ),
             IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(tf_launch),
+            ),
+            IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(sensors_launch),
                 launch_arguments={
                     "enable_camera": LaunchConfiguration("enable_camera"),
@@ -165,10 +169,6 @@ def generate_launch_description() -> LaunchDescription:
             ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(rviz_launch),
-                launch_arguments={
-                    "image_topic": LaunchConfiguration("image_topic"),
-                    "camera_frame": LaunchConfiguration("frame_id"),
-                }.items(),
                 condition=IfCondition(LaunchConfiguration("enable_rviz")),
             ),
         ]
