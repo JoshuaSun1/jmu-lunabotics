@@ -1,0 +1,20 @@
+# ROS 2 / colcon output
+/build/
+/install/
+/log/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Tool caches and editor state
+.pre-commit-cache/
+.vscode/
+
+# Generated recordings and performance logs
+*.db3
+*.mcap
+/bags/
+/performance-logs/

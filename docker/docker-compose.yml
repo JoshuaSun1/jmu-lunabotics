@@ -1,0 +1,16 @@
+services:
+  lunabot:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.jetson
+      args:
+        BASE_IMAGE: ${CONTAINER_BASE_IMAGE}
+        ROS_DISTRO: ${ROS_DISTRO}
+        TARGET_PLATFORM: ${TARGET_PLATFORM}
+    image: lunabot-autonomy:phase0-${ROS_DISTRO}
+    platform: ${TARGET_PLATFORM}
+    working_dir: /workspace
+    volumes:
+      - ..:/workspace:rw
+    stdin_open: true
+    tty: true

@@ -1,0 +1,46 @@
+name: Phase 0 quality checks
+
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  hygiene:
+    name: Formatting and file hygiene
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install pre-commit
+        run: python -m pip install --upgrade pre-commit
+      - name: Run pre-commit
+        run: pre-commit run --all-files
+
+  ros-scaffold:
+    name: ROS 2 Humble scaffold build and test
+    runs-on: ubuntu-22.04
+    container: ros:humble-ros-base-jammy
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build and test tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends \
+            python3-colcon-common-extensions \
+            python3-rosdep \
+            ros-humble-ament-lint-auto \
+            ros-humble-ament-cmake-lint-cmake \
+            ros-humble-ament-cmake-pytest \
+            ros-humble-ament-cmake-xmllint
+          if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi
+          rosdep update
+      - name: Resolve declared dependencies
+        run: rosdep install --from-paths src --ignore-src --rosdistro humble -r -y
+      - name: Build and test the scaffold
+        run: ./scripts/test.sh

@@ -1,0 +1,16 @@
+---
+BasedOnStyle: LLVM
+IndentWidth: 2
+TabWidth: 2
+UseTab: Never
+ColumnLimit: 100
+AccessModifierOffset: -2
+NamespaceIndentation: None
+IndentCaseLabels: true
+BreakBeforeBraces: Attach
+AllowShortFunctionsOnASingleLine: Empty
+PointerAlignment: Left
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+Standard: c++17
+...
