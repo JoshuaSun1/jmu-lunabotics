@@ -3,7 +3,7 @@
 from pathlib import Path
 
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
+REPOSITORY_ROOT = Path(__file__).resolve().parents[2]
 PACKAGE_NAMES = (
     "lb_interfaces",
     "lb_model",
@@ -21,7 +21,7 @@ PACKAGE_NAMES = (
 def test_required_packages_have_matching_manifests() -> None:
     """Every package in the required architecture has a matching manifest."""
     for package_name in PACKAGE_NAMES:
-        manifest = REPOSITORY_ROOT / "src" / package_name / "package.xml"
+        manifest = REPOSITORY_ROOT / package_name / "package.xml"
         assert manifest.is_file(), f"missing package manifest: {manifest}"
         assert f"<name>{package_name}</name>" in manifest.read_text(encoding="utf-8")
 

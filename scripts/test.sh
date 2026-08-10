@@ -4,6 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+WORKSPACE_ROOT="${LUNABOT_WORKSPACE_ROOT:-$(cd "${REPOSITORY_ROOT}/../.." && pwd)}"
 ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-humble}"
 SKIP_BUILD="false"
 
@@ -46,12 +47,12 @@ fi
 # ROS setup scripts access optional variables that may be unset under `set -u`.
 set +u
 source "/opt/ros/${ROS_DISTRO_TO_USE}/setup.bash"
-source "${REPOSITORY_ROOT}/install/setup.bash"
+source "${WORKSPACE_ROOT}/install/setup.bash"
 set -u
-colcon --log-base "${REPOSITORY_ROOT}/log" test \
-  --base-paths "${REPOSITORY_ROOT}/src" \
-  --build-base "${REPOSITORY_ROOT}/build" \
-  --install-base "${REPOSITORY_ROOT}/install" \
+colcon --log-base "${WORKSPACE_ROOT}/log" test \
+  --base-paths "${REPOSITORY_ROOT}" \
+  --build-base "${WORKSPACE_ROOT}/build" \
+  --install-base "${WORKSPACE_ROOT}/install" \
   --event-handlers console_direct+ \
   --return-code-on-test-failure
-colcon test-result --test-result-base "${REPOSITORY_ROOT}/build" --verbose
+colcon test-result --test-result-base "${WORKSPACE_ROOT}/build" --verbose

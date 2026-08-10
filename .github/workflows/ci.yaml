@@ -26,6 +26,8 @@ jobs:
     name: ROS 2 Humble scaffold build and test
     runs-on: ubuntu-22.04
     container: ros:humble-ros-base-jammy
+    env:
+      LUNABOT_WORKSPACE_ROOT: ${{ github.workspace }}
     steps:
       - uses: actions/checkout@v4
       - name: Install build and test tools
@@ -41,6 +43,6 @@ jobs:
           if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi
           rosdep update
       - name: Resolve declared dependencies
-        run: rosdep install --from-paths src --ignore-src --rosdistro humble -r -y
+        run: rosdep install --from-paths . --ignore-src --rosdistro humble -r -y
       - name: Build and test the scaffold
         run: ./scripts/test.sh

@@ -31,8 +31,9 @@ This is a proposed baseline, not proof of target validation. See
 ├── docker/                 # arm64 Jetson container scaffold and version lock
 ├── docs/                   # architecture, safety, testing, TBDs, and change log
 ├── firmware/               # MCU placeholder; no protocol is assumed
+├── lb_*/                   # ROS 2 packages, one responsibility per package
 ├── scripts/                # scoped bootstrap, build, test, and utility scripts
-└── src/                    # ROS 2 packages, one responsibility per package
+└── resources/              # living software-development record
 ```
 
 ## Development workflow
@@ -46,6 +47,11 @@ environment:
 ./scripts/test.sh
 ./scripts/lint.sh
 ```
+
+These commands build into the enclosing `dev_ws/build`, `dev_ws/install`, and
+`dev_ws/log` directories. Source the resulting workspace with
+`source ../../install/setup.bash` when this repository is at
+`dev_ws/src/jmu-lunabotics`.
 
 The current x86_64 Ubuntu 24.04/Jazzy workstation may run structural checks
 only by explicitly setting `LUNABOT_ROS_DISTRO=jazzy`; that does **not** validate

@@ -758,17 +758,16 @@ lunabot_autonomy/
 │   ├── record_bag.sh
 │   ├── performance_test.sh
 │   └── check_tf_authority.py
-└── src/
-    ├── lb_interfaces/
-    ├── lb_model/
-    ├── lb_hardware/
-    ├── lb_localization/
-    ├── lb_sensors/
-    ├── lb_navigation/
-    ├── lb_state_manager/
-    ├── lb_safety/
-    ├── lb_launch/
-    └── lb_sim/
+├── lb_interfaces/
+├── lb_model/
+├── lb_hardware/
+├── lb_localization/
+├── lb_sensors/
+├── lb_navigation/
+├── lb_state_manager/
+├── lb_safety/
+├── lb_launch/
+└── lb_sim/
 ```
 
 ### 16.1 Package responsibilities

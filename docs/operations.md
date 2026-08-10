@@ -13,8 +13,9 @@
 
 1. Review `docker/versions.env` and `docs/resources/software_platform_lock.md`.
 2. Run `scripts/bootstrap_dev.sh --check`; it performs no installation.
-3. Build and test only within this repository using `scripts/build.sh` and
-   `scripts/test.sh`.
+3. From this repository, run `scripts/build.sh` and `scripts/test.sh`. They
+   build the repository's packages into the enclosing `dev_ws/build`,
+   `dev_ws/install`, and `dev_ws/log` directories.
 4. Do not connect or enable propulsion through software during Phase 0.
 
 The Orin Nano's firmware and JetPack image, the ZED SDK installation, power

@@ -10,16 +10,16 @@ parallel publishers or hardware-specific constants.
 
 | Source directory | ROS package | Sole responsibility |
 |---|---|---|
-| `src/lb_interfaces` | `lb_interfaces` | Custom ROS actions, messages, and services only. |
-| `src/lb_model` | `lb_model` | URDF/Xacro, meshes, ros2_control tags, static robot frames. |
-| `src/lb_hardware` | `lb_hardware` | ros2_control hardware plugin and drive transport abstraction. |
-| `src/lb_localization` | `lb_localization` | EKF configuration, tag map/localizer, localization health. |
-| `src/lb_sensors` | `lb_sensors` | LiDAR filtering, ZED depth processing, terrain hazards. |
-| `src/lb_navigation` | `lb_navigation` | Maps, Nav2 configuration, costmaps, navigation behavior trees. |
-| `src/lb_state_manager` | `lb_state_manager` | High-level mission state machine and mechanism clients. |
-| `src/lb_safety` | `lb_safety` | Motion locks, safety supervision, fault reporting. |
-| `src/lb_launch` | `lb_launch` | System launch files and environment profiles. |
-| `src/lb_sim` | `lb_sim` | Mock hardware, mock sensors, test worlds, and bag replay. |
+| `lb_interfaces` | `lb_interfaces` | Custom ROS actions, messages, and services only. |
+| `lb_model` | `lb_model` | URDF/Xacro, meshes, ros2_control tags, static robot frames. |
+| `lb_hardware` | `lb_hardware` | ros2_control hardware plugin and drive transport abstraction. |
+| `lb_localization` | `lb_localization` | EKF configuration, tag map/localizer, localization health. |
+| `lb_sensors` | `lb_sensors` | LiDAR filtering, ZED depth processing, terrain hazards. |
+| `lb_navigation` | `lb_navigation` | Maps, Nav2 configuration, costmaps, navigation behavior trees. |
+| `lb_state_manager` | `lb_state_manager` | High-level mission state machine and mechanism clients. |
+| `lb_safety` | `lb_safety` | Motion locks, safety supervision, fault reporting. |
+| `lb_launch` | `lb_launch` | System launch files and environment profiles. |
+| `lb_sim` | `lb_sim` | Mock hardware, mock sensors, test worlds, and bag replay. |
 
 ## Coordinate-frame ownership
 

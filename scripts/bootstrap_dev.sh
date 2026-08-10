@@ -4,6 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+WORKSPACE_ROOT="${LUNABOT_WORKSPACE_ROOT:-$(cd "${REPOSITORY_ROOT}/../.." && pwd)}"
 TARGET_ROS_DISTRO="humble"
 REQUESTED_ROS_DISTRO="${LUNABOT_ROS_DISTRO:-${TARGET_ROS_DISTRO}}"
 
@@ -50,6 +51,7 @@ run_check() {
   architecture="$(uname -m)"
 
   printf 'repository: %s\n' "${REPOSITORY_ROOT}"
+  printf 'workspace: %s\n' "${WORKSPACE_ROOT}"
   printf 'requested ROS distribution: %s\n' "${REQUESTED_ROS_DISTRO}"
   printf 'architecture: %s\n' "${architecture}"
 

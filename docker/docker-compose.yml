@@ -9,8 +9,8 @@ services:
         TARGET_PLATFORM: ${TARGET_PLATFORM}
     image: lunabot-autonomy:phase0-${ROS_DISTRO}
     platform: ${TARGET_PLATFORM}
-    working_dir: /workspace
+    working_dir: /workspace/src/jmu-lunabotics
     volumes:
-      - ..:/workspace:rw
+      - ..:/workspace/src/jmu-lunabotics:rw
     stdin_open: true
     tty: true

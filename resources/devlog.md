@@ -115,3 +115,38 @@ This remains a non-target host check; Humble/arm64 target validation is open.
 
 **Git evidence:** `dffd236` (`refactor: align source directories with package
 names`) records this source-directory alignment.
+
+## 2026-08-10 — Workspace layout flattened to `dev_ws`
+
+**Purpose and decision:** `dev_ws` is now the sole ROS workspace. The Git
+repository remains at `dev_ws/src/jmu-lunabotics`, with its ten `lb_*` ROS
+packages directly at repository root. Repository-local `src/`, `build/`,
+`install/`, and `log/` directories are no longer part of the active layout.
+
+**Components and dependencies:** `scripts/build.sh` and `scripts/test.sh` now
+build only this repository's packages while writing artifacts to
+`dev_ws/build`, `dev_ws/install`, and `dev_ws/log`. The CI job provides an
+explicit workspace-root override, and the container creates the same layout at
+`/workspace/src/jmu-lunabotics`. No ROS package dependencies, interfaces, TF
+ownership, parameters, safety behavior, or hardware behavior changed.
+
+**Files and documentation:** Moved all package directories to repository root;
+updated build/test/lint/bootstrap scripts, scaffold test, Docker/Compose, CI,
+README, architecture, operations, testing documentation, and the canonical
+specification. Added `.dockerignore` so generated artifacts are excluded from
+the container build context.
+
+**Verification and evidence:** A clean x86_64/Jazzy structural build wrote
+only to `dev_ws/build`, `dev_ws/install`, and `dev_ws/log`; it discovered ten
+packages and passed 44 tests. The generated artifacts under both the repository
+and `dev_ws/src` were removed after validation. This does not replace the
+pending Humble/arm64 Jetson validation.
+
+**Known validation limitation:** The pre-commit hooks through YAML validation
+passed, but the cached Black mirror hook stalled on this host and was stopped;
+the system Black executable is not installed. Shell syntax, Python compilation,
+whitespace, end-of-file, and YAML checks passed. Restore a working Black hook
+environment before treating the full lint gate as revalidated.
+
+**Git evidence:** This entry is associated with the workspace-flattening commit
+recorded in repository history.

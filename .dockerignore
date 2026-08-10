@@ -1,0 +1,8 @@
+.git
+build/
+install/
+log/
+bags/
+performance-logs/
+__pycache__/
+*.py[cod]
