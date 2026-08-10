@@ -324,7 +324,7 @@ Recommended output:
 The repository shall contain:
 
 ```text
-navigation/maps/
+lb_navigation/maps/
 ├── arena.pgm
 ├── arena.yaml
 ├── keepout_mask.pgm        # optional
@@ -759,16 +759,16 @@ lunabot_autonomy/
 │   ├── performance_test.sh
 │   └── check_tf_authority.py
 └── src/
-    ├── interfaces/
-    ├── model/
-    ├── hardware/
-    ├── localization/
-    ├── sensors/
-    ├── navigation/
-    ├── state_manager/
-    ├── safety/
-    ├── launch/
-    └── sim/
+    ├── lb_interfaces/
+    ├── lb_model/
+    ├── lb_hardware/
+    ├── lb_localization/
+    ├── lb_sensors/
+    ├── lb_navigation/
+    ├── lb_state_manager/
+    ├── lb_safety/
+    ├── lb_launch/
+    └── lb_sim/
 ```
 
 ### 16.1 Package responsibilities
@@ -791,17 +791,17 @@ lunabot_autonomy/
 Required launch files:
 
 ```text
-model/launch/description.launch.py
-hardware/launch/hardware.launch.py
-localization/launch/localization.launch.py
-sensors/launch/perception.launch.py
-navigation/launch/navigation.launch.py
-state_manager/launch/mission.launch.py
-safety/launch/safety.launch.py
-launch/launch/bringup.launch.py
-launch/launch/bench_test.launch.py
-launch/launch/bag_replay.launch.py
-sim/launch/mock_robot.launch.py
+lb_model/launch/description.launch.py
+lb_hardware/launch/hardware.launch.py
+lb_localization/launch/localization.launch.py
+lb_sensors/launch/perception.launch.py
+lb_navigation/launch/navigation.launch.py
+lb_state_manager/launch/mission.launch.py
+lb_safety/launch/safety.launch.py
+lb_launch/launch/bringup.launch.py
+lb_launch/launch/bench_test.launch.py
+lb_launch/launch/bag_replay.launch.py
+lb_sim/launch/mock_robot.launch.py
 ```
 
 `bringup.launch.py` shall support arguments including:

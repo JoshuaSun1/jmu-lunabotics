@@ -95,3 +95,23 @@ validation is still open.
 
 **Git evidence:** `cc2ec8e` (`refactor: rename ROS package architecture`)
 records the package-architecture migration.
+
+## 2026-08-10 — Source directories aligned with ROS package names
+
+**Purpose and decision:** The source-directory name now matches its ROS
+package identity exactly. For example, `src/lb_launch` contains package
+`lb_launch`; this removes the prior two-name source/package mapping.
+
+**Dependency and compatibility assessment:** Package identities, declared
+dependencies, topics, services, actions, TF ownership, parameters, safety
+behavior, and hardware interfaces are unchanged. `lb_launch` remains the safe
+identity because the ROS underlay owns the unprefixed `launch` package.
+
+**Files and verification:** Renamed all ten source directories and updated the
+source-path contract, lint script, architecture document, and canonical
+specification. A clean Jazzy structural build discovered the ten intended
+packages; its test run passed 44 tests and the repository lint run passed.
+This remains a non-target host check; Humble/arm64 target validation is open.
+
+**Git evidence:** This entry is associated with the source-directory alignment
+commit recorded in repository history.

@@ -10,16 +10,16 @@ parallel publishers or hardware-specific constants.
 
 | Source directory | ROS package | Sole responsibility |
 |---|---|---|
-| `src/interfaces` | `lb_interfaces` | Custom ROS actions, messages, and services only. |
-| `src/model` | `lb_model` | URDF/Xacro, meshes, ros2_control tags, static robot frames. |
-| `src/hardware` | `lb_hardware` | ros2_control hardware plugin and drive transport abstraction. |
-| `src/localization` | `lb_localization` | EKF configuration, tag map/localizer, localization health. |
-| `src/sensors` | `lb_sensors` | LiDAR filtering, ZED depth processing, terrain hazards. |
-| `src/navigation` | `lb_navigation` | Maps, Nav2 configuration, costmaps, navigation behavior trees. |
-| `src/state_manager` | `lb_state_manager` | High-level mission state machine and mechanism clients. |
-| `src/safety` | `lb_safety` | Motion locks, safety supervision, fault reporting. |
-| `src/launch` | `lb_launch` | System launch files and environment profiles. |
-| `src/sim` | `lb_sim` | Mock hardware, mock sensors, test worlds, and bag replay. |
+| `src/lb_interfaces` | `lb_interfaces` | Custom ROS actions, messages, and services only. |
+| `src/lb_model` | `lb_model` | URDF/Xacro, meshes, ros2_control tags, static robot frames. |
+| `src/lb_hardware` | `lb_hardware` | ros2_control hardware plugin and drive transport abstraction. |
+| `src/lb_localization` | `lb_localization` | EKF configuration, tag map/localizer, localization health. |
+| `src/lb_sensors` | `lb_sensors` | LiDAR filtering, ZED depth processing, terrain hazards. |
+| `src/lb_navigation` | `lb_navigation` | Maps, Nav2 configuration, costmaps, navigation behavior trees. |
+| `src/lb_state_manager` | `lb_state_manager` | High-level mission state machine and mechanism clients. |
+| `src/lb_safety` | `lb_safety` | Motion locks, safety supervision, fault reporting. |
+| `src/lb_launch` | `lb_launch` | System launch files and environment profiles. |
+| `src/lb_sim` | `lb_sim` | Mock hardware, mock sensors, test worlds, and bag replay. |
 
 ## Coordinate-frame ownership
 

@@ -4,24 +4,24 @@ from pathlib import Path
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
-PACKAGE_LAYOUT = {
-    "lb_interfaces": "interfaces",
-    "lb_model": "model",
-    "lb_hardware": "hardware",
-    "lb_localization": "localization",
-    "lb_sensors": "sensors",
-    "lb_navigation": "navigation",
-    "lb_state_manager": "state_manager",
-    "lb_safety": "safety",
-    "lb_launch": "launch",
-    "lb_sim": "sim",
-}
+PACKAGE_NAMES = (
+    "lb_interfaces",
+    "lb_model",
+    "lb_hardware",
+    "lb_localization",
+    "lb_sensors",
+    "lb_navigation",
+    "lb_state_manager",
+    "lb_safety",
+    "lb_launch",
+    "lb_sim",
+)
 
 
 def test_required_packages_have_matching_manifests() -> None:
     """Every package in the required architecture has a matching manifest."""
-    for package_name, source_directory in PACKAGE_LAYOUT.items():
-        manifest = REPOSITORY_ROOT / "src" / source_directory / "package.xml"
+    for package_name in PACKAGE_NAMES:
+        manifest = REPOSITORY_ROOT / "src" / package_name / "package.xml"
         assert manifest.is_file(), f"missing package manifest: {manifest}"
         assert f"<name>{package_name}</name>" in manifest.read_text(encoding="utf-8")
 
