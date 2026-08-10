@@ -148,5 +148,5 @@ the system Black executable is not installed. Shell syntax, Python compilation,
 whitespace, end-of-file, and YAML checks passed. Restore a working Black hook
 environment before treating the full lint gate as revalidated.
 
-**Git evidence:** This entry is associated with the workspace-flattening commit
-recorded in repository history.
+**Git evidence:** `6f88f8f` (`refactor: flatten ROS workspace layout`) records
+the workspace-flattening migration.
