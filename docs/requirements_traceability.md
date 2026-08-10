@@ -11,4 +11,5 @@
 | `colcon build` / `colcon test` | Build/test scripts and scaffold test | Pending validation in locked Humble environment |
 
 Requirements outside Phase 0 remain deliberately unimplemented. See
-`docs/implementation_log.md` for validation evidence as it becomes available.
+[`../resources/devlog.md`](../resources/devlog.md) for validation evidence as
+it becomes available.

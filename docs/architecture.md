@@ -44,3 +44,17 @@ drive controller -> ros2_control hardware plugin -> microcontroller -> motor
 controllers. The hardware emergency stop remains independent of ROS. Exact
 communications and drivetrain details are intentionally not assumed; see
 [the TBD register](tbd_register.md).
+
+## Chassis decision and Phase 1 boundary
+
+The planned chassis has four driven wheels and a large scooping bucket. The
+six motors listed in the BOM must not be interpreted as six drive motors; the
+non-drive motors are planned for the digging arm. The steering/kinematic model
+is still `TBD`: a bulldozer-like appearance is not sufficient evidence to
+choose skid-steer over a steering linkage.
+
+Phase 1 may use a clearly labelled synthetic geometry to exercise the four
+wheel and bucket frame tree. It must keep all physical dimensions, mounting
+transforms, footprint, and limits as unmeasured parameters rather than treating
+mock values as the robot design. The formal decision record is
+[`0001_four_wheel_chassis.md`](decisions/0001_four_wheel_chassis.md).

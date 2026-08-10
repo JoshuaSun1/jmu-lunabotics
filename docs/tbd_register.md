@@ -9,7 +9,7 @@ and a recorded validation method.
 | PLAT-01 | Runtime | Physical Orin revision, firmware, installed packages, image digest | Phase 1 | Target boot and version capture |
 | PLAT-02 | Development | x86 build/CI strategy and arm64 validation runner | Phase 0 | Documented, reproducible workflow |
 | POWER-01 | Power | Orin 19 V adapter connector, polarity, current capacity, fuse/converter | Before robot power-up | Electrical review and bench test |
-| DRIVE-01 | Drive | Differential or six-wheel skid-steer topology | Phase 1 | Mechanical confirmation |
+| DRIVE-01 | Drive | Four driven wheels confirmed; steering/kinematic topology (skid-steer or steering linkage) remains TBD | Phase 1 | Mechanical confirmation of steering actuation and turning model |
 | DRIVE-02 | Drive | Wheel radius, separation, gear ratio, encoder source/resolution, signs | Phase 1–2 | Measured calibration record |
 | DRIVE-03 | Motor comms | MCU role, CAN topology/bitrate/IDs, SPARK MAX configuration, heartbeat/fault protocol | Phase 2 | Approved protocol specification |
 | SAFE-01 | Safety | E-stop path, enable/reset policy, battery/current/tilt/staleness thresholds | Phase 2 / 9 | Electrical and safety review |
@@ -29,3 +29,9 @@ The BOM identifies an Orin Nano 8 GB, ZED Mini, six NEO 2.0 motors, six SPARK
 MAX controllers, and an ODrive USB-to-CAN adapter. It does **not** select a
 2D LiDAR or microcontroller. The listed Jetson-Nano-labelled power adapter is
 not validated for the Orin until `POWER-01` closes.
+
+On 2026-08-10, the team confirmed that the chassis will have four driven
+wheels and a large scooping bucket. The other ordered motors are intended for
+the digging arm rather than additional drive wheels. This closes the
+six-wheel interpretation of the BOM, but does not establish the steering
+kinematics, dimensions, or actuator interfaces.

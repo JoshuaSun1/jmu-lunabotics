@@ -36,6 +36,7 @@ def test_phase_zero_resources_and_version_lock_exist() -> None:
         "docs/resources/software_platform_lock.md",
         "docs/tbd_register.md",
         "docs/implementation_log.md",
+        "resources/devlog.md",
     )
     for relative_path in required_paths:
         assert (REPOSITORY_ROOT / relative_path).is_file(), f"missing: {relative_path}"

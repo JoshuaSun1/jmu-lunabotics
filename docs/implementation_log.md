@@ -1,8 +1,10 @@
 # Implementation log
 
-This is an append-only record of material repository changes. Each later entry
-must identify scope, validation, assumptions, TBDs opened or closed, and
-remaining blockers.
+This is an append-only record of material repository changes. The canonical
+ongoing development record is now [`../resources/devlog.md`](../resources/devlog.md),
+which includes the traceability fields required by the project instructions.
+Each later entry must identify scope, validation, assumptions, TBDs opened or
+closed, and remaining blockers.
 
 ## 2026-08-04 — Prototype transition and Phase 0 start
 
