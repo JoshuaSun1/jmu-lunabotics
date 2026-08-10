@@ -61,5 +61,5 @@ invented. `DRIVE-01` is narrowed to the steering/turning model; `GEOM-01`,
 path or runtime behavior. It was checked by the repository scaffold test; no
 hardware test is applicable.
 
-**Git evidence:** This entry will be associated with the documentation commit
-that records it.
+**Git evidence:** `d3cb02b` (`docs: record four-wheel chassis decision`)
+records this documentation update.
