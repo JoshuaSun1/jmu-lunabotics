@@ -16,8 +16,12 @@
 3. From this repository, run `scripts/build.sh` and `scripts/test.sh`. They
    build the repository's packages into the enclosing `dev_ws/build`,
    `dev_ws/install`, and `dev_ws/log` directories.
-4. Do not connect or enable propulsion through software during Phase 0.
+4. For Phase 1 model inspection only, source the workspace and run
+   `ros2 launch lb_sim mock_robot.launch.py use_rviz:=true` on a development
+   host. This starts only upstream mock hardware and has no `/cmd_vel` path.
+5. Do not connect or enable propulsion through software during Phase 1.
 
 The Orin Nano's firmware and JetPack image, the ZED SDK installation, power
 adapter verification, and all hardware calibration are physical-target tasks.
-They are not performed by the bootstrap script.
+They are not performed by the bootstrap script. RViz remains opt-in and should
+run offboard rather than on the competition Jetson.

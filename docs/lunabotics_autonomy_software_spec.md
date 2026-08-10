@@ -1238,7 +1238,7 @@ Before implementation begins, the team should confirm:
 
 - [ ] The computer is an NVIDIA Jetson Orin Nano 8 GB.
 - [ ] The validated JetPack, Ubuntu, ROS 2, ZED SDK, and wrapper versions.
-- [ ] Differential/skid-steer drive assumption.
+- [x] Four-wheel skid-steer drive topology confirmed on 2026-08-10; calibrated geometry remains open.
 - [ ] Motor-controller and microcontroller communication method.
 - [ ] Wheel dimensions, gearing, and encoder resolution.
 - [ ] ZED and LiDAR mounting locations.

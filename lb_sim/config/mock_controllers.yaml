@@ -1,0 +1,10 @@
+# Phase 1 mock-only controller configuration.  The rate is a visualization/test
+# cadence, not a physical control-loop requirement or safety setting.
+controller_manager:
+  ros__parameters:
+    update_rate: 30  # Hz, synthetic mock cadence
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+joint_state_broadcaster:
+  ros__parameters: {}

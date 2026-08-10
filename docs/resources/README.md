@@ -6,6 +6,10 @@ These files are reference inputs rather than generated runtime configuration.
   bill of materials, migrated unchanged from the prototype archive.
 - `software_platform_lock.md` records a researched proposed software baseline;
   it remains subject to physical Jetson validation.
+- `Current_Lunabot_Robot_Design_Codex_Handoff.md` is the user-provided current
+  mechanical-design handoff. Its confirmed four-wheel skid-steer topology is
+  used by Phase 1; its numerical geometry is explicitly preliminary and is not
+  the runtime mock-geometry source.
 
 The BOM SHA-256 at migration is:
 

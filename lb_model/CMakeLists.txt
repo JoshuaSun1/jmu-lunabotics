@@ -3,9 +3,18 @@ project(lb_model)
 
 find_package(ament_cmake REQUIRED)
 
+install(
+  DIRECTORY config launch rviz urdf
+  DESTINATION share/${PROJECT_NAME}
+  PATTERN "__pycache__" EXCLUDE
+  PATTERN "*.pyc" EXCLUDE
+)
+
 if(BUILD_TESTING)
+  find_package(ament_cmake_pytest REQUIRED)
   find_package(ament_lint_auto REQUIRED)
   ament_lint_auto_find_test_dependencies()
+  ament_add_pytest_test(model_contract test/test_model_contract.py)
 endif()
 
 ament_package()

@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<!--
+  Phase 1 mock-only robot description.
+
+  The geometry file must remain synthetic until GEOM-01 and DRIVE-02 are
+  closed.  This file deliberately has no map, odom, base_footprint, real
+  actuator linkage, safety limit, or drivetrain calibration.
+-->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="lb_phase1_mock">
+  <xacro:arg name="geometry_file" default="$(find lb_model)/config/mock_geometry.yaml"/>
+  <xacro:property name="geometry_path" value="$(arg geometry_file)"/>
+  <xacro:property name="geometry" value="${xacro.load_yaml(geometry_path)}"/>
+
+  <material name="mock_chassis">
+    <color rgba="0.20 0.35 0.55 1.0"/>
+  </material>
+  <material name="mock_wheel">
+    <color rgba="0.12 0.12 0.12 1.0"/>
+  </material>
+  <material name="mock_scoop">
+    <color rgba="0.75 0.45 0.10 1.0"/>
+  </material>
+  <material name="mock_sensor">
+    <color rgba="0.15 0.70 0.55 1.0"/>
+  </material>
+
+  <xacro:macro name="box_link" params="name length width height material">
+    <link name="${name}">
+      <visual>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+        <material name="${material}"/>
+      </visual>
+      <collision>
+        <geometry>
+          <box size="${length} ${width} ${height}"/>
+        </geometry>
+      </collision>
+    </link>
+  </xacro:macro>
+
+  <xacro:macro name="fixed_frame" params="name parent xyz rpy">
+    <link name="${name}"/>
+    <joint name="${name}_fixed_joint" type="fixed">
+      <parent link="${parent}"/>
+      <child link="${name}"/>
+      <origin xyz="${xyz}" rpy="${rpy}"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:macro name="mock_wheel" params="name x y z">
+    <link name="${name}_link">
+      <visual>
+        <origin rpy="${geometry.wheel.visual_roll_rad} 0 0"/>
+        <geometry>
+          <cylinder radius="${geometry.wheel.radius_m}" length="${geometry.wheel.width_m}"/>
+        </geometry>
+        <material name="mock_wheel"/>
+      </visual>
+      <collision>
+        <origin rpy="${geometry.wheel.visual_roll_rad} 0 0"/>
+        <geometry>
+          <cylinder radius="${geometry.wheel.radius_m}" length="${geometry.wheel.width_m}"/>
+        </geometry>
+      </collision>
+    </link>
+    <joint name="${name}_joint" type="continuous">
+      <parent link="base_link"/>
+      <child link="${name}_link"/>
+      <origin xyz="${x} ${y} ${z}" rpy="0 0 0"/>
+      <axis xyz="0 1 0"/>
+    </joint>
+  </xacro:macro>
+
+  <link name="base_link">
+    <visual>
+      <geometry>
+        <box size="${geometry.chassis.length_m} ${geometry.chassis.width_m} ${geometry.chassis.height_m}"/>
+      </geometry>
+      <material name="mock_chassis"/>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="${geometry.chassis.length_m} ${geometry.chassis.width_m} ${geometry.chassis.height_m}"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Four continuous wheel joints: confirmed skid-steer topology, mock positions only. -->
+  <xacro:mock_wheel name="front_left_wheel" x="${geometry.wheel.front_x_m}" y="${geometry.wheel.left_y_m}" z="${geometry.wheel.center_z_m}"/>
+  <xacro:mock_wheel name="front_right_wheel" x="${geometry.wheel.front_x_m}" y="${geometry.wheel.right_y_m}" z="${geometry.wheel.center_z_m}"/>
+  <xacro:mock_wheel name="rear_left_wheel" x="${geometry.wheel.rear_x_m}" y="${geometry.wheel.left_y_m}" z="${geometry.wheel.center_z_m}"/>
+  <xacro:mock_wheel name="rear_right_wheel" x="${geometry.wheel.rear_x_m}" y="${geometry.wheel.right_y_m}" z="${geometry.wheel.center_z_m}"/>
+
+  <!-- Fixed conceptual proxy only; the actual excavation linkage is MISS-01. -->
+  <xacro:box_link name="scoop_link" length="${geometry.scoop_proxy.length_m}" width="${geometry.scoop_proxy.width_m}" height="${geometry.scoop_proxy.height_m}" material="mock_scoop"/>
+  <joint name="scoop_proxy_fixed_joint" type="fixed">
+    <parent link="base_link"/>
+    <child link="scoop_link"/>
+    <origin xyz="${geometry.scoop_proxy.center_x_m} ${geometry.scoop_proxy.center_y_m} ${geometry.scoop_proxy.center_z_m}" rpy="0 0 0"/>
+  </joint>
+
+  <!-- Synthetic sensor mounts; no real mount or driver transform is asserted. -->
+  <xacro:fixed_frame name="zed_camera_mount_link" parent="base_link" xyz="${geometry.sensors.zed_mount_x_m} ${geometry.sensors.zed_mount_y_m} ${geometry.sensors.zed_mount_z_m}" rpy="0 0 0"/>
+  <xacro:box_link name="zed_camera_link" length="${geometry.sensors.zed_visual_length_m}" width="${geometry.sensors.zed_visual_width_m}" height="${geometry.sensors.zed_visual_height_m}" material="mock_sensor"/>
+  <joint name="zed_camera_fixed_joint" type="fixed">
+    <parent link="zed_camera_mount_link"/>
+    <child link="zed_camera_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <xacro:fixed_frame name="zed_camera_optical_frame" parent="zed_camera_link" xyz="0 0 0" rpy="${geometry.sensors.optical_roll_rad} ${geometry.sensors.optical_pitch_rad} ${geometry.sensors.optical_yaw_rad}"/>
+  <xacro:fixed_frame name="imu_link" parent="zed_camera_link" xyz="0 0 0" rpy="0 0 0"/>
+
+  <xacro:fixed_frame name="webcam_mount_link" parent="base_link" xyz="${geometry.sensors.webcam_mount_x_m} ${geometry.sensors.webcam_mount_y_m} ${geometry.sensors.webcam_mount_z_m}" rpy="0 0 0"/>
+  <xacro:box_link name="webcam_link" length="${geometry.sensors.webcam_visual_length_m}" width="${geometry.sensors.webcam_visual_width_m}" height="${geometry.sensors.webcam_visual_height_m}" material="mock_sensor"/>
+  <joint name="webcam_fixed_joint" type="fixed">
+    <parent link="webcam_mount_link"/>
+    <child link="webcam_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+  <xacro:fixed_frame name="webcam_optical_frame" parent="webcam_link" xyz="0 0 0" rpy="${geometry.sensors.optical_roll_rad} ${geometry.sensors.optical_pitch_rad} ${geometry.sensors.optical_yaw_rad}"/>
+
+  <!-- A generic mount, not a claim that a LiDAR has been selected or installed. -->
+  <xacro:fixed_frame name="lidar_mount_link" parent="base_link" xyz="${geometry.sensors.lidar_mount_x_m} ${geometry.sensors.lidar_mount_y_m} ${geometry.sensors.lidar_mount_z_m}" rpy="0 0 0"/>
+
+  <!-- Upstream mock hardware.  No controller that accepts cmd_vel is loaded in Phase 1. -->
+  <ros2_control name="phase1_mock_system" type="system">
+    <hardware>
+      <plugin>mock_components/GenericSystem</plugin>
+      <param name="calculate_dynamics">false</param>
+    </hardware>
+    <joint name="front_left_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="front_right_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="rear_left_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="rear_right_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"><param name="initial_value">0.0</param></state_interface>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+</robot>

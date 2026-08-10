@@ -1,15 +1,18 @@
 # JMU Lunabotics autonomy software
 
 ROS 2 software for the JMU NASA Lunabotics robot. This repository is being
-rebuilt around `docs/lunabotics_autonomy_software_spec.md`; the Phase 0
-scaffold intentionally contains no motor, sensor, localization, Nav2, or
-mission implementation.
+rebuilt around `docs/lunabotics_autonomy_software_spec.md`. Phase 1 provides a
+headless, mock-only description and TF stack; it contains no real motor,
+sensor, localization, Nav2, mission, or safety implementation.
 
 ## Current status
 
-Phase 0 establishes the repository structure, package boundaries, version
-lock, documentation, and quality tooling. Hardware-dependent values remain
-explicit `TBD`s in [the TBD register](docs/tbd_register.md).
+Phase 1 adds a parameterized Xacro, four-wheel skid-steer mock frame tree,
+upstream `ros2_control` `GenericSystem`, joint-state broadcaster, and
+`robot_state_publisher`. The geometry profile is deliberately synthetic rather
+than a claim about the physical robot; all measured dimensions and mounting
+transforms remain explicit `TBD`s in [the TBD register](docs/tbd_register.md).
+The exact contract is in [the Phase 1 mock-model note](docs/phase1_mock_model.md).
 
 The intended robot runtime is:
 
@@ -61,15 +64,29 @@ the Jetson, L4T, CUDA, ZED SDK, or arm64 container runtime.
 LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh
 ```
 
+On a Humble development environment with the Phase 1 dependencies installed,
+inspect the mock TF tree in RViz without any motor hardware:
+
+```bash
+source ../../install/setup.bash
+ros2 launch lb_sim mock_robot.launch.py use_rviz:=true
+# In a separate terminal that has sourced the same workspace:
+scripts/check_tf_authority.py --runtime
+```
+
+`lb_launch bringup.launch.py` defaults to the same mock hardware and keeps
+`enable_motors:=false`; setting it true is intentionally inert in Phase 1.
+
 Read [operations](docs/operations.md) before running commands on hardware.
 The bootstrap script performs checks by default and never silently modifies the
 host, ROS installation, shell profile, JetPack image, ZED SDK, or robot.
 
 ## Safety boundary
 
-Motors must remain disabled until the later safety and hardware phases are
-implemented and validated. This repository does not authorize direct motor
-control, power switching, or bypassing the physical emergency stop.
+Motors must remain disabled until the later hardware and safety phases are
+implemented and validated. The Phase 1 mock has no `/cmd_vel` consumer,
+odometry publisher, real transport, power switching, or hardware enable path.
+This repository does not authorize bypassing the physical emergency stop.
 
 ## Prototype history
 

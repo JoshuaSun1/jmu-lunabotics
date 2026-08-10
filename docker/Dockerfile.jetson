@@ -1,4 +1,4 @@
-# Phase 0 build container. It deliberately does not install the ZED SDK: that
+# Phase 1 build container. It deliberately does not install the ZED SDK: that
 # installation must be validated against the physical Jetson image first.
 ARG BASE_IMAGE=ubuntu:22.04
 FROM ${BASE_IMAGE}
@@ -30,6 +30,13 @@ RUN apt-get update \
         ros-${ROS_DISTRO}-ament-cmake-lint-cmake \
         ros-${ROS_DISTRO}-ament-cmake-pytest \
         ros-${ROS_DISTRO}-ament-cmake-xmllint \
+        ros-${ROS_DISTRO}-joint-state-publisher \
+        ros-${ROS_DISTRO}-launch-testing-ament-cmake \
+        ros-${ROS_DISTRO}-launch-testing-ros \
+        ros-${ROS_DISTRO}-robot-state-publisher \
+        ros-${ROS_DISTRO}-ros2-control \
+        ros-${ROS_DISTRO}-ros2-controllers \
+        ros-${ROS_DISTRO}-xacro \
     && rm -rf /var/lib/apt/lists/*
 
 RUN if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi \

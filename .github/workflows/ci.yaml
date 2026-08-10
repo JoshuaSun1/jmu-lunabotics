@@ -1,4 +1,4 @@
-name: Phase 0 quality checks
+name: Phase 1 quality checks
 
 on:
   pull_request:
@@ -39,7 +39,14 @@ jobs:
             ros-humble-ament-lint-auto \
             ros-humble-ament-cmake-lint-cmake \
             ros-humble-ament-cmake-pytest \
-            ros-humble-ament-cmake-xmllint
+            ros-humble-ament-cmake-xmllint \
+            ros-humble-joint-state-publisher \
+            ros-humble-launch-testing-ament-cmake \
+            ros-humble-launch-testing-ros \
+            ros-humble-robot-state-publisher \
+            ros-humble-ros2-control \
+            ros-humble-ros2-controllers \
+            ros-humble-xacro
           if [ ! -f /etc/ros/rosdep/sources.list.d/20-default.list ]; then rosdep init; fi
           rosdep update
       - name: Resolve declared dependencies

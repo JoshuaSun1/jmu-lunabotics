@@ -150,3 +150,74 @@ environment before treating the full lint gate as revalidated.
 
 **Git evidence:** `6f88f8f` (`refactor: flatten ROS workspace layout`) records
 the workspace-flattening migration.
+
+## 2026-08-10 — Phase 1 mock description, TF contract, and ros2_control wiring
+
+**Purpose and scope:** Implemented the Phase 1 no-hardware model boundary:
+parameterized Xacro, four-wheel skid-steer mock tree, sensor/mount frames,
+upstream ros2_control mock hardware, joint-state publishing, RViz profile, and
+automated TF-authority checks. The user-provided
+[`Current Lunabot Robot Design Codex Handoff`](../docs/resources/Current_Lunabot_Robot_Design_Codex_Handoff.md)
+is retained as the design-evidence source.
+
+**Components and files:** `lb_model` now owns
+`urdf/lb_mock.urdf.xacro`, the explicitly synthetic
+`config/mock_geometry.yaml`, standalone `description.launch.py`, and the RViz
+profile. `lb_sim` owns `mock_controllers.yaml`, `mock_robot.launch.py`, and the
+headless launch test. `lb_launch/launch/bringup.launch.py` is a thin Phase 1
+mock include; `lb_hardware` remains intentionally empty until the Phase 2
+transport/plugin work. The model contract and detailed frame/provenance record
+are in [`docs/phase1_mock_model.md`](../docs/phase1_mock_model.md).
+
+**ROS interfaces and TF:** `joint_state_broadcaster` is the sole mock
+publisher of `/joint_states` (`sensor_msgs/msg/JointState`), consumed by
+`robot_state_publisher`. `robot_state_publisher` is the sole publisher of
+`/tf` and `/tf_static` (`tf2_msgs/msg/TFMessage`) for the `base_link` subtree.
+That subtree contains four continuous wheel joints, a fixed conceptual
+`scoop_link`, ZED/webcam mock mounts and optical frames, `imu_link`, and a
+generic `lidar_mount_link`. The mock contains no `map`, `odom`,
+`base_footprint`, `/cmd_vel`, `/odom/wheel`, or real sensor output. Future
+global/local EKFs retain `map -> odom`/`odom -> base_link` ownership.
+
+**Parameters and evidence:** Every value in `mock_geometry.yaml` is marked
+`synthetic_mock_only` and prohibited from physical use; its replacement source
+is a reviewed CAD or measured calibration record. The mock controller update
+rate is a visualization/test cadence, not a physical control or safety limit.
+Four-wheel skid-steer is now a confirmed topology (`DRIVE-01` closed), based on
+the team confirmation and handoff. Wheel radius/placement, track, chassis
+origin, sensor mounts, linkage, reductions, encoder signs, protocol, and
+safety limits remain open as `DRIVE-02`, `DRIVE-03`, `GEOM-01`, `ZED-01`,
+`LIDAR-01`, `TAG-01`, `MISS-01`, and `SAFE-01`.
+
+**Architecture and alternatives:** The mock uses upstream
+`mock_components/GenericSystem` rather than inventing an `lb_hardware` plugin.
+It exposes wheel velocity/state interfaces but loads only
+`joint_state_broadcaster`; no `diff_drive_controller` or command controller is
+introduced before Phase 2. The scoop is a fixed proxy because the lift/dump
+kinematics are unresolved. Camera optical frames are mock-only URDF-owned;
+real wrapper ownership must be selected before integration to avoid duplicate
+TF publishers.
+
+**Safety and failure behavior:** The Phase 1 mock has no real transport,
+motor-enable path, `/cmd_vel` consumer, odometry publisher, or mechanism
+command path. `enable_motors` remains false by default and is intentionally
+inert if set. The mock therefore cannot move or enable the physical robot.
+
+**Verification and evidence:** `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh`
+built all ten packages and passed 53 tests with zero failures (one runtime
+launch test conditionally skipped because the host lacks Xacro/ros2_control).
+`./scripts/lint.sh` passed in an unrestricted local execution. A temporary,
+non-installed extraction of the Jazzy Xacro package expanded the model to 14
+links and 13 joints; `check_urdf` parsed the output with `base_link` as root.
+The standalone description launch also initialized `robot_state_publisher`.
+The concise command/results record is
+[`docs/evidence/phase1_validation_2026-08-10.md`](../docs/evidence/phase1_validation_2026-08-10.md).
+The restricted sandbox blocks DDS socket creation, and the host lacks
+controller-manager and joint-state-broadcaster executables, so the complete
+mock runtime/TF-authority test remains pending Humble CI/container. The Black
+pre-commit hook itself is healthy but cannot run multi-file inside the restricted
+sandbox because its multiprocessing socket is blocked; it succeeds in an
+unrestricted environment/CI.
+
+**Git evidence:** Pending Phase 1 implementation commit; replace this line
+with the commit identifier after validation.
