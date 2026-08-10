@@ -16,7 +16,7 @@ done
 
 python3 -m py_compile \
   "${SCRIPT_DIR}/check_tf_authority.py" \
-  "${REPOSITORY_ROOT}/src/lunabot_bringup/test/test_scaffold.py"
+  "${REPOSITORY_ROOT}/src/launch/test/test_scaffold.py"
 
 cd "${REPOSITORY_ROOT}"
 exec pre-commit run --all-files

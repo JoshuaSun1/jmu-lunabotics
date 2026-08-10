@@ -30,7 +30,7 @@ software or control decision.
 - Physical wheel positions, wheel dimensions, bucket envelope, frame origin,
   sensor transforms, and drive-controller configuration remain unmeasured
   parameters/TBDs.
-- `lunabot_hardware` must not select a drive controller or calculate odometry
+- `lb_hardware` must not select a drive controller or calculate odometry
   until the steering/kinematic model is confirmed.
 
 ## Follow-up and validation

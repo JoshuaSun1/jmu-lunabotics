@@ -63,3 +63,35 @@ hardware test is applicable.
 
 **Git evidence:** `d3cb02b` (`docs: record four-wheel chassis decision`)
 records this documentation update.
+
+## 2026-08-10 — Source-directory and ROS-package migration
+
+**Purpose and decision:** Reorganized the ROS workspace into concise source
+directories while retaining unique ROS package names with the `lb_` prefix.
+The mapping is documented in [`docs/architecture.md`](../docs/architecture.md):
+`launch/lb_launch`, `model/lb_model`, `hardware/lb_hardware`,
+`interfaces/lb_interfaces`, `localization/lb_localization`,
+`state_manager/lb_state_manager`, `navigation/lb_navigation`,
+`sensors/lb_sensors`, `safety/lb_safety`, and `sim/lb_sim`.
+
+**Dependency and compatibility assessment:** The scaffold has no direct
+package-to-package dependencies or runtime interfaces yet; each manifest
+declares only its ament build and lint dependencies. The ROS 2 underlay already
+contains the core package `launch`, so `lb_launch` is used for `src/launch` to
+avoid shadowing ROS launch tooling. No topics, services, actions, TF ownership,
+parameters, safety behavior, or hardware interfaces changed.
+
+**Files and follow-up:** Renamed all source directories, package manifests, and
+CMake project names; updated the scaffold contract, lint path, architecture,
+canonical specification, and chassis decision record. Future launch commands
+will use `ros2 launch lb_launch ...`; source-directory names are not ROS package
+names.
+
+**Verification and evidence:** A clean Jazzy structural build discovered the
+ten intended `lb_*` packages. The command
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` passed 44 tests after
+that build. This remains a non-target host check; Humble/arm64 target
+validation is still open.
+
+**Git evidence:** This entry is associated with the package-architecture
+migration commit recorded in repository history.

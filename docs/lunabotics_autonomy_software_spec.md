@@ -232,7 +232,7 @@ Initial detector configuration:
 
 ### 6.3 Known-tag localization node
 
-**Package:** `lunabot_localization`
+**Package:** `lb_localization`
 **Executable:** `tag_localizer`
 **Input:** AprilTag detections and TF
 **Output:** `/localization/apriltag_pose` as `geometry_msgs/msg/PoseWithCovarianceStamped` in `map` frame
@@ -324,7 +324,7 @@ Recommended output:
 The repository shall contain:
 
 ```text
-lunabot_navigation/maps/
+navigation/maps/
 ├── arena.pgm
 ├── arena.yaml
 ├── keepout_mask.pgm        # optional
@@ -377,7 +377,7 @@ The LiDAR may be evaluated for AMCL later, but AMCL shall not be part of the bas
 
 ### 8.2 ZED depth pipeline
 
-**Package:** `lunabot_perception`
+**Package:** `lb_sensors`
 **Executable:** `terrain_hazard_node`
 
 Preferred input:
@@ -474,7 +474,7 @@ The controller shall:
 
 ### 9.3 Hardware plugin
 
-**Package:** `lunabot_hardware`
+**Package:** `lb_hardware`
 **Class:** `LunabotDriveHardware` deriving from a `ros2_control` system hardware interface.
 
 Responsibilities:
@@ -586,7 +586,7 @@ At any state:
 
 ### 11.3 Mission manager
 
-**Package:** `lunabot_mission`
+**Package:** `lb_state_manager`
 **Executable:** `mission_manager`
 
 Responsibilities:
@@ -652,7 +652,7 @@ Teleoperation shall be usable without Nav2 for bench tests. Autonomous control s
 
 ## 13. Safety supervisor
 
-**Package:** `lunabot_safety`
+**Package:** `lb_safety`
 **Executable:** `safety_supervisor`
 
 The safety supervisor shall monitor:
@@ -759,49 +759,49 @@ lunabot_autonomy/
 │   ├── performance_test.sh
 │   └── check_tf_authority.py
 └── src/
-    ├── lunabot_interfaces/
-    ├── lunabot_description/
-    ├── lunabot_hardware/
-    ├── lunabot_localization/
-    ├── lunabot_perception/
-    ├── lunabot_navigation/
-    ├── lunabot_mission/
-    ├── lunabot_safety/
-    ├── lunabot_bringup/
-    └── lunabot_sim/
+    ├── interfaces/
+    ├── model/
+    ├── hardware/
+    ├── localization/
+    ├── sensors/
+    ├── navigation/
+    ├── state_manager/
+    ├── safety/
+    ├── launch/
+    └── sim/
 ```
 
 ### 16.1 Package responsibilities
 
 | Package | Responsibility |
 |---|---|
-| `lunabot_interfaces` | Custom actions/messages/services only. |
-| `lunabot_description` | URDF/Xacro, meshes, ros2_control tags, robot_state_publisher launch. |
-| `lunabot_hardware` | ros2_control hardware plugin, transport abstraction, mock transport. |
-| `lunabot_localization` | EKF configs, tag map, tag localizer, localization monitor. |
-| `lunabot_perception` | Depth processing, terrain hazards, LiDAR filters/config. |
-| `lunabot_navigation` | Nav2 parameters, maps, costmap configuration, Nav2 BT XML. |
-| `lunabot_mission` | Mission state machine and mechanism clients/mock servers. |
-| `lunabot_safety` | Safety supervisor and motion locks. |
-| `lunabot_bringup` | System launch files and environment profiles. |
-| `lunabot_sim` | Fake hardware, mock sensors, test worlds or bag-replay launch. |
+| `lb_interfaces` | Custom actions/messages/services only. |
+| `lb_model` | URDF/Xacro, meshes, ros2_control tags, robot_state_publisher launch. |
+| `lb_hardware` | ros2_control hardware plugin, transport abstraction, mock transport. |
+| `lb_localization` | EKF configs, tag map, tag localizer, localization monitor. |
+| `lb_sensors` | Depth processing, terrain hazards, LiDAR filters/config. |
+| `lb_navigation` | Nav2 parameters, maps, costmap configuration, Nav2 BT XML. |
+| `lb_state_manager` | Mission state machine and mechanism clients/mock servers. |
+| `lb_safety` | Safety supervisor and motion locks. |
+| `lb_launch` | System launch files and environment profiles. |
+| `lb_sim` | Fake hardware, mock sensors, test worlds or bag-replay launch. |
 
 ## 17. Launch architecture
 
 Required launch files:
 
 ```text
-lunabot_description/launch/description.launch.py
-lunabot_hardware/launch/hardware.launch.py
-lunabot_localization/launch/localization.launch.py
-lunabot_perception/launch/perception.launch.py
-lunabot_navigation/launch/navigation.launch.py
-lunabot_mission/launch/mission.launch.py
-lunabot_safety/launch/safety.launch.py
-lunabot_bringup/launch/bringup.launch.py
-lunabot_bringup/launch/bench_test.launch.py
-lunabot_bringup/launch/bag_replay.launch.py
-lunabot_sim/launch/mock_robot.launch.py
+model/launch/description.launch.py
+hardware/launch/hardware.launch.py
+localization/launch/localization.launch.py
+sensors/launch/perception.launch.py
+navigation/launch/navigation.launch.py
+state_manager/launch/mission.launch.py
+safety/launch/safety.launch.py
+launch/launch/bringup.launch.py
+launch/launch/bench_test.launch.py
+launch/launch/bag_replay.launch.py
+sim/launch/mock_robot.launch.py
 ```
 
 `bringup.launch.py` shall support arguments including:
