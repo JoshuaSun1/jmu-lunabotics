@@ -219,5 +219,5 @@ pre-commit hook itself is healthy but cannot run multi-file inside the restricte
 sandbox because its multiprocessing socket is blocked; it succeeds in an
 unrestricted environment/CI.
 
-**Git evidence:** Pending Phase 1 implementation commit; replace this line
-with the commit identifier after validation.
+**Git evidence:** `0d78d29` (`feat: implement phase 1 mock robot`) records
+this implementation and evidence update.
