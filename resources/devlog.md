@@ -113,5 +113,5 @@ specification. A clean Jazzy structural build discovered the ten intended
 packages; its test run passed 44 tests and the repository lint run passed.
 This remains a non-target host check; Humble/arm64 target validation is open.
 
-**Git evidence:** This entry is associated with the source-directory alignment
-commit recorded in repository history.
+**Git evidence:** `dffd236` (`refactor: align source directories with package
+names`) records this source-directory alignment.
