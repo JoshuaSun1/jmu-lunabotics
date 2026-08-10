@@ -93,5 +93,5 @@ ten intended `lb_*` packages. The command
 that build. This remains a non-target host check; Humble/arm64 target
 validation is still open.
 
-**Git evidence:** This entry is associated with the package-architecture
-migration commit recorded in repository history.
+**Git evidence:** `cc2ec8e` (`refactor: rename ROS package architecture`)
+records the package-architecture migration.
