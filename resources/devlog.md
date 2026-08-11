@@ -288,4 +288,4 @@ motion, `/cmd_vel` and `/odom/wheel` remaps, command timeout, and no
 `odom -> base_link` TF. No physical drive test is authorized until electrical,
 geometry, encoder, protocol, and safety prerequisites are reviewed.
 
-**Git evidence:** Pending Phase 2 implementation commit.
+**Git evidence:** `3f12a2a` (`feat: implement phase 2 drive interface`) records this implementation.
