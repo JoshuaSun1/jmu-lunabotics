@@ -8,6 +8,16 @@
 -->
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="lb_phase1_mock">
   <xacro:arg name="geometry_file" default="$(find lb_model)/config/mock_geometry.yaml"/>
+  <!--
+    Phase 1 keeps the upstream GenericSystem default. Phase 2 selects the
+    lb_hardware plugin explicitly from its bench launch; neither option is a
+    physical drivetrain configuration.
+  -->
+  <xacro:arg name="hardware_plugin" default="mock_components/GenericSystem"/>
+  <xacro:arg name="transport_type" default="mock"/>
+  <xacro:arg name="enable_on_activate" default="false"/>
+  <xacro:arg name="mock_communication_loss_after_reads" default="-1"/>
+  <xacro:arg name="mock_command_timeout_s" default="0.25"/>
   <xacro:property name="geometry_path" value="$(arg geometry_file)"/>
   <xacro:property name="geometry" value="${xacro.load_yaml(geometry_path)}"/>
 
@@ -124,11 +134,16 @@
   <!-- A generic mount, not a claim that a LiDAR has been selected or installed. -->
   <xacro:fixed_frame name="lidar_mount_link" parent="base_link" xyz="${geometry.sensors.lidar_mount_x_m} ${geometry.sensors.lidar_mount_y_m} ${geometry.sensors.lidar_mount_z_m}" rpy="0 0 0"/>
 
-  <!-- Upstream mock hardware.  No controller that accepts cmd_vel is loaded in Phase 1. -->
-  <ros2_control name="phase1_mock_system" type="system">
+  <!-- No controller that accepts cmd_vel is loaded by the Phase 1 launch. -->
+  <ros2_control name="lb_mock_drive_system" type="system">
     <hardware>
-      <plugin>mock_components/GenericSystem</plugin>
+      <plugin>$(arg hardware_plugin)</plugin>
       <param name="calculate_dynamics">false</param>
+      <!-- Read by lb_hardware only; GenericSystem safely ignores these Phase 2 arguments. -->
+      <param name="transport_type">$(arg transport_type)</param>
+      <param name="enable_on_activate">$(arg enable_on_activate)</param>
+      <param name="mock_communication_loss_after_reads">$(arg mock_communication_loss_after_reads)</param>
+      <param name="mock_command_timeout_s">$(arg mock_command_timeout_s)</param>
     </hardware>
     <joint name="front_left_wheel_joint">
       <command_interface name="velocity"/>

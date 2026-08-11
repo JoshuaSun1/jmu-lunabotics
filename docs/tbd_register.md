@@ -10,8 +10,8 @@ and a recorded validation method.
 | PLAT-02 | Development | x86 build/CI strategy and arm64 validation runner | Phase 0 | Documented, reproducible workflow |
 | POWER-01 | Power | Orin 19 V adapter connector, polarity, current capacity, fuse/converter | Before robot power-up | Electrical review and bench test |
 | DRIVE-02 | Drive | Wheel radius, separation, gear ratio, encoder source/resolution, signs | Phase 1–2 | Measured calibration record |
-| DRIVE-03 | Motor comms | MCU role, CAN topology/bitrate/IDs, SPARK MAX configuration, heartbeat/fault protocol | Phase 2 | Approved protocol specification |
-| SAFE-01 | Safety | E-stop path, enable/reset policy, battery/current/tilt/staleness thresholds | Phase 2 / 9 | Electrical and safety review |
+| DRIVE-03 | Motor comms | MCU role, CAN topology/bitrate/IDs, SPARK MAX configuration, heartbeat/fault protocol | Before real transport | Approved protocol specification |
+| SAFE-01 | Safety | E-stop path, enable/reset policy, battery/current/tilt/staleness thresholds | Before real output / Phase 9 | Electrical and safety review |
 | GEOM-01 | Robot | Frame origin, footprint(s), clearance, speed/acceleration/jerk limits | Phase 1 onward | Measured and reviewed values |
 | ZED-01 | ZED Mini | Unit/firmware, USB port, mount, transform, calibration, timestamp/frame authority | Phase 1 / 3 | Bench validation record |
 | LIDAR-01 | LiDAR | Model, driver, connection, range/filter/mount settings | Phase 1 / 6 | Selected hardware and driver test |

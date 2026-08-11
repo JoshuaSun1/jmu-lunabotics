@@ -1,8 +1,22 @@
 # Hardware protocol
 
-No motor or microcontroller packet protocol has been selected. Phase 0 must
+No motor or microcontroller packet protocol has been selected. Phase 2 does
 not infer CAN IDs, bitrate, packet fields, pinouts, controller modes, or fault
 semantics from the BOM.
+
+## Phase 2 abstract boundary
+
+`lb_hardware` defines `DriveTransport` with `connect`, `disconnect`,
+`read_state`, `write_command`, `set_enabled`, `stop`, and `get_faults`. Wheel
+commands and state use radians and radians/second at this boundary.
+`MockDriveTransport` supports software-only testing. `RealDriveTransport` is
+an intentionally unavailable skeleton: it opens no device and returns failure
+for every operation until `DRIVE-03` and `SAFE-01` are closed.
+
+This is a transport abstraction, not a protocol selection. In particular, the
+listed ODrive USB-to-CAN adapter does not resolve whether the Jetson talks to a
+microcontroller, whether a microcontroller talks to SPARK MAX controllers, or
+whether the controller topology is two or four drive channels.
 
 The future drive interface must document:
 

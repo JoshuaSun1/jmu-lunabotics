@@ -1,4 +1,4 @@
-"""Phase 2 system entry point: mock-first drive bench with disabled output by default."""
+"""Phase 2 drive bench entry point; it defaults to disabled in-memory mock output."""
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
@@ -9,11 +9,11 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description() -> LaunchDescription:
-    """Expose the public mock-first bringup contract without authorizing propulsion."""
+    """Expose one deliberately safe command/odometry test profile."""
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     enable_motors = LaunchConfiguration("enable_motors")
-    bench_launch = PathJoinSubstitution(
-        [FindPackageShare("lb_launch"), "launch", "bench_test.launch.py"]
+    hardware_launch = PathJoinSubstitution(
+        [FindPackageShare("lb_hardware"), "launch", "hardware.launch.py"]
     )
 
     return LaunchDescription(
@@ -21,15 +21,6 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("use_sim_time", default_value="false"),
             DeclareLaunchArgument("use_mock_hardware", default_value="true"),
             DeclareLaunchArgument("enable_motors", default_value="false"),
-            DeclareLaunchArgument("enable_zed", default_value="false"),
-            DeclareLaunchArgument("enable_lidar", default_value="false"),
-            DeclareLaunchArgument("enable_apriltags", default_value="false"),
-            DeclareLaunchArgument("enable_depth_perception", default_value="false"),
-            DeclareLaunchArgument("enable_nav2", default_value="false"),
-            DeclareLaunchArgument("enable_mission", default_value="false"),
-            DeclareLaunchArgument("map", default_value=""),
-            DeclareLaunchArgument("params_file", default_value=""),
-            DeclareLaunchArgument("use_rviz", default_value="false"),
             DeclareLaunchArgument(
                 "geometry_file",
                 default_value=PathJoinSubstitution(
@@ -39,7 +30,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("mock_communication_loss_after_reads", default_value="-1"),
             DeclareLaunchArgument("mock_command_timeout_s", default_value="0.25"),
             IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(bench_launch),
+                PythonLaunchDescriptionSource(hardware_launch),
                 launch_arguments={
                     "use_sim_time": LaunchConfiguration("use_sim_time"),
                     "use_mock_hardware": use_mock_hardware,
@@ -54,15 +45,15 @@ def generate_launch_description() -> LaunchDescription:
             LogInfo(
                 condition=IfCondition(enable_motors),
                 msg=(
-                    "Phase 2 uses enable_motors only for in-memory MockDriveTransport. "
-                    "It does not enable physical propulsion."
+                    "Phase 2 enable_motors affects only MockDriveTransport. It does not authorize "
+                    "physical propulsion."
                 ),
             ),
             LogInfo(
                 condition=UnlessCondition(use_mock_hardware),
                 msg=(
-                    "No real controller protocol exists in Phase 2. The selected real skeleton fails "
-                    "closed before opening a device."
+                    "The Phase 2 real transport is intentionally unavailable and will fail closed; "
+                    "no device or controller protocol is opened."
                 ),
             ),
         ]

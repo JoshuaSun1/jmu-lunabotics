@@ -1,6 +1,6 @@
 # Architecture
 
-## Phase 1 boundary
+## Phase 1 and Phase 2 boundary
 
 This document records the target architecture and the implemented Phase 1
 mock-description boundary. Each future phase must preserve the ownership rules
@@ -66,3 +66,13 @@ four-wheel, conceptual-scoop, and sensor-mount frame tree. Its upstream
 footprint, actuator linkage, and limits remain unmeasured. See
 [`phase1_mock_model.md`](phase1_mock_model.md) and the formal decision record
 [`0001_four_wheel_chassis.md`](decisions/0001_four_wheel_chassis.md).
+
+Phase 2 adds `lb_hardware`'s protocol-neutral `DriveTransport`, in-memory
+`MockDriveTransport`, fail-closed `RealDriveTransport` skeleton, and
+`LunabotDriveHardware` ros2_control system plugin. The Phase 2 bench profile
+uses all four wheel joints through `diff_drive_controller`, but its radius,
+track, timeout, limits, and covariance values are explicitly synthetic. The
+controller publishes mock wheel odometry with its odometry TF disabled, so it
+does not take `odom -> base_link` ownership from the future local EKF. The
+real skeleton cannot open a device or enable output until the MCU protocol and
+safety design are reviewed. See [`phase2_drive_interface.md`](phase2_drive_interface.md).

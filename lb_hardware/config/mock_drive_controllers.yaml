@@ -1,0 +1,67 @@
+# Phase 2 mock-only drive-controller profile.
+#
+# Every numeric value here comes from lb_model/config/mock_geometry.yaml or is a
+# synthetic test setting. It is prohibited for physical motor, odometry, or
+# safety use until DRIVE-02, DRIVE-03, GEOM-01, and SAFE-01 are closed.
+controller_manager:
+  ros__parameters:
+    update_rate: 50  # Hz; mock control-loop cadence, not a measured hardware rate.
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+    drive_controller:
+      type: diff_drive_controller/DiffDriveController
+
+drive_controller:
+  ros__parameters:
+    # Confirmed wheel-joint grouping for the four-wheel skid-steer mock model.
+    left_wheel_names:
+      - front_left_wheel_joint
+      - rear_left_wheel_joint
+    right_wheel_names:
+      - front_right_wheel_joint
+      - rear_right_wheel_joint
+    wheels_per_side: 2  # Mock model exposes two independently commanded joints per side.
+
+    # Synthetic Phase 1 geometry only: radius 0.12 m; left/right mock centers +/-0.34 m.
+    wheel_radius: 0.12  # m, synthetic_mock_only; DRIVE-02 must replace this.
+    wheel_separation: 0.68  # m, synthetic_mock_only; effective skid-steer track is TBD.
+    wheel_separation_multiplier: 1.0  # Dimensionless mock value; experimentally tune later.
+    left_wheel_radius_multiplier: 1.0  # Dimensionless mock value; experimentally tune later.
+    right_wheel_radius_multiplier: 1.0  # Dimensionless mock value; experimentally tune later.
+
+    # Publish feedback-derived mock wheel odometry only; never own odom -> base_link.
+    position_feedback: true
+    open_loop: false
+    odom_frame_id: odom
+    base_frame_id: base_link
+    tf_frame_prefix_enable: false
+    enable_odom_tf: false
+    publish_rate: 30.0  # Hz, mock visualization/contract cadence.
+    pose_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # Mock only; LOC-01 TBD.
+    twist_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # Mock only; LOC-01 TBD.
+
+    # Native input is TwistStamped on ~/cmd_vel; bench launch remaps it to /cmd_vel.
+    use_stamped_vel: true
+    cmd_vel_timeout: 0.25  # s, mock-only stale-command exercise; SAFE-01 TBD.
+    publish_limited_velocity: true
+    velocity_rolling_window_size: 1  # Mock feedback should be directly observable in tests.
+
+    # Synthetic mock limits only; they are not physical drive or safety limits.
+    linear.x.has_velocity_limits: true
+    linear.x.max_velocity: 0.50  # m/s, synthetic_mock_only.
+    linear.x.min_velocity: -0.50  # m/s, synthetic_mock_only.
+    linear.x.has_acceleration_limits: true
+    linear.x.max_acceleration: 0.50  # m/s^2, synthetic_mock_only.
+    linear.x.min_acceleration: -0.50  # m/s^2, synthetic_mock_only.
+    linear.x.has_jerk_limits: true
+    linear.x.max_jerk: 1.00  # m/s^3, synthetic_mock_only.
+    linear.x.min_jerk: -1.00  # m/s^3, synthetic_mock_only.
+    angular.z.has_velocity_limits: true
+    angular.z.max_velocity: 1.00  # rad/s, synthetic_mock_only.
+    angular.z.min_velocity: -1.00  # rad/s, synthetic_mock_only.
+    angular.z.has_acceleration_limits: true
+    angular.z.max_acceleration: 1.00  # rad/s^2, synthetic_mock_only.
+    angular.z.min_acceleration: -1.00  # rad/s^2, synthetic_mock_only.
+    angular.z.has_jerk_limits: true
+    angular.z.max_jerk: 2.00  # rad/s^3, synthetic_mock_only.
+    angular.z.min_jerk: -2.00  # rad/s^3, synthetic_mock_only.

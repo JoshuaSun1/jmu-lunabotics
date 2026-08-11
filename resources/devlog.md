@@ -221,3 +221,71 @@ unrestricted environment/CI.
 
 **Git evidence:** `0d78d29` (`feat: implement phase 1 mock robot`) records
 this implementation and evidence update.
+
+## 2026-08-11 — Phase 2 mock-first drive hardware interface
+
+**Purpose and scope:** Implemented the Phase 2 software boundary between
+`diff_drive_controller` and a future drive MCU without choosing an electrical
+protocol. This is a mock/fail-closed implementation only: it does not command
+motors, open a CAN/serial/USB device, define an encoder scale, or implement a
+physical E-stop.
+
+**Components and files:** `lb_hardware` now owns the protocol-neutral
+`DriveTransport` contract, `MockDriveTransport`, `RealDriveTransport`,
+`LunabotDriveHardware` Humble system-hardware plugin, plugin export file,
+mock-only controller configuration, hardware launch, C++ transport unit test,
+and Phase 2 static contracts. `lb_launch` owns
+`launch/bench_test.launch.py` and now routes public bringup through that safe
+bench profile. The detailed component/interface record is
+[`docs/phase2_drive_interface.md`](../docs/phase2_drive_interface.md).
+
+**ROS interfaces and TF:** The declared mock command boundary is `/cmd_vel`
+(`geometry_msgs/msg/TwistStamped`) remapped to the controller's native
+`~/cmd_vel`; wheel commands are ROS-control velocity interfaces in rad/s.
+`joint_state_broadcaster` produces `/joint_states`
+(`sensor_msgs/msg/JointState`), and the controller declares a mock
+`~/odom` to `/odom/wheel` (`nav_msgs/msg/Odometry`) remap. The controller has
+`enable_odom_tf: false`; `robot_state_publisher` retains sole Phase 1 ownership
+of the `base_link` subtree, while Phase 3 retains `odom -> base_link` ownership.
+The Humble in-process remaps and runtime topics remain target-validation work.
+
+**Parameters and provenance:** The controller uses confirmed four mock wheel
+joints in left/right groups. Its 0.12 m radius, 0.68 m separation, rates,
+covariance, timeout, and velocity/acceleration/jerk limits are all labelled
+synthetic mock values, sourced only from the prior mock profile or test needs;
+they are prohibited for physical use. `mock_communication_loss_after_reads`
+and `mock_command_timeout_s` are deterministic test inputs. `DRIVE-02`,
+`DRIVE-03`, `GEOM-01`, and `SAFE-01` remain open.
+
+**Architecture and alternatives:** Four wheel-joint values are kept at the
+software boundary rather than assuming two versus four physical motor channels.
+The real skeleton deliberately avoids selecting the BOM's USB-to-CAN adapter
+as a direct Jetson-to-controller design, because the specification requires an
+MCU safety boundary and the actual topology/protocol remains unresolved.
+
+**Safety and failure behavior:** The mock begins disabled. The real skeleton
+always rejects connection and output. The plugin zeros command interfaces and
+requests `stop()` plus `set_enabled(false)` before returning an error on state
+read/write failure or non-finite command. This is fail-closed software behavior
+only; it does not provide an independent physical stop, controller fault
+latching, or MCU watchdog.
+
+**Dependencies and verification:** Target dependencies are `hardware_interface`,
+`pluginlib`, `rclcpp`, `rclcpp_lifecycle`, controller manager, joint-state
+broadcaster, diff-drive controller, Xacro, and robot-state publisher. On the
+available x86_64/Jazzy structural host,
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh` built ten packages and passed 63
+tests with zero failures and one expected Xacro-related skip. The
+ROS-independent mock transport compiled and passed its C++ unit test; static
+contracts passed. `./scripts/lint.sh` passed in unrestricted execution; the
+restricted sandbox still blocks Black worker processes. Evidence and command details are in
+[`docs/evidence/phase2_validation_2026-08-11.md`](../docs/evidence/phase2_validation_2026-08-11.md).
+
+**Known limitations and remaining work:** The host lacks target ROS-control and
+Xacro runtime dependencies, so the custom plugin was not compiled or loaded
+there; Humble/arm64 must verify plugin build, controller activation, wheel
+motion, `/cmd_vel` and `/odom/wheel` remaps, command timeout, and no
+`odom -> base_link` TF. No physical drive test is authorized until electrical,
+geometry, encoder, protocol, and safety prerequisites are reviewed.
+
+**Git evidence:** Pending Phase 2 implementation commit.

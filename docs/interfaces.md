@@ -30,3 +30,16 @@ phase.
 No Phase 1 node publishes or consumes `/cmd_vel`, `/odom/wheel`, sensor data,
 or mechanism commands. The mock command interfaces are unclaimed and cannot
 move a physical robot.
+
+## Phase 2 drive interfaces
+
+| Interface | Type | Publisher | Consumer | Boundary |
+|---|---|---|---|---|
+| `/cmd_vel` | `geometry_msgs/msg/TwistStamped` | Bench/manual test source; later command mux | `drive_controller` through declared launch remap | The controller accepts linear X in m/s and angular Z in rad/s. Humble remap validation is pending. |
+| `front_*` / `rear_*` wheel velocity interfaces | ros2_control internal interface, rad/s | `drive_controller` | `LunabotDriveHardware` | Four mock wheel-joint commands; not a public ROS topic or a claim about final motor-channel count. |
+| `/joint_states` | `sensor_msgs/msg/JointState` | `joint_state_broadcaster` | `robot_state_publisher` | Position in rad and velocity in rad/s from mock transport. |
+| `/odom/wheel` | `nav_msgs/msg/Odometry` | `drive_controller` through declared launch remap | Future local EKF | Mock feedback-derived odometry only; `enable_odom_tf: false` preserves Phase 3 TF ownership. |
+
+No Phase 2 custom diagnostics topic is published yet. Transport fault state is
+internal to the hardware plugin and returned as a ROS-control error. Phase 9
+will expose the full `/diagnostics` and safety contract.

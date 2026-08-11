@@ -1,18 +1,21 @@
 # JMU Lunabotics autonomy software
 
 ROS 2 software for the JMU NASA Lunabotics robot. This repository is being
-rebuilt around `docs/lunabotics_autonomy_software_spec.md`. Phase 1 provides a
-headless, mock-only description and TF stack; it contains no real motor,
-sensor, localization, Nav2, mission, or safety implementation.
+rebuilt around `docs/lunabotics_autonomy_software_spec.md`. Phase 2 provides a
+headless, mock-first description/drive stack; it contains no real motor,
+sensor, localization, Nav2, mission, or physical safety implementation.
 
 ## Current status
 
 Phase 1 adds a parameterized Xacro, four-wheel skid-steer mock frame tree,
 upstream `ros2_control` `GenericSystem`, joint-state broadcaster, and
-`robot_state_publisher`. The geometry profile is deliberately synthetic rather
-than a claim about the physical robot; all measured dimensions and mounting
-transforms remain explicit `TBD`s in [the TBD register](docs/tbd_register.md).
-The exact contract is in [the Phase 1 mock-model note](docs/phase1_mock_model.md).
+`robot_state_publisher`. Phase 2 adds a protocol-neutral drive transport,
+in-memory mock, fail-closed real skeleton, custom ros2_control hardware
+plugin, four-wheel `diff_drive_controller` mock configuration, and a bench
+launch. The geometry and controller profile are deliberately synthetic rather
+than claims about the physical robot. The exact boundaries are in the
+[Phase 1 model note](docs/phase1_mock_model.md) and
+[Phase 2 drive-interface note](docs/phase2_drive_interface.md).
 
 The intended robot runtime is:
 
@@ -74,8 +77,9 @@ ros2 launch lb_sim mock_robot.launch.py use_rviz:=true
 scripts/check_tf_authority.py --runtime
 ```
 
-`lb_launch bringup.launch.py` defaults to the same mock hardware and keeps
-`enable_motors:=false`; setting it true is intentionally inert in Phase 1.
+`lb_launch bringup.launch.py` and `lb_launch bench_test.launch.py` default to
+disabled mock output. Setting `enable_motors:=true` enables only the in-memory
+mock profile; the real skeleton fails closed and cannot open a hardware device.
 
 Read [operations](docs/operations.md) before running commands on hardware.
 The bootstrap script performs checks by default and never silently modifies the
@@ -84,9 +88,10 @@ host, ROS installation, shell profile, JetPack image, ZED SDK, or robot.
 ## Safety boundary
 
 Motors must remain disabled until the later hardware and safety phases are
-implemented and validated. The Phase 1 mock has no `/cmd_vel` consumer,
-odometry publisher, real transport, power switching, or hardware enable path.
-This repository does not authorize bypassing the physical emergency stop.
+implemented and validated. The Phase 2 mock can consume a synthetic command
+and publish mock wheel odometry, but has no real transport, power switching,
+or physical hardware-enable path. This repository does not authorize bypassing
+the physical emergency stop.
 
 ## Prototype history
 
