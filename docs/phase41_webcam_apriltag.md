@@ -219,5 +219,5 @@ physical webcam mount, final multi-tag inventory and map, quality/covariance
 gates, source adapters for additional cameras, `lb_localization/tag_localizer`,
 local/global EKFs, and target-hardware profiling.
 
-**Implementation Git commit:** `PENDING — update after the Phase 4.1 code and
-documentation commit is created.`
+**Implementation Git commit:** `963e64c` (`feat: implement phase 4.1 webcam
+apriltag bench`).

@@ -412,4 +412,5 @@ the local/global EKFs, profile the selected Humble/Jetson runtime, and design
 the least-privilege container V4L2 mapping. No ZED, physical robot mount,
 global pose, target hardware, or competition resource result is claimed.
 
-**Git evidence:** `PENDING — update after the Phase 4.1 implementation commit is created.`
+**Git evidence:** `963e64c` (`feat: implement phase 4.1 webcam apriltag
+bench`) records this implementation.

@@ -42,7 +42,7 @@ the final Phase 4.1 pipeline result.
 ## Final validation matrix
 
 These are the recorded development-host results. They are not a target-runtime
-or metric-accuracy result. `PENDING` is not a pass.
+or metric-accuracy result. An unvalidated target criterion is not a pass.
 
 | Check | Command / observation | Final result |
 |---|---|---|
@@ -100,5 +100,5 @@ adds substantial host I/O and must not be used as a detector-rate benchmark.
   viewing angle, lighting condition, and CPU/load record before relying on the
   10–15 Hz initial target.
 
-**Implementation Git commit:** `PENDING — update after the implementation
-commit is created.`
+**Implementation Git commit:** `963e64c` (`feat: implement phase 4.1 webcam
+apriltag bench`).
