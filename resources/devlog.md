@@ -331,4 +331,4 @@ remain TAG-01 (additional IDs, final tag size/placement and tag map), ZED-01
 (ZED integration/frame authority), and the physical `base_link`-to-webcam
 extrinsic transform.
 
-**Git evidence:** Pending documentation commit for this bench-discovery record.
+**Git evidence:** `f219d12` (`docs: record Phase 4.1 webcam discovery`) records this bench-discovery evidence.
