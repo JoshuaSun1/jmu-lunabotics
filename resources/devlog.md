@@ -289,3 +289,46 @@ motion, `/cmd_vel` and `/odom/wheel` remaps, command timeout, and no
 geometry, encoder, protocol, and safety prerequisites are reviewed.
 
 **Git evidence:** `3f12a2a` (`feat: implement phase 2 drive interface`) records this implementation.
+
+## 2026-08-17 — Phase 4.1 webcam AprilTag bench discovery
+
+**Purpose and scope:** Performed a non-actuating, webcam-only bench check before
+Phase 4.1 implementation. This confirms image capture and fiducial detection;
+it does not validate robot-relative or global pose estimation.
+
+**Observed hardware and interfaces:** The connected external Logitech UVC camera
+(`046d:0825`) was available as a V4L2 capture source at 640 x 480 YUYV, 30 Hz.
+Its current `/dev/video2` enumeration is host-session-specific and must not be
+used as a persistent launch identifier; a stable `/dev/v4l/by-id` path will be
+selected during implementation. A temporary `v4l2_camera` node published
+`/image_raw` (`sensor_msgs/msg/Image`) and `/camera_info`
+(`sensor_msgs/msg/CameraInfo`). A temporary `apriltag_ros` node consumed that
+stream and published `/phase41/tag_detections` as an
+`apriltag_msgs/msg/AprilTagDetectionArray`.
+
+**Measured result:** The visible tag was detected as family `tag36h11`, ID `0`,
+with Hamming error `0` and decision margin `115.7505`. This is direct evidence
+that the webcam, selected tag family, and CPU detector operate together on the
+development host. The test camera stream had no loaded calibration, so its
+pose-estimation warning was expected and no metric pose, covariance, TF, or
+global-localization claim is made.
+
+**Confirmed parameter provenance:** The user confirmed that the physical tag
+edge size is 0.250 m. This is a user-provided physical value, to be treated as
+the detector-corner edge length and independently rechecked before competition
+use. The user also confirmed that the archived
+`old-lunabotics/config/webcam_calibration.yaml` applies to this same camera.
+That calibration is 640 x 480 with `plumb_bob` distortion; it is an archived,
+user-confirmed calibration rather than a newly measured result. Phase 4.1 will
+load it and later revalidate metric pose against a measured target distance.
+
+**Architecture and remaining work:** Phase 4.1 will retain camera-independent
+detection outputs so the webcam and later ZED RGB camera can publish separate
+detection topics into one `lb_localization/tag_localizer`. The localizer will
+use calibrated camera optical frames and a surveyed tag map, not detector TF
+aliases, and only the later global EKF may publish `map -> odom`. Open items
+remain TAG-01 (additional IDs, final tag size/placement and tag map), ZED-01
+(ZED integration/frame authority), and the physical `base_link`-to-webcam
+extrinsic transform.
+
+**Git evidence:** Pending documentation commit for this bench-discovery record.
