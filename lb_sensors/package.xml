@@ -2,12 +2,21 @@
 <package format="3">
   <name>lb_sensors</name>
   <version>0.1.0</version>
-  <description>LiDAR filtering, depth processing, and terrain-hazard perception.</description>
+  <description>Camera and terrain sensor processing, including AprilTag observations.</description>
   <maintainer email="team@example.com">JMU NASA Lunabotics Team</maintainer>
   <license>MIT</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>apriltag_ros</exec_depend>
+  <exec_depend>image_proc</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>v4l-utils</exec_depend>
+  <exec_depend>v4l2_camera</exec_depend>
+
+  <test_depend>ament_cmake_pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_cmake_lint_cmake</test_depend>
   <test_depend>ament_cmake_xmllint</test_depend>

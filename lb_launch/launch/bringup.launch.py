@@ -1,4 +1,4 @@
-"""Phase 2 system entry point: mock-first drive bench with disabled output by default."""
+"""Safe public entry point for the Phase 2 mock bench or Phase 4.1 sensor bench."""
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
@@ -9,11 +9,15 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description() -> LaunchDescription:
-    """Expose the public mock-first bringup contract without authorizing propulsion."""
+    """Select mutually exclusive mock-drive and camera-observation bench profiles."""
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     enable_motors = LaunchConfiguration("enable_motors")
+    enable_apriltags = LaunchConfiguration("enable_apriltags")
     bench_launch = PathJoinSubstitution(
         [FindPackageShare("lb_launch"), "launch", "bench_test.launch.py"]
+    )
+    webcam_apriltag_launch = PathJoinSubstitution(
+        [FindPackageShare("lb_sensors"), "launch", "webcam_apriltag.launch.py"]
     )
 
     return LaunchDescription(
@@ -31,6 +35,25 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("params_file", default_value=""),
             DeclareLaunchArgument("use_rviz", default_value="false"),
             DeclareLaunchArgument(
+                "webcam_device",
+                default_value="/dev/v4l/by-id/usb-046d_0825_961026E0-video-index0",
+            ),
+            DeclareLaunchArgument("webcam_namespace", default_value="sensors/webcam"),
+            DeclareLaunchArgument("webcam_frame", default_value="webcam_optical_frame"),
+            DeclareLaunchArgument("webcam_fps", default_value="15.0"),
+            DeclareLaunchArgument(
+                "webcam_calibration_file",
+                default_value=PathJoinSubstitution(
+                    [FindPackageShare("lb_sensors"), "config", "webcam_calibration.yaml"]
+                ),
+            ),
+            DeclareLaunchArgument(
+                "webcam_detector_config",
+                default_value=PathJoinSubstitution(
+                    [FindPackageShare("lb_sensors"), "config", "webcam_apriltag.yaml"]
+                ),
+            ),
+            DeclareLaunchArgument(
                 "geometry_file",
                 default_value=PathJoinSubstitution(
                     [FindPackageShare("lb_model"), "config", "mock_geometry.yaml"]
@@ -40,6 +63,10 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("mock_command_timeout_s", default_value="0.25"),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(bench_launch),
+                # The Phase 1/2 bench includes an explicitly synthetic webcam
+                # mount in robot_state_publisher.  Do not join a real camera
+                # observation to that mock base frame.
+                condition=UnlessCondition(enable_apriltags),
                 launch_arguments={
                     "use_sim_time": LaunchConfiguration("use_sim_time"),
                     "use_mock_hardware": use_mock_hardware,
@@ -51,18 +78,40 @@ def generate_launch_description() -> LaunchDescription:
                     "mock_command_timeout_s": LaunchConfiguration("mock_command_timeout_s"),
                 }.items(),
             ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(webcam_apriltag_launch),
+                condition=IfCondition(enable_apriltags),
+                launch_arguments={
+                    "webcam_device": LaunchConfiguration("webcam_device"),
+                    "camera_namespace": LaunchConfiguration("webcam_namespace"),
+                    "camera_frame": LaunchConfiguration("webcam_frame"),
+                    "camera_fps": LaunchConfiguration("webcam_fps"),
+                    "calibration_file": LaunchConfiguration("webcam_calibration_file"),
+                    "detector_config": LaunchConfiguration("webcam_detector_config"),
+                }.items(),
+            ),
+            LogInfo(
+                condition=IfCondition(enable_apriltags),
+                msg=(
+                    "Phase 4.1 webcam AprilTag detection is enabled. It publishes only "
+                    "camera-scoped data and observation TF; the Phase 1/2 mock bench is "
+                    "suppressed, so no localizer, EKF, synthetic base-camera TF, or "
+                    "physical motor output is enabled."
+                ),
+            ),
             LogInfo(
                 condition=IfCondition(enable_motors),
                 msg=(
-                    "Phase 2 uses enable_motors only for in-memory MockDriveTransport. "
-                    "It does not enable physical propulsion."
+                    "Phase 2 uses enable_motors only for in-memory MockDriveTransport when "
+                    "the mock bench is active. enable_apriltags:=true suppresses that bench; "
+                    "this does not enable physical propulsion."
                 ),
             ),
             LogInfo(
                 condition=UnlessCondition(use_mock_hardware),
                 msg=(
-                    "No real controller protocol exists in Phase 2. The selected real skeleton fails "
-                    "closed before opening a device."
+                    "When the Phase 2 bench is active, no real controller protocol exists: "
+                    "the selected real skeleton fails closed before opening a device."
                 ),
             ),
         ]

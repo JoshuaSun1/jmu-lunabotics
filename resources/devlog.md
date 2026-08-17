@@ -332,3 +332,84 @@ remain TAG-01 (additional IDs, final tag size/placement and tag map), ZED-01
 extrinsic transform.
 
 **Git evidence:** `f219d12` (`docs: record Phase 4.1 webcam discovery`) records this bench-discovery evidence.
+
+## 2026-08-17 — Phase 4.1 calibrated webcam AprilTag observation baseline
+
+**Purpose and scope:** Implemented the non-actuating, calibrated webcam
+observation baseline for Phase 4.1. It proves a source-scoped camera,
+rectification, and `tag36h11` detector path on the development host; it does
+not implement known-tag localization, global pose, camera-to-robot geometry,
+or robot control.
+
+**Components and files:** `lb_sensors` now owns
+`launch/webcam_apriltag.launch.py`,
+`config/webcam_calibration.yaml`, and `config/webcam_apriltag.yaml` for the
+V4L2 driver, rectifier, and detector. `lb_launch/launch/bringup.launch.py`
+exposes the opt-in `enable_apriltags` sensor-only entry point and suppresses
+the Phase 1/2 mock bench when it is enabled, preventing a real observation
+from being joined to the mock webcam geometry. `scripts/record_bag.sh` adds a
+`webcam_apriltag` profile. The target image now declares `v4l-utils`,
+`v4l2_camera`, `image_proc`, and `apriltag_ros`; the generic Compose profile
+is explicitly build/development-only and has no camera device mapping.
+
+**ROS interfaces and TF ownership:** The launch publishes
+`/sensors/webcam/image_raw` and `/sensors/webcam/image_rect`
+(`sensor_msgs/msg/Image`), `/sensors/webcam/camera_info`
+(`sensor_msgs/msg/CameraInfo`), `/sensors/webcam/tag_detections`
+(`apriltag_msgs/msg/AprilTagDetectionArray`), and `/tf`
+(`tf2_msgs/msg/TFMessage`). `apriltag_ros` solely owns dynamic,
+camera-relative `webcam_optical_frame -> webcam_observation_tag_0` samples.
+The detection message is not a robot pose, and this phase publishes no
+physical `base_link -> webcam_optical_frame`, tag map, localizer/EKF pose, or
+`map -> odom`/`odom -> base_link` transform. New TF samples stop after tag
+loss, but a listener can cache the last sample; a later localizer must reject
+stale timestamps. Future cameras must use distinct source-scoped topics and
+observation child frames.
+
+**Parameters and provenance:** The Logitech UVC camera is selected by an
+explicit stable `/dev/v4l/by-id/...` path (its observed `/dev/video2`
+enumeration is session-specific). The inherited user-confirmed calibration is
+unchanged numerically: 640 x 480, `plumb_bob`; only its metadata name became
+`uvc_camera_(046d:0825)`. V4L2 is configured to and read back at 15 Hz before
+the driver opens. The user-confirmed bench tag is `tag36h11` ID 0 with a
+0.250 m detector-corner edge. `max_hamming: 0`, PnP, one detector thread,
+decimation 2.0, blur 0, refinement, and sharpening 0.25 are baseline settings,
+not competition-tuned values.
+
+**Architecture, safety, and failure behavior:** `v4l2_camera` was selected
+for direct V4L2 configuration with `image_proc` and `apriltag_ros`; the launch
+uses a `v4l2-ctl` set/read-back preflight rather than silently accepting an
+unknown source rate. Missing V4L2 utility, device, configuration, or an
+out-of-range read-back raises a launch error before the driver starts. The
+pipeline has no `/cmd_vel` consumer, motor enable, power control, localizer, or
+EKF, so it cannot command propulsion. A missing tag supplies no new detection
+or TF sample; it is not a valid last-known/global pose. Resolution or
+calibration mismatch invalidates metric use.
+
+**Verification and evidence:** On the available x86_64 Ubuntu 24.04/Jazzy
+development host, `python3 -m py_compile` passed;
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/build.sh` built 10 packages; and
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` passed 70 tests with
+zero failures and one expected skip. `./scripts/lint.sh` passed all configured
+hooks in unrestricted execution; its Black worker stalled in the restricted
+sandbox. The `webcam_apriltag` recorder profile passed its dry run. The live
+bench verified matching 640 x 480 `CameraInfo`, detected `tag36h11` ID 0 with
+hamming 0 and decision margin 124.291, and observed camera-relative TF
+translation `[-0.143, 0.360, 2.051]` m; none is a metric accuracy claim. A
+full-image bag recorded `image_raw` at 14.995 Hz, while detector samples were
+11.86 Hz (`ros2 topic hz`) and 9.17 Hz (metadata-only bag). The latter does
+not demonstrate the specification's sustained 10–15 FPS detector target.
+Supporting detail is in
+[`docs/evidence/phase41_validation_2026-08-17.md`](../docs/evidence/phase41_validation_2026-08-17.md);
+local ignored bags are `bags/webcam_apriltag-20260817T195613Z` and
+`bags/webcam_apriltag_metadata-20260817T160500Z`.
+
+**Known limitations and remaining work:** Revalidate calibration against a
+measured target distance/angle, measure the physical camera mount/extrinsic,
+choose/survey the multi-tag map and inventory, add source adapters and quality
+covariance, and stale-data gates, implement `lb_localization/tag_localizer` and
+the local/global EKFs, profile the selected Humble/Jetson runtime, and design
+the least-privilege container V4L2 mapping. No ZED, physical robot mount,
+global pose, target hardware, or competition resource result is claimed.
+
+**Git evidence:** `PENDING — update after the Phase 4.1 implementation commit is created.`

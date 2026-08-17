@@ -12,7 +12,7 @@ usage() {
   cat <<'EOF'
 Usage: scripts/record_bag.sh --profile PROFILE [--dry-run]
 
-Profiles: localization, perception, navigation, hardware, mission
+Profiles: localization, perception, navigation, hardware, mission, webcam_apriltag
 
 The bag output is written below ./bags/ and is ignored by Git. This script
 never enables motors and only records the canonical topic groups documented in
@@ -51,6 +51,9 @@ fi
 case "${PROFILE}" in
   localization)
     TOPICS=(/odom/wheel /imu/data /odometry/local /odometry/global /tag_detections /localization/apriltag_pose /tf /tf_static)
+    ;;
+  webcam_apriltag)
+    TOPICS=(/sensors/webcam/image_raw /sensors/webcam/camera_info /sensors/webcam/image_rect /sensors/webcam/tag_detections /tf)
     ;;
   perception)
     TOPICS=(/scan /perception/depth_obstacles /perception/terrain_hazards /diagnostics)

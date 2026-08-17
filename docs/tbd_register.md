@@ -13,9 +13,10 @@ and a recorded validation method.
 | DRIVE-03 | Motor comms | MCU role, CAN topology/bitrate/IDs, SPARK MAX configuration, heartbeat/fault protocol | Before real transport | Approved protocol specification |
 | SAFE-01 | Safety | E-stop path, enable/reset policy, battery/current/tilt/staleness thresholds | Before real output / Phase 9 | Electrical and safety review |
 | GEOM-01 | Robot | Frame origin, footprint(s), clearance, speed/acceleration/jerk limits | Phase 1 onward | Measured and reviewed values |
+| CAM-01 | Webcam mount | Physical `base_link -> webcam_optical_frame` transform, frame authority, mounting rigidity, calibration revalidation, timestamp behavior | Before tag localization | Surveyed mount/calibration record with method, uncertainty, and one TF authority |
 | ZED-01 | ZED Mini | Unit/firmware, USB port, mount, transform, calibration, timestamp/frame authority | Phase 1 / 3 | Bench validation record |
 | LIDAR-01 | LiDAR | Model, driver, connection, range/filter/mount settings | Phase 1 / 6 | Selected hardware and driver test |
-| TAG-01 | AprilTags | Camera choice, family, IDs, sizes, placement, world poses, uncertainty | Phase 4 | Surveyed tag map |
+| TAG-01 | AprilTags | Final camera allocation, family, IDs, sizes, placement, world poses, uncertainty, and multi-camera observation naming | Phase 4 | Surveyed tag map plus documented tag/camera inventory and uncertainty |
 | MAP-01 | Arena | Map, resolution, origin, occupancy thresholds, keepouts | Phase 4–5 | Calibrated map artifact |
 | LOC-01 | Localization | EKF covariances, IMU axes/yaw, tag quality gates, validity thresholds | Phase 3–4 | Recorded-data validation |
 | PER-01 | Perception | ROI, terrain thresholds, negative-obstacle strategy, costmap parameters | Phase 6–7 | Arena test evidence |
@@ -35,6 +36,26 @@ the digging arm rather than additional drive wheels. This closes the six-wheel
 interpretation of the BOM. The 2026-08-10 design handoff and team confirmation
 also establish skid/tank steering. They do not establish dimensions, actuator
 interfaces, or calibrated drive values.
+
+## Phase 4.1 webcam baseline
+
+The 2026-08-17 bench baseline narrows, but does not close, the camera/tag
+questions. The same Logitech webcam has a user-confirmed archived 640 x 480
+calibration, and the bench tag is `tag36h11` ID 0 with a user-confirmed
+0.250 m detector-corner edge. The calibration metadata name was updated to
+`uvc_camera_(046d:0825)`; its numerical values are unchanged. The source-scoped
+webcam pipeline configures and verifies a 15 Hz V4L2 source rate before the
+driver starts, then uses a dynamic `webcam_observation_tag_0` observation
+frame.
+
+`CAM-01` remains open because no physical mount/extrinsic is measured. `TAG-01`
+remains open because the competition tag inventory, multi-camera allocation,
+placement, world poses, uncertainty, and surveyed tag map are not selected.
+`ZED-01` remains independent: a later ZED must use distinct source-scoped
+topics and observation frames, such as `zed_observation_tag_0`.
+The generic Compose profile intentionally has no camera device mapping; its
+least-privilege `/dev/v4l` and V4L2-device pass-through design remains part of
+`OPS-01` before containerized Jetson camera use.
 
 ## Resolved design decisions
 

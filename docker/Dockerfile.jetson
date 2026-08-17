@@ -1,5 +1,5 @@
-# Phase 1 build container. It deliberately does not install the ZED SDK: that
-# installation must be validated against the physical Jetson image first.
+# Phase 4.1 build container. It deliberately does not install the ZED SDK:
+# that installation must be validated against the physical Jetson image first.
 ARG BASE_IMAGE=ubuntu:22.04
 FROM ${BASE_IMAGE}
 
@@ -19,6 +19,7 @@ RUN apt-get update \
         python3-colcon-common-extensions \
         python3-rosdep \
         python3-vcstool \
+        v4l-utils \
     && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
         -o /usr/share/keyrings/ros-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/ros-archive-keyring.gpg] http://packages.ros.org/ros2/ubuntu $(. /etc/os-release && echo ${UBUNTU_CODENAME}) main" \
@@ -30,12 +31,15 @@ RUN apt-get update \
         ros-${ROS_DISTRO}-ament-cmake-lint-cmake \
         ros-${ROS_DISTRO}-ament-cmake-pytest \
         ros-${ROS_DISTRO}-ament-cmake-xmllint \
+        ros-${ROS_DISTRO}-apriltag-ros \
+        ros-${ROS_DISTRO}-image-proc \
         ros-${ROS_DISTRO}-joint-state-publisher \
         ros-${ROS_DISTRO}-launch-testing-ament-cmake \
         ros-${ROS_DISTRO}-launch-testing-ros \
         ros-${ROS_DISTRO}-robot-state-publisher \
         ros-${ROS_DISTRO}-ros2-control \
         ros-${ROS_DISTRO}-ros2-controllers \
+        ros-${ROS_DISTRO}-v4l2-camera \
         ros-${ROS_DISTRO}-xacro \
     && rm -rf /var/lib/apt/lists/*
 

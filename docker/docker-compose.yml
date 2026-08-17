@@ -1,3 +1,6 @@
+# Build/development profile only: it intentionally does not map a V4L2 device
+# or /dev/v4l. Add and validate a least-privilege target-runtime overlay before
+# running a camera inside a Jetson container.
 services:
   lunabot:
     build:
@@ -7,7 +10,7 @@ services:
         BASE_IMAGE: ${CONTAINER_BASE_IMAGE}
         ROS_DISTRO: ${ROS_DISTRO}
         TARGET_PLATFORM: ${TARGET_PLATFORM}
-    image: lunabot-autonomy:phase0-${ROS_DISTRO}
+    image: lunabot-autonomy:phase41-${ROS_DISTRO}
     platform: ${TARGET_PLATFORM}
     working_dir: /workspace/src/jmu-lunabotics
     volumes:
