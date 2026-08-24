@@ -414,3 +414,115 @@ global pose, target hardware, or competition resource result is claimed.
 
 **Git evidence:** `963e64c` (`feat: implement phase 4.1 webcam apriltag
 bench`) records this implementation.
+
+## 2026-08-24 — Phase 4.2 fail-closed known-AprilTag localizer
+
+**Purpose and scope:** Implemented the software-only known-tag-localization
+boundary in `lb_localization`. It turns a surveyed known-tag observation into
+an absolute `map`-frame measurement for a later global EKF, without claiming a
+physical robot pose, completing Phase 4, starting an EKF, or authorizing any
+motion. This phase preserves the Phase 4.1 bench tag: `tag36h11` ID 0 at a
+user-confirmed 0.250 m detector-corner edge remains test-only and is rejected
+from a field map. The team-selected future field plan is `tag36h11` IDs 1, 2,
+and 3 at nominal 0.300 m detector-corner edges; it is not printed, measured,
+mounted, surveyed, or validated.
+
+**Components and files:** `lb_localization` now owns the C++ core
+(`include/lb_localization/tag_localizer_core.hpp`,
+`src/tag_localizer_core.cpp`), ROS node (`src/tag_localizer_node.cpp`),
+fail-closed launch (`launch/tag_localizer.launch.py`), unverified production
+templates (`config/tag_map.template.yaml`, `tag_localizer.template.yaml`, and
+the nonlaunchable `ekf_global.template.yaml`), and synthetic-only fixtures and
+tests under `test/`. The detailed contracts and evidence are
+[`docs/phase42_tag_localizer.md`](../docs/phase42_tag_localizer.md) and
+[`docs/evidence/phase42_validation_2026-08-24.md`](../docs/evidence/phase42_validation_2026-08-24.md).
+Repository-wide Black 24.10 formatting also made no-behavior-change style
+updates to the existing Phase 4.1 webcam launch/contract test so the full lint
+suite is clean.
+
+**ROS interfaces and TF ownership:** The node directly subscribes to each
+configured source-scoped `apriltag_msgs/msg/AprilTagDetectionArray`, initially
+`/sensors/webcam/tag_detections` and the reserved
+`/sensors/zed/tag_detections`. It publishes only
+`/localization/apriltag_pose` (`geometry_msgs/msg/PoseWithCovarianceStamped`,
+frame `map`) and `/diagnostics` (`diagnostic_msgs/msg/DiagnosticArray`). It
+offers no services or actions, consumes no motor command, and has no transform
+broadcaster. It requires an exact-stamp observation edge
+`<camera_optical_frame> -> <source>_observation_tag_<id>` plus a static or
+exact-stamp surveyed `base_link -> <camera_optical_frame>` extrinsic. Source
+prefixes must be unique (`webcam_observation_tag_` versus
+`zed_observation_tag_`) so two cameras never collide. The node never owns or
+publishes `map -> odom`, `odom -> base_link`, camera extrinsics, or tag-world
+TF; a future global EKF is the sole intended `map -> odom` authority.
+
+**Parameters and provenance:** The map parser requires `REP-103`, unique
+positive `tag36h11` field IDs, tag size, finite map pose, and declared survey
+status. The normal templates deliberately contain `TBD`/`unverified` values;
+all gates, covariance coefficients, camera extrinsic authority, and map poses
+must be measured/surveyed and recorded before physical use. The synthetic
+fixture values (including the 0.300 m tags, extrinsics, gates, and the large
+unobserved-roll/pitch covariance) are test data only. The planar fused output
+sets roll/pitch to zero and applies the explicit
+`unobserved_roll_pitch_variance_rad2` rather than pretending they were
+estimated.
+
+**Architecture and alternatives:** The localizer consumes source-scoped
+detector topics directly rather than prematurely adding an unscoped
+`/tag_detections` adapter. This preserves source identity and camera-specific
+TF frames for multi-camera duplicate protection. Metric pose comes from the
+detector observation TF because the installed `apriltag_msgs` message carries
+quality/image data but no metric pose. The retained old-project pose/TF
+backbone was not reused because it could synthesize camera aliases or global
+TF authority inconsistent with this architecture. Candidates are deduplicated
+by physical `(family, id)`, fused only across distinct tags, and produce an
+EKF input rather than a parallel global transform source.
+
+**Safety and failure behavior:** The public launch has no usable default map
+or configuration path. The node accepts only an all-surveyed map/configuration/
+extrinsic set, or an all-`synthetic_test_only` set with explicit
+`allow_synthetic_test_data:=true`. It rejects unknown/bench tags, bad family,
+hamming, decision margin, pixel size, range, view angle, stale/future
+detections, timestamp/frame-invalid TF, inter-tag disagreement, and
+implausible jumps. A no-tag interval creates no new pose; a backwards ROS-time
+jump clears pending observations and the jump reference. A dedicated TF
+listener thread supports the configured nonzero TF lookup timeout on Humble and
+Jazzy. These are software gates only; they do not replace physical E-stop,
+camera calibration, tag survey, or localization health monitoring.
+
+**Dependencies and resource use:** New package dependencies are `rclcpp`,
+`tf2`, `tf2_geometry_msgs`, `tf2_ros`, `geometry_msgs`, `diagnostic_msgs`,
+`apriltag_msgs`, and `yaml_cpp_vendor`/`yaml-cpp`. Future dependencies remain
+the selected camera detector/ZED stack, Phase 3 local odometry, and
+`robot_localization` for the global EKF. No Phase 4.2 runtime CPU, memory,
+bandwidth, detector latency, or Jetson resource measurement was taken; the
+synthetic node-start test used two configured source subscriptions but no live
+DDS camera/TF graph.
+
+**Verification and evidence:** On the x86_64 Ubuntu 24.04/ROS 2 Jazzy
+development host, `LUNABOT_ROS_DISTRO=jazzy ./scripts/build.sh` completed all
+10 packages and `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build`
+reported 87 tests, 0 errors, 0 failures, and 1 expected conditional skip.
+The C++ suite covers map parsing (including ID 0 and non-REP-103 rejection),
+configuration opt-in, transform composition, quality gates, covariance,
+multi-camera equivalence, fusion, yaw wrapping, deduplication, and jump
+rejection; static contracts cover launch/TF ownership. A no-argument public
+launch failed before node creation as designed. An explicit synthetic fixture
+launch initialized the node and then stopped cleanly under a five-second test
+timeout. The restricted sandbox blocked DDS sockets, so no live detection,
+TF, pose, or performance claim follows. `./scripts/lint.sh` passed all hooks
+in unrestricted execution after Black workers stalled in the restricted
+sandbox.
+
+**Known limitations and remaining work:** `CAM-01`, `TAG-01`, `LOC-01`, and
+`ZED-01` remain open. Required next work is to print/measure/survey IDs 1–3,
+record map convention/uncertainty, measure each physical camera extrinsic,
+revalidate webcam calibration, add/profile a ZED source on the locked
+Jetson/Humble image, capture recorded data for gate/covariance tuning, add the
+localization-validity monitor, implement/validate Phase 3 local odometry, and
+then validate a global EKF as the sole `map -> odom` authority. Target arm64,
+live multi-camera, stale-TF, and absolute-pose accuracy behavior remain
+unvalidated.
+
+**Git evidence:** `3326f22` (`feat: implement phase 4.2 tag localizer`) is
+the implementation commit; this devlog record is committed separately for
+traceability.
