@@ -109,9 +109,11 @@ ensure exactly one publisher owns each rigid transform.
 A later ZED (or another webcam) must use its own source-scoped image/detection
 topics and a distinct observation-frame prefix, for example
 `zed_observation_tag_0`. Two cameras must never publish the same dynamic child
-frame for the same tag. The future `lb_localization/tag_localizer` will combine
-camera-relative observations only after it has a surveyed tag map, calibrated
-camera extrinsics, quality gates, and covariance rules.
+frame for the same tag. Phase 4.2 provides the
+[`lb_localization/tag_localizer`](phase42_tag_localizer.md) software core, but
+it cannot combine camera-relative observations in a physical run until it has a
+surveyed tag map, calibrated camera extrinsics, and recorded gate/covariance
+values.
 
 ## Safe behavior and failures
 
@@ -137,9 +139,10 @@ not weaken the independent physical E-stop requirement.
 - A resolution/calibration mismatch invalidates metric interpretation. Keep
   the launch at the calibrated 640 x 480 profile until a new calibration is
   recorded.
-- Rejected hamming values, poor decision margin, excessive range/view angle,
-  timestamp staleness, multi-tag disagreement, and localizer health behavior
-  are future `TAG-01`/`LOC-01` work; only `max_hamming: 0` is enforced here.
+- The Phase 4.2 localizer implements configurable hamming, decision-margin,
+  range/view-angle, timestamp, multi-tag-disagreement, and jump gates, but
+  physical values remain `TAG-01`/`LOC-01` work. Phase 4.1 itself enforces only
+  its detector baseline `max_hamming: 0`.
 
 ## Bench procedure
 
@@ -215,9 +218,9 @@ Jetson under defined range, angle, lighting, and load conditions before
 claiming detector-rate compliance.
 
 Remaining work includes a measured camera-to-tag accuracy study, a surveyed
-physical webcam mount, final multi-tag inventory and map, quality/covariance
-gates, source adapters for additional cameras, `lb_localization/tag_localizer`,
-local/global EKFs, and target-hardware profiling.
+physical webcam mount, the planned field-tag inventory/map survey,
+recorded-data gate/covariance tuning, additional-camera integration, local/global
+EKFs, and target-hardware profiling.
 
 **Implementation Git commit:** `963e64c` (`feat: implement phase 4.1 webcam
 apriltag bench`).

@@ -50,9 +50,7 @@ def _configure_v4l2_framerate(device: str, framerate: float) -> None:
     )
     set_output = (set_result.stdout + set_result.stderr).strip()
     if set_result.returncode != 0:
-        raise RuntimeError(
-            f"Could not configure {device} for {framerate:g} FPS: {set_output}"
-        )
+        raise RuntimeError(f"Could not configure {device} for {framerate:g} FPS: {set_output}")
 
     get_result = subprocess.run(
         [v4l2_control, f"--device={device}", "--get-parm"],
@@ -174,14 +172,10 @@ def generate_launch_description() -> LaunchDescription:
         [
             DeclareLaunchArgument(
                 "webcam_device",
-                default_value=(
-                    "/dev/v4l/by-id/usb-046d_0825_961026E0-video-index0"
-                ),
+                default_value=("/dev/v4l/by-id/usb-046d_0825_961026E0-video-index0"),
             ),
             DeclareLaunchArgument("camera_namespace", default_value="sensors/webcam"),
-            DeclareLaunchArgument(
-                "camera_name", default_value="uvc_camera_(046d:0825)"
-            ),
+            DeclareLaunchArgument("camera_name", default_value="uvc_camera_(046d:0825)"),
             DeclareLaunchArgument("camera_frame", default_value="webcam_optical_frame"),
             DeclareLaunchArgument("camera_fps", default_value="15.0"),
             DeclareLaunchArgument(

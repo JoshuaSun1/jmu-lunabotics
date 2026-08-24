@@ -57,6 +57,25 @@ The generic Compose profile intentionally has no camera device mapping; its
 least-privilege `/dev/v4l` and V4L2-device pass-through design remains part of
 `OPS-01` before containerized Jetson camera use.
 
+## Phase 4.2 field-tag and localizer boundary
+
+As of 2026-08-24, the team plans three future field markers: `tag36h11` IDs
+1, 2, and 3, each with a nominal 0.300 m detector-corner edge. This narrows
+the inventory portion of `TAG-01`, but does not close it. The markers are not
+yet printed, measured, mounted, assigned to cameras, surveyed, or validated,
+and no field pose or uncertainty is known. Bench-only ID 0 at 0.250 m remains
+outside this inventory and field-map template.
+
+Phase 4.2 adds the testable `tag_localizer` software core and unverified
+templates. `CAM-01`, `TAG-01`, `LOC-01`, and `ZED-01` stay open because the
+core rejects non-surveyed configurations except an explicitly opted-in,
+all-synthetic test set. In particular, it cannot legitimize the Phase 1 mock
+camera transform, synthetic fixture values, a template value, or a retained
+detector TF without timestamp qualification as a physical calibration or live
+observation. Its timestamp checks are structurally tested; target-runtime TF
+behavior remains unvalidated. The future global EKF and its `map -> odom`
+authority remain blocked on Phase 3 local odometry and recorded-data tuning.
+
 ## Resolved design decisions
 
 | ID | Decision | Evidence | Remaining boundary |

@@ -18,12 +18,14 @@
 | Phase 4.1 calibrated webcam acquisition and rectification | `lb_sensors/launch/webcam_apriltag.launch.py`, `lb_sensors/config/webcam_calibration.yaml` | Implemented as non-actuating 640 x 480 V4L2 acquisition after a fail-closed 15 Hz preflight plus rectification; user-confirmed inherited calibration requires measured revalidation and target runtime validation |
 | Phase 4.1 AprilTag detection baseline | `lb_sensors/config/webcam_apriltag.yaml`, `lb_sensors/launch/webcam_apriltag.launch.py`, `lb_sensors/test/test_phase41_webcam_contract.py` | Implemented for `tag36h11` ID 0, 0.250 m detector-corner edge, and hamming 0; development-host output samples were 9.17–11.86 Hz, so the specification's 10–15 FPS detector target is not yet demonstrated; target profiling pending |
 | Phase 4.1 camera-scoped observation TF | `webcam_optical_frame -> webcam_observation_tag_0`, `docs/phase41_webcam_apriltag.md` | Implemented as dynamic detector observation only; no physical base-camera extrinsic, tag map, robot pose, localizer, EKF, `map -> odom`, or `odom -> base_link` |
-| Known-tag localization and global correction | Future `lb_localization/tag_localizer`, tag-map/EKF configuration | Pending `CAM-01`, `TAG-01`, `LOC-01`, and target evidence |
+| Phase 4.2 tag-map schema and planned field inventory | `lb_localization/config/tag_map.template.yaml`, `docs/phase42_tag_localizer.md` | Implemented as an unverified template for `tag36h11` IDs 1–3, nominal 0.300 m; no field poses/survey or physical claim |
+| Phase 4.2 known-tag localizer core | `lb_localization/src/tag_localizer_core.cpp`, `tag_localizer_node.cpp`, unit/contract tests | Implemented and structurally tested with synthetic fixtures; publishes only map-frame absolute pose and diagnostics, never TF; physical use and the specification's localization-validity monitoring remain pending `CAM-01`, `TAG-01`, and `LOC-01` |
+| Global EKF correction and `map -> odom` authority | `lb_localization/config/ekf_global.template.yaml` | Pending Phase 3 `/odometry/local`, measured tuning, `robot_localization`, and target runtime TF-authority evidence; template is not launched |
 | Container builds on target architecture | `docker/` Phase 1 dependency set | Pending physical arm64 validation |
 | `colcon build` / `colcon test` | Build/test scripts and package tests | Pending validation in locked Humble environment |
 
-The Phase 4.1 detector baseline is intentionally narrower than the Phase 4
-localization requirements. Requirements outside the completed mock-drive and
-camera-observation boundaries remain deliberately unimplemented. See
-[`../resources/devlog.md`](../resources/devlog.md) for validation evidence as
-it becomes available.
+The Phase 4.1 detector baseline and Phase 4.2 synthetic localizer are narrower
+than completed field localization. Requirements outside the completed
+mock-drive, camera-observation, and software-only localizer boundaries remain
+deliberately unimplemented. See [`../resources/devlog.md`](../resources/devlog.md)
+for validation evidence as it becomes available.

@@ -1,0 +1,18 @@
+# Design template only -- it is not launched or installed as a runnable EKF
+# profile.  Phase 3 must provide validated local odometry before this can be
+# completed.  The eventual global robot_localization EKF is the sole map->odom
+# authority; tag_localizer must never broadcast that transform.
+ekf_global:
+  ros__parameters:
+    frequency: TBD
+    sensor_timeout: TBD
+    two_d_mode: true
+    publish_tf: TBD
+    map_frame: map
+    odom_frame: odom
+    base_link_frame: base_link
+    world_frame: map
+    odom0: /odometry/local
+    pose0: /localization/apriltag_pose
+    # Complete every *_config vector and covariance/timeout setting from
+    # recorded-data validation before turning this template into a launchable file.

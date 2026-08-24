@@ -9,7 +9,7 @@ topic leakage into the system design:
 | `/imu/data` | ZED wrapper/remap | Local EKF |
 | `/odom/wheel` | Drive controller | Local EKF |
 | `/odometry/local` | Local EKF | Global EKF, Nav2 |
-| `/sensors/<camera>/tag_detections` | Camera-specific AprilTag detector | Future source adapter / tag localizer |
+| `/sensors/<camera>/tag_detections` | Camera-specific AprilTag detector | Source-scoped `tag_localizer` subscription |
 | `/tag_detections` | Future normalized/aggregated AprilTag interface | Tag localizer |
 | `/localization/apriltag_pose` | Tag localizer | Global EKF |
 | `/perception/terrain_hazards` | Terrain node | Nav2 costmap |
@@ -22,8 +22,9 @@ message adaptations and parameters are deferred to the relevant implementation
 phase.
 
 The source-scoped detection name is intentional. Phase 4.1 publishes only
-`/sensors/webcam/tag_detections`; the unscoped `/tag_detections` row remains a
-future application-boundary reservation and has no Phase 4.1 publisher.
+`/sensors/webcam/tag_detections`; Phase 4.2 consumes configured source-scoped
+topics directly. The unscoped `/tag_detections` row remains a future
+application-boundary reservation and has no current publisher.
 
 ## Phase 1 mock interfaces
 
@@ -66,3 +67,19 @@ TF. No Phase 4.1 node publishes `/tag_detections`,
 `map -> odom`, or `odom -> base_link`. A later ZED/second camera must publish
 source-scoped names and a unique child frame (for example,
 `zed_observation_tag_0`) instead of reusing the webcam observation frame.
+
+## Phase 4.2 known-tag-localizer interfaces
+
+| Interface | Type | Publisher | Consumer | Boundary |
+|---|---|---|---|---|
+| `/sensors/webcam/tag_detections` | `apriltag_msgs/msg/AprilTagDetectionArray` | Webcam detector | `tag_localizer` | The configured source header must equal `webcam_optical_frame`; actual production use waits for a surveyed webcam extrinsic. |
+| `/sensors/zed/tag_detections` | `apriltag_msgs/msg/AprilTagDetectionArray` | Future ZED detector | `tag_localizer` | Reserved source contract; no ZED pipeline exists yet. Its observation children must use `zed_observation_tag_<id>`. |
+| `/tf` camera observation | `tf2_msgs/msg/TFMessage` | Camera-specific AprilTag detector | `tag_localizer` | Exact-stamp dynamic `<camera>_optical_frame -> <source>_observation_tag_<id>` transform supplies metric camera-to-tag geometry. Timestamp/frame checks reject zero, stale, and mismatched samples; target-runtime cached-TF behavior remains to be validated. |
+| `/tf` camera extrinsic | `tf2_msgs/msg/TFMessage` | Future measured rigid-frame authority | `tag_localizer` | `base_link -> <camera>_optical_frame`; a static sample is accepted only after its source configuration is marked surveyed. No mock URDF extrinsic is valid. |
+| `/localization/apriltag_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | `tag_localizer` | Future global EKF | Fresh fused absolute pose in `map`, using covariance; it is planar yaw with explicitly large unobserved roll/pitch covariance, and the localizer publishes no TF. |
+| `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | `tag_localizer` | Operator/logger | Accepted/rejected counts, reasons, cache/fusion status, and age since the last accepted correction. |
+
+`tag_localizer` deduplicates observations by physical `(family, id)` before
+fusion. Two cameras seeing tag 1 therefore do not falsely satisfy a
+multi-tag requirement. It never publishes `/tag_detections`, `/odometry/global`,
+`map -> odom`, or `odom -> base_link`.

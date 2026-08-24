@@ -68,12 +68,8 @@ def test_launch_keeps_camera_data_source_scoped_and_does_not_invent_robot_pose()
 def test_runtime_and_evidence_dependencies_are_declared() -> None:
     """The target image and recorder preserve the complete bench dependency path."""
     manifest = (PACKAGE_ROOT / "package.xml").read_text(encoding="utf-8")
-    dockerfile = (REPOSITORY_ROOT / "docker" / "Dockerfile.jetson").read_text(
-        encoding="utf-8"
-    )
-    recorder = (REPOSITORY_ROOT / "scripts" / "record_bag.sh").read_text(
-        encoding="utf-8"
-    )
+    dockerfile = (REPOSITORY_ROOT / "docker" / "Dockerfile.jetson").read_text(encoding="utf-8")
+    recorder = (REPOSITORY_ROOT / "scripts" / "record_bag.sh").read_text(encoding="utf-8")
 
     assert "<exec_depend>v4l-utils</exec_depend>" in manifest
     assert "<exec_depend>v4l2_camera</exec_depend>" in manifest

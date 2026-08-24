@@ -1,6 +1,6 @@
 # Architecture
 
-## Phase 1, Phase 2, and Phase 4.1 boundary
+## Phase 1, Phase 2, Phase 4.1, and Phase 4.2 boundary
 
 This document records the target architecture and the implemented Phase 1
 mock-description boundary. Each future phase must preserve the ownership rules
@@ -112,8 +112,26 @@ user-confirmed 0.250 m detector-corner edge and `max_hamming: 0`. The detector
 may publish only `webcam_observation_tag_0`; a later ZED must use a distinct
 child frame such as `zed_observation_tag_0` to avoid TF collisions.
 
-This phase has no tag map, multi-tag fusion, quality/covariance gates,
-`lb_localization/tag_localizer`, local EKF, global EKF, or map/odometry TF
-publication. Those remain the later Phase 3/4 architecture. The detailed
-camera interface, parameter provenance, bench procedure, and failure boundary
-are in [`phase41_webcam_apriltag.md`](phase41_webcam_apriltag.md).
+Phase 4.1 itself still has no tag map, fusion, robot pose, or map/odometry TF
+publication. The detailed camera interface, parameter provenance, bench
+procedure, and failure boundary are in
+[`phase41_webcam_apriltag.md`](phase41_webcam_apriltag.md).
+
+## Phase 4.2 known-tag-localization boundary
+
+`lb_localization` now owns a fail-closed C++ `tag_localizer` core and ROS
+wrapper. It directly subscribes to configured source-scoped detector arrays,
+looks up each source's exact-stamp observation TF and a measured
+`base_link -> camera_optical_frame` transform, and composes a candidate
+`map -> base_link` pose internally. It publishes only the resulting
+`/localization/apriltag_pose` measurement and `/diagnostics`; it has no TF
+broadcaster. The future global EKF remains the sole `map -> odom` owner.
+
+The configuration templates record the planned field inventory of
+`tag36h11` IDs 1–3 at nominal 0.300 m detector-corner edges. They are
+unverified and nonlaunchable: no tag pose, camera extrinsic, quality gate, or
+covariance is silently assumed. The Phase 4.1 bench-only ID 0 / 0.250 m tag is
+excluded. Synthetic fixture maps/extrinsics may run only with an explicit
+test-only opt-in and are never included from system bringup. See
+[`phase42_tag_localizer.md`](phase42_tag_localizer.md) for the full TF,
+fusion, failure, and remaining-hardware contract.

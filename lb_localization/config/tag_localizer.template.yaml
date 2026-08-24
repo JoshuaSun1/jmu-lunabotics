@@ -1,0 +1,53 @@
+# Template only: do not launch this file.  Every TBD must be replaced by a
+# measured/surveyed value with provenance, and the status values changed to
+# "surveyed" after review.  No quality/covariance defaults are hidden in code.
+schema_version: 1
+configuration_status: unverified
+map_frame: map
+base_frame: base_link
+tf_lookup_timeout_s: TBD
+quality_gates:
+  max_tag_distance_m: TBD
+  max_view_angle_deg: TBD
+  min_decision_margin: TBD
+  max_hamming: TBD
+  max_pose_jump_m: TBD
+  max_yaw_jump_rad: TBD
+  max_detection_age_s: TBD
+  minimum_valid_tags: TBD
+  min_tag_pixel_size_px: TBD
+  transform_timestamp_tolerance_s: TBD
+  max_future_skew_s: TBD
+  fusion_window_s: TBD
+  jump_reference_timeout_s: TBD
+  max_intertag_position_spread_m: TBD
+  max_intertag_yaw_spread_rad: TBD
+covariance_model:
+  position_stddev_floor_m: TBD
+  position_stddev_per_m: TBD
+  yaw_stddev_floor_rad: TBD
+  yaw_stddev_per_m: TBD
+  roll_pitch_stddev_rad: TBD
+  z_stddev_scale: TBD
+  distance_quality_gain: TBD
+  view_angle_quality_gain: TBD
+  reference_decision_margin: TBD
+  reference_tag_pixel_size_px: TBD
+  # Required deliberately large covariance for the unobserved roll/pitch
+  # components of this planar fused measurement; tune/justify from validation.
+  unobserved_roll_pitch_variance_rad2: TBD
+sources:
+  - source_id: webcam
+    detections_topic: /sensors/webcam/tag_detections
+    expected_camera_frame: webcam_optical_frame
+    observation_frame_prefix: webcam_observation_tag_
+    base_frame: base_link
+    extrinsic_status: unverified
+    extrinsic_authority: TBD
+  - source_id: zed
+    detections_topic: /sensors/zed/tag_detections
+    expected_camera_frame: zed_camera_optical_frame
+    observation_frame_prefix: zed_observation_tag_
+    base_frame: base_link
+    extrinsic_status: unverified
+    extrinsic_authority: TBD

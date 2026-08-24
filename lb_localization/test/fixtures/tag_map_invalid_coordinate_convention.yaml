@@ -1,0 +1,12 @@
+# Deliberately invalid unit-test fixture: map geometry must follow REP-103.
+schema_version: 1
+map:
+  frame_id: map
+  survey_status: synthetic_test_only
+  coordinate_convention: NED
+tags:
+  - id: 1
+    family: tag36h11
+    size_m: 0.300
+    frame_id: invalid_coordinate_tag_1
+    pose_map: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}

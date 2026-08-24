@@ -1,0 +1,25 @@
+# Template only: this is deliberately invalid for runtime use until every pose
+# has been surveyed in the arena.  It records the team's planned future field
+# inventory, not a physical world map.  The Phase 4.1 bench-only tag 0 is not
+# present and must not be added to this field map without a separate survey.
+schema_version: 1
+map:
+  frame_id: map
+  survey_status: unverified
+  coordinate_convention: REP-103
+tags:
+  - id: 1
+    family: tag36h11
+    size_m: 0.300
+    frame_id: field_tag_1
+    pose_map: null  # Survey x/y/z/roll/pitch/yaw and uncertainty before use.
+  - id: 2
+    family: tag36h11
+    size_m: 0.300
+    frame_id: field_tag_2
+    pose_map: null
+  - id: 3
+    family: tag36h11
+    size_m: 0.300
+    frame_id: field_tag_3
+    pose_map: null

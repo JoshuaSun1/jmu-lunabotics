@@ -34,3 +34,28 @@ closed, and remaining blockers.
 - This validation is structural only. Jetson arm64/Humble container build, L4T,
   CUDA, ZED SDK/wrapper, camera, and hardware validation remain blocked on the
   physical target and are not represented as complete.
+
+## 2026-08-24 — Phase 4.2 software-only known-tag localizer
+
+- Added `lb_localization`'s C++ `tag_localizer` core/node, fail-closed launch,
+  tag-map/localizer/EKF templates, and synthetic-only fixtures.
+- The core loads a known tag map and camera-source contracts, composes
+  `map -> base_link` measurements from exact-time detector observations plus a
+  measured camera extrinsic, gates/fuses distinct physical tags, and publishes
+  only `/localization/apriltag_pose` and `/diagnostics`.
+- The implementation has no TF broadcaster and cannot publish `map -> odom`;
+  its public launch is excluded from system bringup and rejects absent,
+  unverified, or synthetic-without-explicit-opt-in data.
+- Its planar fused output gives roll/pitch an explicit large unobserved
+  covariance, validates the map's REP-103 convention, and uses a dedicated TF
+  listener thread so nonzero lookup timeouts work on Humble/Jazzy.
+- Recorded the planned future field inventory as `tag36h11` IDs 1–3 at nominal
+  0.300 m detector-corner edges. It remains an unmeasured, unsurveyed plan;
+  Phase 4.1's ID-0 / 0.250 m tag remains bench-only.
+- x86_64/Jazzy structural validation built 10 packages and passed 87 tests
+  with no errors/failures and one expected conditional skip. A public launch
+  with no map/config failed before creating a node, as designed; explicit
+  synthetic fixtures booted the node and were cleanly stopped under timeout.
+- Required physical work remains the tag/map survey, camera extrinsics,
+  calibration and detector-TF timestamp validation, ZED integration, gate and
+  covariance tuning, Phase 3 local odometry, and global-EKF TF-authority test.

@@ -74,3 +74,27 @@ cached transform is not a current detection.
 same sensor-only bench entry point. It deliberately suppresses the Phase 1/2
 mock bench and its synthetic camera transform; do not use it to connect the
 real webcam observation to mock robot geometry.
+
+## Phase 4.2 known-tag localizer
+
+`tag_localizer` is a non-actuating measurement node, but it is intentionally
+not part of normal bringup yet. Its launch requires explicit files:
+
+```bash
+ros2 launch lb_localization tag_localizer.launch.py \
+  tag_map_file:=/absolute/path/to/surveyed_tag_map.yaml \
+  localizer_config_file:=/absolute/path/to/surveyed_localizer.yaml
+```
+
+Do not substitute the installed templates: they contain `TBD` values and
+unverified tag poses/extrinsics, so the launch/node will fail closed. Do not
+reuse the Phase 1 mock webcam transform. A future physical run requires a
+surveyed `map` tag map, measured `base_link -> camera_optical_frame` transform,
+unique camera observation prefixes, and recorded gate/covariance provenance.
+
+The package's synthetic test fixtures are for automated tests only. They may
+be opted into only with `allow_synthetic_test_data:=true`; do not place that
+argument in robot bringup or treat its pose output as a field pose. The node
+publishes `/localization/apriltag_pose` and `/diagnostics` but never publishes
+`map -> odom`. Until Phase 3 local odometry and a validated global EKF exist,
+there is no live global-localization or navigation path.

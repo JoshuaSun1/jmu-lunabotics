@@ -43,6 +43,22 @@ profile at 640 x 480 until a different profile has its own calibration record.
 The synthetic webcam transform in the Phase 1 model is not a physical extrinsic
 and must not be used for this validation.
 
+## Phase 4.2 future field-tag plan
+
+The user-selected field inventory is `tag36h11` IDs **1, 2, and 3**, each with
+a nominal **0.300 m detector-corner edge**. This is a future plan as of
+2026-08-24, not a calibration result: the tags are not yet printed, measured,
+mounted, surveyed, or detector-validated. The existing `tag36h11` ID 0 at
+0.250 m remains bench-only and is deliberately excluded from the field-map
+template.
+
+`lb_localization/config/tag_map.template.yaml` and
+`tag_localizer.template.yaml` preserve these decisions while leaving every
+world pose, camera extrinsic, gate, and covariance as `TBD`. Their synthetic
+test fixtures have invented numeric values solely for deterministic unit tests.
+Do not copy a fixture pose, size, camera transform, or covariance into a real
+configuration.
+
 ## Required records
 
 - `base_link` origin, axes, and all rigid sensor mounting transforms.

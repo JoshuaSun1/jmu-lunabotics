@@ -4,8 +4,9 @@ ROS 2 software for the JMU NASA Lunabotics robot. This repository is being
 rebuilt around `docs/lunabotics_autonomy_software_spec.md`. Phase 2 provides a
 headless, mock-first description/drive stack; it contains no real motor,
 sensor, localization, Nav2, mission, or physical safety implementation. Phase
-4.1 adds only a non-actuating webcam AprilTag-observation bench pipeline; it
-does not produce a robot or global pose.
+4.1 adds a non-actuating webcam AprilTag-observation bench pipeline, and Phase
+4.2 adds a fail-closed, synthetic-test-covered known-tag localizer. Neither
+establishes a physical robot or global pose.
 
 ## Current status
 
@@ -27,6 +28,17 @@ samples while the configured tag is visible. A future consumer must reject a
 cached stale TF sample after tag loss. The phase has no physical base-to-camera
 extrinsic, tag map, localizer, EKF, `map`/`odom` transform, or robot-pose
 output. See the [Phase 4.1 webcam AprilTag note](docs/phase41_webcam_apriltag.md).
+
+Phase 4.2 adds `lb_localization/tag_localizer`: a C++ core that combines a
+surveyed map tag, exact-time camera observation TF, and measured camera
+extrinsic into a covariance-bearing `/localization/apriltag_pose` measurement.
+It supports separate webcam/ZED source contracts, deduplicates two views of
+the same tag, and emits diagnostics, but never publishes TF. The planned field
+inventory is `tag36h11` IDs 1–3 at nominal 0.300 m detector-corner edges;
+those markers and their poses are not yet physical/surveyed. The ID-0 0.250 m
+tag remains bench-only. The normal launch fails unless its explicit files
+validate as surveyed; an all-synthetic test set additionally requires an
+explicit opt-in. See the [Phase 4.2 localizer note](docs/phase42_tag_localizer.md).
 
 The intended robot runtime is:
 
@@ -116,8 +128,8 @@ Motors must remain disabled until the later hardware and safety phases are
 implemented and validated. The Phase 2 mock can consume a synthetic command
 and publish mock wheel odometry, but has no real transport, power switching,
 or physical hardware-enable path. This repository does not authorize bypassing
-the physical emergency stop. Phase 4.1 camera detection has no command,
-localization, or actuation path and cannot authorize motion.
+the physical emergency stop. Phase 4.1 camera detection and Phase 4.2's
+measurement-only localizer have no actuation path and cannot authorize motion.
 
 ## Prototype history
 

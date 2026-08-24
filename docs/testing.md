@@ -1,6 +1,6 @@
 # Testing
 
-## Phase 0 through Phase 4.1 checks
+## Phase 0 through Phase 4.2 checks
 
 | Check | Command | What it establishes |
 |---|---|---|
@@ -21,6 +21,7 @@
 | Phase 4.1 detection inspection | `ros2 topic echo /sensors/webcam/tag_detections --once` | Confirms the source-scoped detection's family, ID, hamming, decision margin, and camera header frame. It does not measure pose accuracy. |
 | Phase 4.1 observation-TF inspection | `ros2 run tf2_ros tf2_echo webcam_optical_frame webcam_observation_tag_0` | Confirms newly stamped dynamic camera-relative observations while the tag is visible; a cached transform after loss is stale and must not be interpreted as a base-relative or map-frame pose. |
 | Phase 4.1 rate/resource baseline | `ros2 topic hz /sensors/webcam/image_raw` and `/sensors/webcam/tag_detections` | Records actual host rates after V4L2 verifies the configured 15 Hz source rate; measure CPU/memory before making target performance claims. |
+| Phase 4.2 localizer core/contract tests | `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh` | Exercises synthetic tag-map parsing, explicit test-only opt-in, composition, quality/stale-TF contracts, covariance/fusion, duplicate-tag protection, jump gates, and the no-TF-broadcaster boundary. A synthetic node startup is also checked; it does not exercise a running camera/TF graph. |
 
 An x86/Jazzy result is a development-host result only. It cannot validate the
 Humble/JetPack/ZED runtime combination.
@@ -41,11 +42,11 @@ Phase 4.1 must preserve the camera calibration/detector YAML, device identity,
 V4L2 rate-preflight output, terminal output, observation-TF output, and a
 short rosbag or equivalent evidence for each meaningful bench run. A
 development-host pass is not a Humble/Jetson/Orin validation and does not
-establish metric pose accuracy. Before Phase 4 localization, add measured
-camera-to-tag accuracy tests, a surveyed physical camera extrinsic,
-multiple-tag/source collision tests, tag map/localizer unit tests,
-covariance/quality-gate tests, and TF-authority integration tests for the
-local and global EKFs.
+establish metric pose accuracy. Phase 4.2 adds offline tag-map/localizer,
+covariance/quality-gate, and multi-source collision contracts, but physical
+localization still needs measured camera-to-tag accuracy, a surveyed physical
+camera extrinsic, detector-TF timestamp validation, recorded-data tuning, and
+runtime TF-authority integration tests for the local and global EKFs.
 
 Use `scripts/record_bag.sh --profile webcam_apriltag` to capture the
 source-scoped raw/rectified images, camera information, detections, and `/tf`
