@@ -18,6 +18,7 @@ if(BUILD_TESTING)
   ament_add_pytest_test(phase1_launch_contract test/test_phase1_launch_contract.py)
   ament_add_pytest_test(phase2_launch_contract test/test_phase2_launch_contract.py)
   ament_add_pytest_test(phase41_launch_contract test/test_phase41_launch_contract.py)
+  ament_add_pytest_test(bootstrap_contract test/test_bootstrap_contract.py)
 endif()
 
 ament_package()

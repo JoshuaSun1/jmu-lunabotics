@@ -67,24 +67,50 @@ This is a proposed baseline, not proof of target validation. See
 
 ## Development workflow
 
-The runtime lock requires ROS 2 Humble. On a correctly configured Humble
-environment:
+The runtime lock requires ROS 2 Humble on Ubuntu 22.04 (Jammy). Bootstrap is
+intended as a **one-time provisioning step on each supported device**, not a
+command to run for every development session.
+
+On a Jammy development host, provision the declared ROS and development
+dependencies from the repository root:
 
 ```bash
+./scripts/bootstrap_dev.sh --install --profile development
+```
+
+On the physical target, first manually install and verify the locked JetPack
+6.2.2 / L4T 36.5 image on the Jetson Orin Nano. Then provision the ROS
+workspace with the Jetson profile:
+
+```bash
+./scripts/bootstrap_dev.sh --install --profile jetson
+```
+
+For every new terminal after a successful build, activate the ROS and
+workspace overlays, then use the read-only readiness check and normal
+development commands:
+
+```bash
+source scripts/activate.sh
 ./scripts/bootstrap_dev.sh --check
 ./scripts/build.sh
 ./scripts/test.sh
 ./scripts/lint.sh
 ```
 
-These commands build into the enclosing `dev_ws/build`, `dev_ws/install`, and
-`dev_ws/log` directories. Source the resulting workspace with
-`source ../../install/setup.bash` when this repository is at
-`dev_ws/src/jmu-lunabotics`.
+Bootstrap's default action is `--check`, which is non-mutating. The explicit
+`--install` action prepares the supported host; it does not make persistent
+shell-profile changes. Later code changes build into the enclosing
+`dev_ws/build`, `dev_ws/install`, and `dev_ws/log` directories.
+
+See [bootstrap and activation](docs/bootstrap.md) for profiles, the expected
+one-time workflow, and the intentional boundaries.
 
 The current x86_64 Ubuntu 24.04/Jazzy workstation may run structural checks
 only by explicitly setting `LUNABOT_ROS_DISTRO=jazzy`; that does **not** validate
-the Jetson, L4T, CUDA, ZED SDK, or arm64 container runtime.
+the Jetson, L4T, CUDA, ZED SDK, or arm64 container runtime. Do not use the
+Humble provisioning profiles to treat this host as a target-equivalent robot
+environment.
 
 ```bash
 LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh
@@ -94,7 +120,7 @@ For the non-actuating Phase 4.1 webcam bench, use a stable camera path rather
 than an unstable `/dev/videoN` number:
 
 ```bash
-source ../../install/setup.bash
+source scripts/activate.sh
 ros2 launch lb_sensors webcam_apriltag.launch.py
 ```
 
@@ -108,7 +134,7 @@ On a Humble development environment with the Phase 1 dependencies installed,
 inspect the mock TF tree in RViz without any motor hardware:
 
 ```bash
-source ../../install/setup.bash
+source scripts/activate.sh
 ros2 launch lb_sim mock_robot.launch.py use_rviz:=true
 # In a separate terminal that has sourced the same workspace:
 scripts/check_tf_authority.py --runtime
@@ -119,8 +145,12 @@ disabled mock output. Setting `enable_motors:=true` enables only the in-memory
 mock profile; the real skeleton fails closed and cannot open a hardware device.
 
 Read [operations](docs/operations.md) before running commands on hardware.
-The bootstrap script performs checks by default and never silently modifies the
-host, ROS installation, shell profile, JetPack image, ZED SDK, or robot.
+Bootstrap performs checks by default and never silently modifies the host. Its
+explicit installer does not edit a shell profile, flash JetPack, install the
+ZED SDK or ZED ROS wrapper, launch hardware, or validate any physical device.
+After provisioning, the available result is a mock and, where the connected
+webcam satisfies its preflight, webcam-AprilTag development environment; it is
+not a physical-robot or ZED-ready certification.
 
 ## Safety boundary
 

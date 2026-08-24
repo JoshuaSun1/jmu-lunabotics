@@ -6,7 +6,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 if ! command -v pre-commit >/dev/null 2>&1; then
-  echo 'pre-commit is required; run scripts/bootstrap_dev.sh --install-host-tools.' >&2
+  echo 'pre-commit is required; run scripts/bootstrap_dev.sh --install --profile development.' >&2
   exit 1
 fi
 

@@ -4,6 +4,11 @@
 
 | Check | Command | What it establishes |
 |---|---|---|
+| Bootstrap readiness check | `./scripts/bootstrap_dev.sh --check` | Non-mutating report of the selected ROS environment, tools, declared runtime packages, and built workspace. It should fail usefully before first provisioning. |
+| One-time Jammy development provisioning | `./scripts/bootstrap_dev.sh --install --profile development` | On a supported Ubuntu 22.04 development host, installs the repository's ROS/development dependencies and prepares the workspace for mock and webcam-AprilTag work. It is not a routine per-session test. |
+| One-time Jetson provisioning | `./scripts/bootstrap_dev.sh --install --profile jetson` | On the manually verified arm64 Orin Nano / JetPack 6.2.2 / L4T 36.5 target, prepares the target ROS workspace dependencies. It does not flash or validate JetPack, ZED, cameras, robot hardware, or safety hardware. |
+| Per-terminal activation | `source scripts/activate.sh` | Sources the ROS and workspace overlays in the current shell without editing a persistent shell profile. |
+| Bootstrap contract | `scripts/test.sh` | Statically verifies the explicit installer interface, safe default, workspace validation, Humble/rosdep authority, ROS-source ordering, activation helper, and target-only omissions without changing a host. |
 | Scaffold contract | `scripts/test.sh` | Package manifests and required Phase 0 files are present. |
 | ROS package build | `scripts/build.sh` | The empty package scaffold configures and builds. |
 | Style and hygiene | `scripts/lint.sh` | Pre-commit hooks and local syntax checks pass. |
@@ -25,6 +30,14 @@
 
 An x86/Jazzy result is a development-host result only. It cannot validate the
 Humble/JetPack/ZED runtime combination.
+
+Bootstrap's `--install` path is intentionally tested only on an appropriate
+Jammy host or the verified Jetson target because it changes that device's
+package installation. The default `--check` path is the safe diagnostic to run
+elsewhere. Neither path starts a hardware launch, enables a motor, installs the
+ZED SDK or wrapper, edits a shell profile, or proves a camera feed; a
+successfully provisioned host is mock/webcam-AprilTag-ready only as its actual
+connected hardware and later bench preflights permit.
 
 ## Future required tests
 

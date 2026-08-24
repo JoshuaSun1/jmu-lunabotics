@@ -154,7 +154,7 @@ of the user-confirmed 0.250 m detector-corner edge length in view.
 
    ```bash
    ./scripts/build.sh
-   source ../../install/setup.bash
+   source scripts/activate.sh
    ```
 
 2. Confirm that the selected `/dev/v4l/by-id/...` symlink resolves to the

@@ -11,28 +11,55 @@
 
 ## Safe setup
 
-1. Review `docker/versions.env` and `docs/resources/software_platform_lock.md`.
-2. Run `scripts/bootstrap_dev.sh --check`; it performs no installation.
-3. From this repository, run `scripts/build.sh` and `scripts/test.sh`. They
-   build the repository's packages into the enclosing `dev_ws/build`,
-   `dev_ws/install`, and `dev_ws/log` directories.
-4. For Phase 1 model inspection only, source the workspace and run
+1. Review `docker/versions.env` and
+   `docs/resources/software_platform_lock.md`. The robot runtime is Ubuntu
+   22.04 / ROS 2 Humble, not the development workstation's Jazzy override.
+2. Provision each supported device once from the repository root:
+
+   ```bash
+   # Ubuntu 22.04 (Jammy) development host
+   ./scripts/bootstrap_dev.sh --install --profile development
+
+   # Only after the locked JetPack / L4T image is manually verified on Orin
+   ./scripts/bootstrap_dev.sh --install --profile jetson
+   ```
+
+   The installer is explicit; its normal default, `--check`, is non-mutating.
+   Do not run the Jetson profile as a substitute for flashing or validating the
+   Jetson image.
+3. In every new terminal after provisioning, activate the current shell and
+   inspect readiness:
+
+   ```bash
+   source scripts/activate.sh
+   ./scripts/bootstrap_dev.sh --check
+   ```
+
+4. From this repository, run `scripts/build.sh` and `scripts/test.sh` after
+   code or configuration changes. They build the repository's packages into
+   the enclosing `dev_ws/build`, `dev_ws/install`, and `dev_ws/log`
+   directories.
+5. For Phase 1 model inspection only, source the workspace and run
    `ros2 launch lb_sim mock_robot.launch.py use_rviz:=true` on a development
    host. This starts only upstream mock hardware and has no `/cmd_vel` path.
-5. For the Phase 2 software bench, run
+6. For the Phase 2 software bench, run
    `ros2 launch lb_launch bench_test.launch.py`. It uses only an in-memory
    mock and leaves mock output disabled by default.
-6. `enable_motors:=true` is permitted only with the default mock transport and
+7. `enable_motors:=true` is permitted only with the default mock transport and
    means in-memory mock motion. Do not set `use_mock_hardware:=false` expecting
    a real test: the Phase 2 skeleton intentionally fails closed.
-7. Do not connect or enable physical propulsion through this software. Complete
+8. Do not connect or enable physical propulsion through this software. Complete
    `DRIVE-02`, `DRIVE-03`, `SAFE-01`, and the ordered hardware tests before any
    real motor bench work.
 
 The Orin Nano's firmware and JetPack image, the ZED SDK installation, power
 adapter verification, and all hardware calibration are physical-target tasks.
-They are not performed by the bootstrap script. RViz remains opt-in and should
-run offboard rather than on the competition Jetson.
+They are not performed by bootstrap, which also does not edit a shell profile,
+launch hardware, or validate connected devices. A successful provisioning run
+can prepare mock and webcam-AprilTag development dependencies, but it is not
+physical-robot or ZED readiness. RViz remains opt-in and should run offboard
+rather than on the competition Jetson. See [bootstrap and activation](bootstrap.md)
+for the full boundary.
 
 ## Phase 4.1 webcam AprilTag bench
 
@@ -42,7 +69,7 @@ user-confirmed 640 x 480 calibration, and a visible `tag36h11` ID 0 tag with a
 camera path and do not substitute an arbitrary `/dev/videoN` enumeration.
 
 ```bash
-source ../../install/setup.bash
+source scripts/activate.sh
 ros2 launch lb_sensors webcam_apriltag.launch.py
 ```
 
