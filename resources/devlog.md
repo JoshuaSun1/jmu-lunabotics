@@ -526,3 +526,88 @@ unvalidated.
 **Git evidence:** `3326f22` (`feat: implement phase 4.2 tag localizer`) is
 the implementation commit; this devlog record is committed separately for
 traceability.
+
+## 2026-08-24 — One-time Humble workspace bootstrap
+
+**Purpose and scope:** Reworked bootstrap from a check-only prerequisite
+report into an explicit, one-time provisioning workflow for another team
+member's supported device. The normal daily action is now a source-only
+activation helper rather than re-running the installer. This change prepares
+the current mock and webcam-AprilTag software scope; it does not claim a
+physical robot, ZED, target-performance, or competition-ready environment.
+
+**Components and files:** `scripts/bootstrap_dev.sh` owns the explicit
+`--install` workflow, non-mutating default `--check`, `development` and
+headless `jetson` profiles, workspace-layout validation, OS/target preflight,
+ROS source setup, `rosdep`, build/test handoff, and optional hook/tool legacy
+actions. `scripts/activate.sh` sources the selected ROS underlay and built
+workspace overlay in the caller's current shell. `lb_launch` owns the
+host-independent bootstrap contract test
+(`test/test_bootstrap_contract.py`), registered in its `CMakeLists.txt`.
+`docs/bootstrap.md`, `README.md`, `docs/operations.md`, `docs/testing.md`, and
+the Phase 4.1 bench note record the operating procedure; detailed validation
+is retained in
+[`docs/evidence/bootstrap_validation_2026-08-24.md`](../docs/evidence/bootstrap_validation_2026-08-24.md).
+
+**ROS interfaces and TF ownership:** This change creates no nodes, topics,
+services, actions, messages, parameters for runtime nodes, or TF frames. It
+only verifies package availability and sources ROS/workspace environment
+hooks. Existing interface and TF ownership remain unchanged.
+
+**Configuration, dependencies, and provenance:** The installer accepts the
+user-selected workspace path and profile. `development` requires Ubuntu 22.04
+and installs Humble base, RViz, rosbag tooling, generic development tools, and
+dependencies resolved directly from the checked-in package manifests through
+`rosdep`. `jetson` additionally requires Ubuntu 22.04, arm64, L4T 36.5, and
+an Orin Nano model string; it intentionally omits RViz. These are platform
+lock values from `docker/versions.env` /
+`docs/resources/software_platform_lock.md`, not new measurements. The
+device-tree model cannot distinguish the physical 8 GB SKU; the team must
+confirm that separately. ZED SDK/wrapper, Nav2, `robot_localization`, LiDAR,
+real motor/MCU dependencies, Docker/NVIDIA runtime, firmware, and device
+permissions remain outside bootstrap because they are not yet target-validated
+or declared project dependencies.
+
+**Architecture and alternatives:** `rosdep` is the source of truth for ROS
+package dependencies rather than a fragile hand-maintained package list. A
+small explicit apt baseline is retained only for bootstrap tools, ROS base,
+rosbag, and development-only RViz. The script prefers the canonical
+`<workspace>/src/jmu-lunabotics` layout while accepting a standalone checkout
+for CI. It does not edit `.bashrc`; a child bootstrap process cannot activate
+the caller's later terminals. Non-Humble activation is rejected unless the
+user explicitly sets both `LUNABOT_ROS_DISTRO` and
+`LUNABOT_ALLOW_NON_TARGET_ACTIVATION=1`, labelling it structural-only.
+
+**Safety and failure behavior:** Installation is opt-in, confirmation-gated
+unless `--yes` is supplied, and rejects conflicting actions, invalid workspace
+paths, non-Humble installation requests, non-Jammy hosts, wrong/stale ROS apt
+sources, and a failed Jetson preflight. The default check is read-only. The
+installer never edits a shell profile, flashes/upgrades JetPack, installs the
+ZED stack, changes device permissions, accesses a motor controller, starts a
+hardware launch, or validates physical safety equipment. A failed source of
+the ROS underlay/overlay propagates as an error rather than reporting a false
+ready state.
+
+**Verification and resource use:** On the available x86_64 Ubuntu 24.04/ROS 2
+Jazzy development host, shell syntax and the standalone contract suite passed;
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/build.sh` completed all 10 packages;
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` reported 95 tests,
+0 errors, 0 failures, and 1 expected skip; `./scripts/lint.sh` passed all
+configured hooks. Negative checks verified the missing-workspace, conflicting
+action, unsupported-Humble-install, Jetson-profile, and non-target-activation
+failure paths without changing the host. No installer command, resource
+measurement, Jetson/arm64 runtime, live camera, or physical robot test was
+run on this host.
+
+**Known limitations and remaining work:** Execute and preserve the full
+installer output on a clean Ubuntu 22.04 developer host and the manually
+verified Orin Nano/JetPack 6.2.2 target; then retain package versions, final
+readiness output, and mock/webcam bench evidence. The apt packages are locked
+at ROS-distribution level rather than exact Debian package versions. The
+bootstrap target preflight is not a substitute for confirming the 8 GB SKU,
+JetPack image integrity, ZED compatibility, camera permissions/calibration,
+or the later physical safety and drive integration work.
+
+**Git evidence:** `6eee304` (`feat: add one-time workspace bootstrap`) is the
+implementation commit; this append-only record is committed separately for
+traceability.
