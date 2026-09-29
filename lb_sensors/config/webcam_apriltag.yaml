@@ -1,0 +1,26 @@
+# Phase 4.1 webcam detector baseline.  The ROS parameter is named "36h11" by
+# apriltag_ros; detector messages identify the family as "tag36h11".
+#
+# The 0.250 m size is user-confirmed on 2026-08-17 and is the edge between the
+# AprilTag detector corners, not the outside paper edge.  All detector tuning
+# values below are archived baseline settings, not measured competition tuning.
+/**:
+  ros__parameters:
+    image_transport: raw
+    family: 36h11
+    size: 0.250
+    max_hamming: 0
+    pose_estimation_method: pnp
+    detector:
+      threads: 1
+      decimate: 2.0
+      blur: 0.0
+      refine: true
+      sharpening: 0.25
+      debug: false
+    # These child frames are dynamic camera observations, not static surveyed
+    # world tags.  A second camera must use a different child-frame prefix.
+    tag:
+      ids: [0]
+      frames: [webcam_observation_tag_0]
+      sizes: [0.250]

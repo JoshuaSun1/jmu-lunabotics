@@ -1,0 +1,57 @@
+# Phase 1 visualisation profile only. Every numeric value below is synthetic:
+# it is neither a CAD dimension nor a calibration value for the physical robot.
+metadata:
+  profile: phase1_mock
+  source: synthetic_mock_only
+  physical_robot_use: prohibited
+  replacement_condition: reviewed CAD or measured calibration record
+
+# ROS REP-103 axes: +x forward, +y left, +z up.  base_link is at the synthetic
+# chassis geometric centre.  The physical origin remains GEOM-01.
+chassis:
+  length_m: 0.90
+  width_m: 0.60
+  height_m: 0.25
+
+wheel:
+  radius_m: 0.12
+  width_m: 0.08
+  visual_roll_rad: 1.5707963267948966
+  front_x_m: 0.30
+  rear_x_m: -0.30
+  left_y_m: 0.34
+  right_y_m: -0.34
+  center_z_m: -0.17
+
+# This is only a fixed conceptual bucket proxy.  It intentionally does not
+# encode an actuator, pivot, stroke, travel limit, or physical scoop design.
+scoop_proxy:
+  length_m: 0.28
+  width_m: 0.48
+  height_m: 0.16
+  center_x_m: 0.56
+  center_y_m: 0.00
+  center_z_m: -0.02
+
+# All sensor mount positions are synthetic.  The optical-frame rotation follows
+# the conventional ROS camera optical axes, but real driver/URDF ownership is
+# still ZED-01/TAG-01 and must be chosen before hardware integration.
+sensors:
+  zed_visual_length_m: 0.08
+  zed_visual_width_m: 0.04
+  zed_visual_height_m: 0.03
+  webcam_visual_length_m: 0.06
+  webcam_visual_width_m: 0.03
+  webcam_visual_height_m: 0.03
+  zed_mount_x_m: 0.18
+  zed_mount_y_m: 0.00
+  zed_mount_z_m: 0.18
+  webcam_mount_x_m: 0.30
+  webcam_mount_y_m: 0.00
+  webcam_mount_z_m: 0.12
+  lidar_mount_x_m: 0.00
+  lidar_mount_y_m: 0.00
+  lidar_mount_z_m: 0.20
+  optical_roll_rad: -1.5707963267948966
+  optical_pitch_rad: 0.0
+  optical_yaw_rad: -1.5707963267948966

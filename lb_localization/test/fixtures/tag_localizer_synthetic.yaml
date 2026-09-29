@@ -1,0 +1,51 @@
+# Unit-test fixture only.  All gates and covariance coefficients are synthetic
+# test values, not physical tuning or an operational localization profile.
+schema_version: 1
+configuration_status: synthetic_test_only
+map_frame: map
+base_frame: base_link
+tf_lookup_timeout_s: 0.050
+quality_gates:
+  max_tag_distance_m: 12.0
+  max_view_angle_deg: 65.0
+  min_decision_margin: 20.0
+  max_hamming: 0
+  max_pose_jump_m: 2.0
+  max_yaw_jump_rad: 1.5
+  max_detection_age_s: 0.250
+  minimum_valid_tags: 1
+  min_tag_pixel_size_px: 8.0
+  transform_timestamp_tolerance_s: 0.050
+  max_future_skew_s: 0.020
+  fusion_window_s: 0.100
+  jump_reference_timeout_s: 2.000
+  max_intertag_position_spread_m: 1.000
+  max_intertag_yaw_spread_rad: 0.800
+covariance_model:
+  position_stddev_floor_m: 0.020
+  position_stddev_per_m: 0.010
+  yaw_stddev_floor_rad: 0.020
+  yaw_stddev_per_m: 0.010
+  roll_pitch_stddev_rad: 0.100
+  z_stddev_scale: 2.0
+  distance_quality_gain: 0.050
+  view_angle_quality_gain: 0.500
+  reference_decision_margin: 100.0
+  reference_tag_pixel_size_px: 80.0
+  # Synthetic test-only conservative variance for planar output roll/pitch.
+  unobserved_roll_pitch_variance_rad2: 1000000.0
+sources:
+  - source_id: webcam
+    detections_topic: /sensors/webcam/tag_detections
+    expected_camera_frame: webcam_optical_frame
+    observation_frame_prefix: webcam_observation_tag_
+    base_frame: base_link
+    extrinsic_status: synthetic_test_only
+    extrinsic_authority: synthetic_test_fixture
+  - source_id: zed
+    detections_topic: /sensors/zed/tag_detections
+    expected_camera_frame: zed_camera_optical_frame
+    observation_frame_prefix: zed_observation_tag_
+    base_frame: base_link
+    extrinsic_status: synthetic_test_only
+    extrinsic_authority: synthetic_test_fixture

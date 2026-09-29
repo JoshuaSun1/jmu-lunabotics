@@ -1,0 +1,11 @@
+<library path="lb_hardware_plugin">
+  <class
+    name="lb_hardware/LunabotDriveHardware"
+    type="lb_hardware::LunabotDriveHardware"
+    base_class_type="hardware_interface::SystemInterface">
+    <description>
+      Four-wheel Lunabotics drive hardware boundary. The real transport is intentionally fail-closed
+      until the MCU protocol and safety design are reviewed.
+    </description>
+  </class>
+</library>

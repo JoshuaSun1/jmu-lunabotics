@@ -1,0 +1,17 @@
+# Deliberately invalid unit-test fixture: duplicate family/ID record.
+schema_version: 1
+map:
+  frame_id: map
+  survey_status: synthetic_test_only
+  coordinate_convention: REP-103
+tags:
+  - id: 1
+    family: tag36h11
+    size_m: 0.300
+    frame_id: synthetic_field_tag_1a
+    pose_map: {x: 1.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  - id: 1
+    family: 36h11
+    size_m: 0.300
+    frame_id: synthetic_field_tag_1b
+    pose_map: {x: 2.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}

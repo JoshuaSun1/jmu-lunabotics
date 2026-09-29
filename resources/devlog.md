@@ -1,0 +1,613 @@
+# Lunabotics software development log
+
+This is the canonical, append-only software development record required for
+competition deliverables. It complements detailed documentation under `docs/`;
+supporting evidence is linked from each entry rather than duplicated here.
+
+## 2026-08-04 — Prototype transition and Phase 0 scaffold
+
+**Purpose and scope:** Preserved the prior prototype, then established the
+reviewable ROS 2 repository scaffold without implementing motor, sensor,
+localization, navigation, mission, or safety behavior.
+
+**Components and files:** Added the ten package boundaries under `src/`,
+repository quality tooling, scoped developer scripts, Jetson/container version
+lock, architecture and safety documents, the BOM resource, and the TBD
+register. Package purpose and future ownership are defined in
+[`docs/architecture.md`](../docs/architecture.md).
+
+**ROS interfaces and TF:** No live topics, services, actions, or hardware
+commands were introduced. The documented authority contract reserves
+`map -> odom` for the global EKF, `odom -> base_link` for the local EKF, and
+rigid `base_link` transforms for `robot_state_publisher`.
+
+**Parameters and dependencies:** Hardware dimensions, drive kinematics,
+sensor mounting transforms, safety limits, protocol fields, and platform
+runtime details remain `TBD` in [`docs/tbd_register.md`](../docs/tbd_register.md).
+The proposed software baseline is JetPack 6.2.2/L4T 36.5.0, Ubuntu 22.04,
+ROS 2 Humble, ZED SDK 5.2.3, and ZED wrapper v5.2.2; it is proposed rather
+than target-validated.
+
+**Safety and failure behavior:** All motors remain disabled. The scaffold
+contains no direct drive, power, E-stop, or controller implementation.
+
+**Verification and evidence:** On the x86_64 Ubuntu 24.04/ROS 2 Jazzy host,
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh` passed 10 packages and 44 tests;
+`./scripts/lint.sh` passed. This is structural evidence only. The target arm64
+Jetson/Humble/ZED container build and hardware validation remain open.
+
+**Git evidence:** `bd2d2c8` preserved the active-repository transition;
+`bbd94d9` added the Phase 0 scaffold. The earlier prototype is retained at
+tag and branch `prototype-before-phase0-2026-08-04`.
+
+## 2026-08-10 — Four-wheel chassis and digging-arm allocation clarified
+
+**Purpose and decision:** The team confirmed a four-wheel-drive chassis with
+a large scooping bucket. The six-motor BOM includes motors planned for the
+digging arm; it must not be interpreted as a six-wheel drivetrain.
+
+**Architecture and alternatives:** The robot will be documented as a
+four-wheel-drive chassis. Steering/kinematic topology remains `TBD`: do not
+infer skid-steer from the bulldozer-like form factor. The decision and its
+consequences are in
+[`docs/decisions/0001_four_wheel_chassis.md`](../docs/decisions/0001_four_wheel_chassis.md).
+
+**Parameters and interfaces:** No physical dimensions, wheel placement,
+bucket envelope, actuator protocol, safety limit, or ROS interface has been
+invented. `DRIVE-01` is narrowed to the steering/turning model; `GEOM-01`,
+`DRIVE-02`, `DRIVE-03`, `SAFE-01`, and `MISS-01` remain open.
+
+**Safety and verification:** This documentation-only change adds no command
+path or runtime behavior. It was checked by the repository scaffold test; no
+hardware test is applicable.
+
+**Git evidence:** `d3cb02b` (`docs: record four-wheel chassis decision`)
+records this documentation update.
+
+## 2026-08-10 — Source-directory and ROS-package migration
+
+**Purpose and decision:** Reorganized the ROS workspace into concise source
+directories while retaining unique ROS package names with the `lb_` prefix.
+The mapping is documented in [`docs/architecture.md`](../docs/architecture.md):
+`launch/lb_launch`, `model/lb_model`, `hardware/lb_hardware`,
+`interfaces/lb_interfaces`, `localization/lb_localization`,
+`state_manager/lb_state_manager`, `navigation/lb_navigation`,
+`sensors/lb_sensors`, `safety/lb_safety`, and `sim/lb_sim`.
+
+**Dependency and compatibility assessment:** The scaffold has no direct
+package-to-package dependencies or runtime interfaces yet; each manifest
+declares only its ament build and lint dependencies. The ROS 2 underlay already
+contains the core package `launch`, so `lb_launch` is used for `src/launch` to
+avoid shadowing ROS launch tooling. No topics, services, actions, TF ownership,
+parameters, safety behavior, or hardware interfaces changed.
+
+**Files and follow-up:** Renamed all source directories, package manifests, and
+CMake project names; updated the scaffold contract, lint path, architecture,
+canonical specification, and chassis decision record. Future launch commands
+will use `ros2 launch lb_launch ...`; source-directory names are not ROS package
+names.
+
+**Verification and evidence:** A clean Jazzy structural build discovered the
+ten intended `lb_*` packages. The command
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` passed 44 tests after
+that build. This remains a non-target host check; Humble/arm64 target
+validation is still open.
+
+**Git evidence:** `cc2ec8e` (`refactor: rename ROS package architecture`)
+records the package-architecture migration.
+
+## 2026-08-10 — Source directories aligned with ROS package names
+
+**Purpose and decision:** The source-directory name now matches its ROS
+package identity exactly. For example, `src/lb_launch` contains package
+`lb_launch`; this removes the prior two-name source/package mapping.
+
+**Dependency and compatibility assessment:** Package identities, declared
+dependencies, topics, services, actions, TF ownership, parameters, safety
+behavior, and hardware interfaces are unchanged. `lb_launch` remains the safe
+identity because the ROS underlay owns the unprefixed `launch` package.
+
+**Files and verification:** Renamed all ten source directories and updated the
+source-path contract, lint script, architecture document, and canonical
+specification. A clean Jazzy structural build discovered the ten intended
+packages; its test run passed 44 tests and the repository lint run passed.
+This remains a non-target host check; Humble/arm64 target validation is open.
+
+**Git evidence:** `dffd236` (`refactor: align source directories with package
+names`) records this source-directory alignment.
+
+## 2026-08-10 — Workspace layout flattened to `dev_ws`
+
+**Purpose and decision:** `dev_ws` is now the sole ROS workspace. The Git
+repository remains at `dev_ws/src/jmu-lunabotics`, with its ten `lb_*` ROS
+packages directly at repository root. Repository-local `src/`, `build/`,
+`install/`, and `log/` directories are no longer part of the active layout.
+
+**Components and dependencies:** `scripts/build.sh` and `scripts/test.sh` now
+build only this repository's packages while writing artifacts to
+`dev_ws/build`, `dev_ws/install`, and `dev_ws/log`. The CI job provides an
+explicit workspace-root override, and the container creates the same layout at
+`/workspace/src/jmu-lunabotics`. No ROS package dependencies, interfaces, TF
+ownership, parameters, safety behavior, or hardware behavior changed.
+
+**Files and documentation:** Moved all package directories to repository root;
+updated build/test/lint/bootstrap scripts, scaffold test, Docker/Compose, CI,
+README, architecture, operations, testing documentation, and the canonical
+specification. Added `.dockerignore` so generated artifacts are excluded from
+the container build context.
+
+**Verification and evidence:** A clean x86_64/Jazzy structural build wrote
+only to `dev_ws/build`, `dev_ws/install`, and `dev_ws/log`; it discovered ten
+packages and passed 44 tests. The generated artifacts under both the repository
+and `dev_ws/src` were removed after validation. This does not replace the
+pending Humble/arm64 Jetson validation.
+
+**Known validation limitation:** The pre-commit hooks through YAML validation
+passed, but the cached Black mirror hook stalled on this host and was stopped;
+the system Black executable is not installed. Shell syntax, Python compilation,
+whitespace, end-of-file, and YAML checks passed. Restore a working Black hook
+environment before treating the full lint gate as revalidated.
+
+**Git evidence:** `6f88f8f` (`refactor: flatten ROS workspace layout`) records
+the workspace-flattening migration.
+
+## 2026-08-10 — Phase 1 mock description, TF contract, and ros2_control wiring
+
+**Purpose and scope:** Implemented the Phase 1 no-hardware model boundary:
+parameterized Xacro, four-wheel skid-steer mock tree, sensor/mount frames,
+upstream ros2_control mock hardware, joint-state publishing, RViz profile, and
+automated TF-authority checks. The user-provided
+[`Current Lunabot Robot Design Codex Handoff`](../docs/resources/Current_Lunabot_Robot_Design_Codex_Handoff.md)
+is retained as the design-evidence source.
+
+**Components and files:** `lb_model` now owns
+`urdf/lb_mock.urdf.xacro`, the explicitly synthetic
+`config/mock_geometry.yaml`, standalone `description.launch.py`, and the RViz
+profile. `lb_sim` owns `mock_controllers.yaml`, `mock_robot.launch.py`, and the
+headless launch test. `lb_launch/launch/bringup.launch.py` is a thin Phase 1
+mock include; `lb_hardware` remains intentionally empty until the Phase 2
+transport/plugin work. The model contract and detailed frame/provenance record
+are in [`docs/phase1_mock_model.md`](../docs/phase1_mock_model.md).
+
+**ROS interfaces and TF:** `joint_state_broadcaster` is the sole mock
+publisher of `/joint_states` (`sensor_msgs/msg/JointState`), consumed by
+`robot_state_publisher`. `robot_state_publisher` is the sole publisher of
+`/tf` and `/tf_static` (`tf2_msgs/msg/TFMessage`) for the `base_link` subtree.
+That subtree contains four continuous wheel joints, a fixed conceptual
+`scoop_link`, ZED/webcam mock mounts and optical frames, `imu_link`, and a
+generic `lidar_mount_link`. The mock contains no `map`, `odom`,
+`base_footprint`, `/cmd_vel`, `/odom/wheel`, or real sensor output. Future
+global/local EKFs retain `map -> odom`/`odom -> base_link` ownership.
+
+**Parameters and evidence:** Every value in `mock_geometry.yaml` is marked
+`synthetic_mock_only` and prohibited from physical use; its replacement source
+is a reviewed CAD or measured calibration record. The mock controller update
+rate is a visualization/test cadence, not a physical control or safety limit.
+Four-wheel skid-steer is now a confirmed topology (`DRIVE-01` closed), based on
+the team confirmation and handoff. Wheel radius/placement, track, chassis
+origin, sensor mounts, linkage, reductions, encoder signs, protocol, and
+safety limits remain open as `DRIVE-02`, `DRIVE-03`, `GEOM-01`, `ZED-01`,
+`LIDAR-01`, `TAG-01`, `MISS-01`, and `SAFE-01`.
+
+**Architecture and alternatives:** The mock uses upstream
+`mock_components/GenericSystem` rather than inventing an `lb_hardware` plugin.
+It exposes wheel velocity/state interfaces but loads only
+`joint_state_broadcaster`; no `diff_drive_controller` or command controller is
+introduced before Phase 2. The scoop is a fixed proxy because the lift/dump
+kinematics are unresolved. Camera optical frames are mock-only URDF-owned;
+real wrapper ownership must be selected before integration to avoid duplicate
+TF publishers.
+
+**Safety and failure behavior:** The Phase 1 mock has no real transport,
+motor-enable path, `/cmd_vel` consumer, odometry publisher, or mechanism
+command path. `enable_motors` remains false by default and is intentionally
+inert if set. The mock therefore cannot move or enable the physical robot.
+
+**Verification and evidence:** `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh`
+built all ten packages and passed 53 tests with zero failures (one runtime
+launch test conditionally skipped because the host lacks Xacro/ros2_control).
+`./scripts/lint.sh` passed in an unrestricted local execution. A temporary,
+non-installed extraction of the Jazzy Xacro package expanded the model to 14
+links and 13 joints; `check_urdf` parsed the output with `base_link` as root.
+The standalone description launch also initialized `robot_state_publisher`.
+The concise command/results record is
+[`docs/evidence/phase1_validation_2026-08-10.md`](../docs/evidence/phase1_validation_2026-08-10.md).
+The restricted sandbox blocks DDS socket creation, and the host lacks
+controller-manager and joint-state-broadcaster executables, so the complete
+mock runtime/TF-authority test remains pending Humble CI/container. The Black
+pre-commit hook itself is healthy but cannot run multi-file inside the restricted
+sandbox because its multiprocessing socket is blocked; it succeeds in an
+unrestricted environment/CI.
+
+**Git evidence:** `0d78d29` (`feat: implement phase 1 mock robot`) records
+this implementation and evidence update.
+
+## 2026-08-11 — Phase 2 mock-first drive hardware interface
+
+**Purpose and scope:** Implemented the Phase 2 software boundary between
+`diff_drive_controller` and a future drive MCU without choosing an electrical
+protocol. This is a mock/fail-closed implementation only: it does not command
+motors, open a CAN/serial/USB device, define an encoder scale, or implement a
+physical E-stop.
+
+**Components and files:** `lb_hardware` now owns the protocol-neutral
+`DriveTransport` contract, `MockDriveTransport`, `RealDriveTransport`,
+`LunabotDriveHardware` Humble system-hardware plugin, plugin export file,
+mock-only controller configuration, hardware launch, C++ transport unit test,
+and Phase 2 static contracts. `lb_launch` owns
+`launch/bench_test.launch.py` and now routes public bringup through that safe
+bench profile. The detailed component/interface record is
+[`docs/phase2_drive_interface.md`](../docs/phase2_drive_interface.md).
+
+**ROS interfaces and TF:** The declared mock command boundary is `/cmd_vel`
+(`geometry_msgs/msg/TwistStamped`) remapped to the controller's native
+`~/cmd_vel`; wheel commands are ROS-control velocity interfaces in rad/s.
+`joint_state_broadcaster` produces `/joint_states`
+(`sensor_msgs/msg/JointState`), and the controller declares a mock
+`~/odom` to `/odom/wheel` (`nav_msgs/msg/Odometry`) remap. The controller has
+`enable_odom_tf: false`; `robot_state_publisher` retains sole Phase 1 ownership
+of the `base_link` subtree, while Phase 3 retains `odom -> base_link` ownership.
+The Humble in-process remaps and runtime topics remain target-validation work.
+
+**Parameters and provenance:** The controller uses confirmed four mock wheel
+joints in left/right groups. Its 0.12 m radius, 0.68 m separation, rates,
+covariance, timeout, and velocity/acceleration/jerk limits are all labelled
+synthetic mock values, sourced only from the prior mock profile or test needs;
+they are prohibited for physical use. `mock_communication_loss_after_reads`
+and `mock_command_timeout_s` are deterministic test inputs. `DRIVE-02`,
+`DRIVE-03`, `GEOM-01`, and `SAFE-01` remain open.
+
+**Architecture and alternatives:** Four wheel-joint values are kept at the
+software boundary rather than assuming two versus four physical motor channels.
+The real skeleton deliberately avoids selecting the BOM's USB-to-CAN adapter
+as a direct Jetson-to-controller design, because the specification requires an
+MCU safety boundary and the actual topology/protocol remains unresolved.
+
+**Safety and failure behavior:** The mock begins disabled. The real skeleton
+always rejects connection and output. The plugin zeros command interfaces and
+requests `stop()` plus `set_enabled(false)` before returning an error on state
+read/write failure or non-finite command. This is fail-closed software behavior
+only; it does not provide an independent physical stop, controller fault
+latching, or MCU watchdog.
+
+**Dependencies and verification:** Target dependencies are `hardware_interface`,
+`pluginlib`, `rclcpp`, `rclcpp_lifecycle`, controller manager, joint-state
+broadcaster, diff-drive controller, Xacro, and robot-state publisher. On the
+available x86_64/Jazzy structural host,
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh` built ten packages and passed 63
+tests with zero failures and one expected Xacro-related skip. The
+ROS-independent mock transport compiled and passed its C++ unit test; static
+contracts passed. `./scripts/lint.sh` passed in unrestricted execution; the
+restricted sandbox still blocks Black worker processes. Evidence and command details are in
+[`docs/evidence/phase2_validation_2026-08-11.md`](../docs/evidence/phase2_validation_2026-08-11.md).
+
+**Known limitations and remaining work:** The host lacks target ROS-control and
+Xacro runtime dependencies, so the custom plugin was not compiled or loaded
+there; Humble/arm64 must verify plugin build, controller activation, wheel
+motion, `/cmd_vel` and `/odom/wheel` remaps, command timeout, and no
+`odom -> base_link` TF. No physical drive test is authorized until electrical,
+geometry, encoder, protocol, and safety prerequisites are reviewed.
+
+**Git evidence:** `3f12a2a` (`feat: implement phase 2 drive interface`) records this implementation.
+
+## 2026-08-17 — Phase 4.1 webcam AprilTag bench discovery
+
+**Purpose and scope:** Performed a non-actuating, webcam-only bench check before
+Phase 4.1 implementation. This confirms image capture and fiducial detection;
+it does not validate robot-relative or global pose estimation.
+
+**Observed hardware and interfaces:** The connected external Logitech UVC camera
+(`046d:0825`) was available as a V4L2 capture source at 640 x 480 YUYV, 30 Hz.
+Its current `/dev/video2` enumeration is host-session-specific and must not be
+used as a persistent launch identifier; a stable `/dev/v4l/by-id` path will be
+selected during implementation. A temporary `v4l2_camera` node published
+`/image_raw` (`sensor_msgs/msg/Image`) and `/camera_info`
+(`sensor_msgs/msg/CameraInfo`). A temporary `apriltag_ros` node consumed that
+stream and published `/phase41/tag_detections` as an
+`apriltag_msgs/msg/AprilTagDetectionArray`.
+
+**Measured result:** The visible tag was detected as family `tag36h11`, ID `0`,
+with Hamming error `0` and decision margin `115.7505`. This is direct evidence
+that the webcam, selected tag family, and CPU detector operate together on the
+development host. The test camera stream had no loaded calibration, so its
+pose-estimation warning was expected and no metric pose, covariance, TF, or
+global-localization claim is made.
+
+**Confirmed parameter provenance:** The user confirmed that the physical tag
+edge size is 0.250 m. This is a user-provided physical value, to be treated as
+the detector-corner edge length and independently rechecked before competition
+use. The user also confirmed that the archived
+`old-lunabotics/config/webcam_calibration.yaml` applies to this same camera.
+That calibration is 640 x 480 with `plumb_bob` distortion; it is an archived,
+user-confirmed calibration rather than a newly measured result. Phase 4.1 will
+load it and later revalidate metric pose against a measured target distance.
+
+**Architecture and remaining work:** Phase 4.1 will retain camera-independent
+detection outputs so the webcam and later ZED RGB camera can publish separate
+detection topics into one `lb_localization/tag_localizer`. The localizer will
+use calibrated camera optical frames and a surveyed tag map, not detector TF
+aliases, and only the later global EKF may publish `map -> odom`. Open items
+remain TAG-01 (additional IDs, final tag size/placement and tag map), ZED-01
+(ZED integration/frame authority), and the physical `base_link`-to-webcam
+extrinsic transform.
+
+**Git evidence:** `f219d12` (`docs: record Phase 4.1 webcam discovery`) records this bench-discovery evidence.
+
+## 2026-08-17 — Phase 4.1 calibrated webcam AprilTag observation baseline
+
+**Purpose and scope:** Implemented the non-actuating, calibrated webcam
+observation baseline for Phase 4.1. It proves a source-scoped camera,
+rectification, and `tag36h11` detector path on the development host; it does
+not implement known-tag localization, global pose, camera-to-robot geometry,
+or robot control.
+
+**Components and files:** `lb_sensors` now owns
+`launch/webcam_apriltag.launch.py`,
+`config/webcam_calibration.yaml`, and `config/webcam_apriltag.yaml` for the
+V4L2 driver, rectifier, and detector. `lb_launch/launch/bringup.launch.py`
+exposes the opt-in `enable_apriltags` sensor-only entry point and suppresses
+the Phase 1/2 mock bench when it is enabled, preventing a real observation
+from being joined to the mock webcam geometry. `scripts/record_bag.sh` adds a
+`webcam_apriltag` profile. The target image now declares `v4l-utils`,
+`v4l2_camera`, `image_proc`, and `apriltag_ros`; the generic Compose profile
+is explicitly build/development-only and has no camera device mapping.
+
+**ROS interfaces and TF ownership:** The launch publishes
+`/sensors/webcam/image_raw` and `/sensors/webcam/image_rect`
+(`sensor_msgs/msg/Image`), `/sensors/webcam/camera_info`
+(`sensor_msgs/msg/CameraInfo`), `/sensors/webcam/tag_detections`
+(`apriltag_msgs/msg/AprilTagDetectionArray`), and `/tf`
+(`tf2_msgs/msg/TFMessage`). `apriltag_ros` solely owns dynamic,
+camera-relative `webcam_optical_frame -> webcam_observation_tag_0` samples.
+The detection message is not a robot pose, and this phase publishes no
+physical `base_link -> webcam_optical_frame`, tag map, localizer/EKF pose, or
+`map -> odom`/`odom -> base_link` transform. New TF samples stop after tag
+loss, but a listener can cache the last sample; a later localizer must reject
+stale timestamps. Future cameras must use distinct source-scoped topics and
+observation child frames.
+
+**Parameters and provenance:** The Logitech UVC camera is selected by an
+explicit stable `/dev/v4l/by-id/...` path (its observed `/dev/video2`
+enumeration is session-specific). The inherited user-confirmed calibration is
+unchanged numerically: 640 x 480, `plumb_bob`; only its metadata name became
+`uvc_camera_(046d:0825)`. V4L2 is configured to and read back at 15 Hz before
+the driver opens. The user-confirmed bench tag is `tag36h11` ID 0 with a
+0.250 m detector-corner edge. `max_hamming: 0`, PnP, one detector thread,
+decimation 2.0, blur 0, refinement, and sharpening 0.25 are baseline settings,
+not competition-tuned values.
+
+**Architecture, safety, and failure behavior:** `v4l2_camera` was selected
+for direct V4L2 configuration with `image_proc` and `apriltag_ros`; the launch
+uses a `v4l2-ctl` set/read-back preflight rather than silently accepting an
+unknown source rate. Missing V4L2 utility, device, configuration, or an
+out-of-range read-back raises a launch error before the driver starts. The
+pipeline has no `/cmd_vel` consumer, motor enable, power control, localizer, or
+EKF, so it cannot command propulsion. A missing tag supplies no new detection
+or TF sample; it is not a valid last-known/global pose. Resolution or
+calibration mismatch invalidates metric use.
+
+**Verification and evidence:** On the available x86_64 Ubuntu 24.04/Jazzy
+development host, `python3 -m py_compile` passed;
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/build.sh` built 10 packages; and
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` passed 70 tests with
+zero failures and one expected skip. `./scripts/lint.sh` passed all configured
+hooks in unrestricted execution; its Black worker stalled in the restricted
+sandbox. The `webcam_apriltag` recorder profile passed its dry run. The live
+bench verified matching 640 x 480 `CameraInfo`, detected `tag36h11` ID 0 with
+hamming 0 and decision margin 124.291, and observed camera-relative TF
+translation `[-0.143, 0.360, 2.051]` m; none is a metric accuracy claim. A
+full-image bag recorded `image_raw` at 14.995 Hz, while detector samples were
+11.86 Hz (`ros2 topic hz`) and 9.17 Hz (metadata-only bag). The latter does
+not demonstrate the specification's sustained 10–15 FPS detector target.
+Supporting detail is in
+[`docs/evidence/phase41_validation_2026-08-17.md`](../docs/evidence/phase41_validation_2026-08-17.md);
+local ignored bags are `bags/webcam_apriltag-20260817T195613Z` and
+`bags/webcam_apriltag_metadata-20260817T160500Z`.
+
+**Known limitations and remaining work:** Revalidate calibration against a
+measured target distance/angle, measure the physical camera mount/extrinsic,
+choose/survey the multi-tag map and inventory, add source adapters and quality
+covariance, and stale-data gates, implement `lb_localization/tag_localizer` and
+the local/global EKFs, profile the selected Humble/Jetson runtime, and design
+the least-privilege container V4L2 mapping. No ZED, physical robot mount,
+global pose, target hardware, or competition resource result is claimed.
+
+**Git evidence:** `963e64c` (`feat: implement phase 4.1 webcam apriltag
+bench`) records this implementation.
+
+## 2026-08-24 — Phase 4.2 fail-closed known-AprilTag localizer
+
+**Purpose and scope:** Implemented the software-only known-tag-localization
+boundary in `lb_localization`. It turns a surveyed known-tag observation into
+an absolute `map`-frame measurement for a later global EKF, without claiming a
+physical robot pose, completing Phase 4, starting an EKF, or authorizing any
+motion. This phase preserves the Phase 4.1 bench tag: `tag36h11` ID 0 at a
+user-confirmed 0.250 m detector-corner edge remains test-only and is rejected
+from a field map. The team-selected future field plan is `tag36h11` IDs 1, 2,
+and 3 at nominal 0.300 m detector-corner edges; it is not printed, measured,
+mounted, surveyed, or validated.
+
+**Components and files:** `lb_localization` now owns the C++ core
+(`include/lb_localization/tag_localizer_core.hpp`,
+`src/tag_localizer_core.cpp`), ROS node (`src/tag_localizer_node.cpp`),
+fail-closed launch (`launch/tag_localizer.launch.py`), unverified production
+templates (`config/tag_map.template.yaml`, `tag_localizer.template.yaml`, and
+the nonlaunchable `ekf_global.template.yaml`), and synthetic-only fixtures and
+tests under `test/`. The detailed contracts and evidence are
+[`docs/phase42_tag_localizer.md`](../docs/phase42_tag_localizer.md) and
+[`docs/evidence/phase42_validation_2026-08-24.md`](../docs/evidence/phase42_validation_2026-08-24.md).
+Repository-wide Black 24.10 formatting also made no-behavior-change style
+updates to the existing Phase 4.1 webcam launch/contract test so the full lint
+suite is clean.
+
+**ROS interfaces and TF ownership:** The node directly subscribes to each
+configured source-scoped `apriltag_msgs/msg/AprilTagDetectionArray`, initially
+`/sensors/webcam/tag_detections` and the reserved
+`/sensors/zed/tag_detections`. It publishes only
+`/localization/apriltag_pose` (`geometry_msgs/msg/PoseWithCovarianceStamped`,
+frame `map`) and `/diagnostics` (`diagnostic_msgs/msg/DiagnosticArray`). It
+offers no services or actions, consumes no motor command, and has no transform
+broadcaster. It requires an exact-stamp observation edge
+`<camera_optical_frame> -> <source>_observation_tag_<id>` plus a static or
+exact-stamp surveyed `base_link -> <camera_optical_frame>` extrinsic. Source
+prefixes must be unique (`webcam_observation_tag_` versus
+`zed_observation_tag_`) so two cameras never collide. The node never owns or
+publishes `map -> odom`, `odom -> base_link`, camera extrinsics, or tag-world
+TF; a future global EKF is the sole intended `map -> odom` authority.
+
+**Parameters and provenance:** The map parser requires `REP-103`, unique
+positive `tag36h11` field IDs, tag size, finite map pose, and declared survey
+status. The normal templates deliberately contain `TBD`/`unverified` values;
+all gates, covariance coefficients, camera extrinsic authority, and map poses
+must be measured/surveyed and recorded before physical use. The synthetic
+fixture values (including the 0.300 m tags, extrinsics, gates, and the large
+unobserved-roll/pitch covariance) are test data only. The planar fused output
+sets roll/pitch to zero and applies the explicit
+`unobserved_roll_pitch_variance_rad2` rather than pretending they were
+estimated.
+
+**Architecture and alternatives:** The localizer consumes source-scoped
+detector topics directly rather than prematurely adding an unscoped
+`/tag_detections` adapter. This preserves source identity and camera-specific
+TF frames for multi-camera duplicate protection. Metric pose comes from the
+detector observation TF because the installed `apriltag_msgs` message carries
+quality/image data but no metric pose. The retained old-project pose/TF
+backbone was not reused because it could synthesize camera aliases or global
+TF authority inconsistent with this architecture. Candidates are deduplicated
+by physical `(family, id)`, fused only across distinct tags, and produce an
+EKF input rather than a parallel global transform source.
+
+**Safety and failure behavior:** The public launch has no usable default map
+or configuration path. The node accepts only an all-surveyed map/configuration/
+extrinsic set, or an all-`synthetic_test_only` set with explicit
+`allow_synthetic_test_data:=true`. It rejects unknown/bench tags, bad family,
+hamming, decision margin, pixel size, range, view angle, stale/future
+detections, timestamp/frame-invalid TF, inter-tag disagreement, and
+implausible jumps. A no-tag interval creates no new pose; a backwards ROS-time
+jump clears pending observations and the jump reference. A dedicated TF
+listener thread supports the configured nonzero TF lookup timeout on Humble and
+Jazzy. These are software gates only; they do not replace physical E-stop,
+camera calibration, tag survey, or localization health monitoring.
+
+**Dependencies and resource use:** New package dependencies are `rclcpp`,
+`tf2`, `tf2_geometry_msgs`, `tf2_ros`, `geometry_msgs`, `diagnostic_msgs`,
+`apriltag_msgs`, and `yaml_cpp_vendor`/`yaml-cpp`. Future dependencies remain
+the selected camera detector/ZED stack, Phase 3 local odometry, and
+`robot_localization` for the global EKF. No Phase 4.2 runtime CPU, memory,
+bandwidth, detector latency, or Jetson resource measurement was taken; the
+synthetic node-start test used two configured source subscriptions but no live
+DDS camera/TF graph.
+
+**Verification and evidence:** On the x86_64 Ubuntu 24.04/ROS 2 Jazzy
+development host, `LUNABOT_ROS_DISTRO=jazzy ./scripts/build.sh` completed all
+10 packages and `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build`
+reported 87 tests, 0 errors, 0 failures, and 1 expected conditional skip.
+The C++ suite covers map parsing (including ID 0 and non-REP-103 rejection),
+configuration opt-in, transform composition, quality gates, covariance,
+multi-camera equivalence, fusion, yaw wrapping, deduplication, and jump
+rejection; static contracts cover launch/TF ownership. A no-argument public
+launch failed before node creation as designed. An explicit synthetic fixture
+launch initialized the node and then stopped cleanly under a five-second test
+timeout. The restricted sandbox blocked DDS sockets, so no live detection,
+TF, pose, or performance claim follows. `./scripts/lint.sh` passed all hooks
+in unrestricted execution after Black workers stalled in the restricted
+sandbox.
+
+**Known limitations and remaining work:** `CAM-01`, `TAG-01`, `LOC-01`, and
+`ZED-01` remain open. Required next work is to print/measure/survey IDs 1–3,
+record map convention/uncertainty, measure each physical camera extrinsic,
+revalidate webcam calibration, add/profile a ZED source on the locked
+Jetson/Humble image, capture recorded data for gate/covariance tuning, add the
+localization-validity monitor, implement/validate Phase 3 local odometry, and
+then validate a global EKF as the sole `map -> odom` authority. Target arm64,
+live multi-camera, stale-TF, and absolute-pose accuracy behavior remain
+unvalidated.
+
+**Git evidence:** `3326f22` (`feat: implement phase 4.2 tag localizer`) is
+the implementation commit; this devlog record is committed separately for
+traceability.
+
+## 2026-08-24 — One-time Humble workspace bootstrap
+
+**Purpose and scope:** Reworked bootstrap from a check-only prerequisite
+report into an explicit, one-time provisioning workflow for another team
+member's supported device. The normal daily action is now a source-only
+activation helper rather than re-running the installer. This change prepares
+the current mock and webcam-AprilTag software scope; it does not claim a
+physical robot, ZED, target-performance, or competition-ready environment.
+
+**Components and files:** `scripts/bootstrap_dev.sh` owns the explicit
+`--install` workflow, non-mutating default `--check`, `development` and
+headless `jetson` profiles, workspace-layout validation, OS/target preflight,
+ROS source setup, `rosdep`, build/test handoff, and optional hook/tool legacy
+actions. `scripts/activate.sh` sources the selected ROS underlay and built
+workspace overlay in the caller's current shell. `lb_launch` owns the
+host-independent bootstrap contract test
+(`test/test_bootstrap_contract.py`), registered in its `CMakeLists.txt`.
+`docs/bootstrap.md`, `README.md`, `docs/operations.md`, `docs/testing.md`, and
+the Phase 4.1 bench note record the operating procedure; detailed validation
+is retained in
+[`docs/evidence/bootstrap_validation_2026-08-24.md`](../docs/evidence/bootstrap_validation_2026-08-24.md).
+
+**ROS interfaces and TF ownership:** This change creates no nodes, topics,
+services, actions, messages, parameters for runtime nodes, or TF frames. It
+only verifies package availability and sources ROS/workspace environment
+hooks. Existing interface and TF ownership remain unchanged.
+
+**Configuration, dependencies, and provenance:** The installer accepts the
+user-selected workspace path and profile. `development` requires Ubuntu 22.04
+and installs Humble base, RViz, rosbag tooling, generic development tools, and
+dependencies resolved directly from the checked-in package manifests through
+`rosdep`. `jetson` additionally requires Ubuntu 22.04, arm64, L4T 36.5, and
+an Orin Nano model string; it intentionally omits RViz. These are platform
+lock values from `docker/versions.env` /
+`docs/resources/software_platform_lock.md`, not new measurements. The
+device-tree model cannot distinguish the physical 8 GB SKU; the team must
+confirm that separately. ZED SDK/wrapper, Nav2, `robot_localization`, LiDAR,
+real motor/MCU dependencies, Docker/NVIDIA runtime, firmware, and device
+permissions remain outside bootstrap because they are not yet target-validated
+or declared project dependencies.
+
+**Architecture and alternatives:** `rosdep` is the source of truth for ROS
+package dependencies rather than a fragile hand-maintained package list. A
+small explicit apt baseline is retained only for bootstrap tools, ROS base,
+rosbag, and development-only RViz. The script prefers the canonical
+`<workspace>/src/jmu-lunabotics` layout while accepting a standalone checkout
+for CI. It does not edit `.bashrc`; a child bootstrap process cannot activate
+the caller's later terminals. Non-Humble activation is rejected unless the
+user explicitly sets both `LUNABOT_ROS_DISTRO` and
+`LUNABOT_ALLOW_NON_TARGET_ACTIVATION=1`, labelling it structural-only.
+
+**Safety and failure behavior:** Installation is opt-in, confirmation-gated
+unless `--yes` is supplied, and rejects conflicting actions, invalid workspace
+paths, non-Humble installation requests, non-Jammy hosts, wrong/stale ROS apt
+sources, and a failed Jetson preflight. The default check is read-only. The
+installer never edits a shell profile, flashes/upgrades JetPack, installs the
+ZED stack, changes device permissions, accesses a motor controller, starts a
+hardware launch, or validates physical safety equipment. A failed source of
+the ROS underlay/overlay propagates as an error rather than reporting a false
+ready state.
+
+**Verification and resource use:** On the available x86_64 Ubuntu 24.04/ROS 2
+Jazzy development host, shell syntax and the standalone contract suite passed;
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/build.sh` completed all 10 packages;
+`LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` reported 95 tests,
+0 errors, 0 failures, and 1 expected skip; `./scripts/lint.sh` passed all
+configured hooks. Negative checks verified the missing-workspace, conflicting
+action, unsupported-Humble-install, Jetson-profile, and non-target-activation
+failure paths without changing the host. No installer command, resource
+measurement, Jetson/arm64 runtime, live camera, or physical robot test was
+run on this host.
+
+**Known limitations and remaining work:** Execute and preserve the full
+installer output on a clean Ubuntu 22.04 developer host and the manually
+verified Orin Nano/JetPack 6.2.2 target; then retain package versions, final
+readiness output, and mock/webcam bench evidence. The apt packages are locked
+at ROS-distribution level rather than exact Debian package versions. The
+bootstrap target preflight is not a substitute for confirming the 8 GB SKU,
+JetPack image integrity, ZED compatibility, camera permissions/calibration,
+or the later physical safety and drive integration work.
+
+**Git evidence:** `6eee304` (`feat: add one-time workspace bootstrap`) is the
+implementation commit; this append-only record is committed separately for
+traceability.

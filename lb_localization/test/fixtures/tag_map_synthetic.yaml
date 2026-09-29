@@ -1,0 +1,23 @@
+# Unit-test fixture only.  These poses are invented for deterministic software
+# tests; they are not an arena survey and cannot be used on a robot.
+schema_version: 1
+map:
+  frame_id: map
+  survey_status: synthetic_test_only
+  coordinate_convention: REP-103
+tags:
+  - id: 1
+    family: tag36h11
+    size_m: 0.300
+    frame_id: synthetic_field_tag_1
+    pose_map: {x: 5.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
+  - id: 2
+    family: tag36h11
+    size_m: 0.300
+    frame_id: synthetic_field_tag_2
+    pose_map: {x: 0.0, y: 5.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 1.5707963267948966}
+  - id: 3
+    family: tag36h11
+    size_m: 0.300
+    frame_id: synthetic_field_tag_3
+    pose_map: {x: -5.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 3.141592653589793}

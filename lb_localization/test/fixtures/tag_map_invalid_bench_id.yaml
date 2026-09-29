@@ -1,0 +1,12 @@
+# Deliberately invalid unit-test fixture: Phase 4.1's bench-only ID 0 is not a field tag.
+schema_version: 1
+map:
+  frame_id: map
+  survey_status: synthetic_test_only
+  coordinate_convention: REP-103
+tags:
+  - id: 0
+    family: tag36h11
+    size_m: 0.250
+    frame_id: invalid_bench_tag_0
+    pose_map: {x: 0.0, y: 0.0, z: 0.0, roll: 0.0, pitch: 0.0, yaw: 0.0}
