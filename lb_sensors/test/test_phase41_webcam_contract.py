@@ -66,16 +66,13 @@ def test_launch_keeps_camera_data_source_scoped_and_does_not_invent_robot_pose()
 
 
 def test_runtime_and_evidence_dependencies_are_declared() -> None:
-    """The target image and recorder preserve the complete bench dependency path."""
+    """The native manifest and recorder preserve the complete bench dependency path."""
     manifest = (PACKAGE_ROOT / "package.xml").read_text(encoding="utf-8")
-    dockerfile = (REPOSITORY_ROOT / "docker" / "Dockerfile.jetson").read_text(encoding="utf-8")
     recorder = (REPOSITORY_ROOT / "scripts" / "record_bag.sh").read_text(encoding="utf-8")
 
     assert "<exec_depend>v4l-utils</exec_depend>" in manifest
     assert "<exec_depend>v4l2_camera</exec_depend>" in manifest
-    assert "ros-${ROS_DISTRO}-apriltag-ros" in dockerfile
-    assert "ros-${ROS_DISTRO}-image-proc" in dockerfile
-    assert "ros-${ROS_DISTRO}-v4l2-camera" in dockerfile
-    assert "v4l-utils" in dockerfile
+    assert "<exec_depend>apriltag_ros</exec_depend>" in manifest
+    assert "<exec_depend>image_proc</exec_depend>" in manifest
     assert "webcam_apriltag)" in recorder
     assert "/sensors/webcam/tag_detections" in recorder

@@ -12,9 +12,8 @@
 | Scaffold contract | `scripts/test.sh` | Package manifests and required Phase 0 files are present. |
 | ROS package build | `scripts/build.sh` | The empty package scaffold configures and builds. |
 | Style and hygiene | `scripts/lint.sh` | Pre-commit hooks and local syntax checks pass. |
-| Target container | `docker compose --env-file docker/versions.env -f docker/docker-compose.yml build` | Must be run natively on the arm64 Jetson. |
 | Xacro contract | `scripts/test.sh` | Expands the synthetic model when `xacro` is installed; checks the nonphysical profile and required frame names. |
-| Mock launch | `scripts/test.sh` in Humble CI/container | Starts `GenericSystem`, confirms an active `joint_state_broadcaster`, required TFs, single publishers, and no `map`/`odom`. |
+| Mock launch | `scripts/test.sh` on a provisioned Humble host or in CI | Starts `GenericSystem`, confirms an active `joint_state_broadcaster`, required TFs, single publishers, and no `map`/`odom`. |
 | Live TF authority | `scripts/check_tf_authority.py --runtime` | Checks a separately launched `lb_sim mock_robot.launch.py` graph without commanding hardware. |
 | Manual RViz smoke | `ros2 launch lb_sim mock_robot.launch.py use_rviz:=true` | Displays the synthetic four-wheel, scoop proxy, and sensor-mount TF tree; no motor hardware is needed. |
 | Phase 2 transport unit test | `scripts/test.sh` | Verifies disabled mock startup, explicit mock motion, zero stop, command timeout, communication loss, and real-skeleton rejection. |

@@ -50,14 +50,14 @@ The intended robot runtime is:
 | ZED Mini software | ZED SDK 5.2.3; ZED ROS 2 Wrapper `v5.2.2` |
 
 This is a proposed baseline, not proof of target validation. See
-[`docker/versions.env`](docker/versions.env) and
-[the platform lock note](docs/resources/software_platform_lock.md).
+[the platform lock note](docs/resources/software_platform_lock.md). The robot
+uses native provisioning through `scripts/bootstrap_dev.sh`; a local Docker
+runtime is not part of the deployment architecture.
 
 ## Repository layout
 
 ```text
 .
-├── docker/                 # arm64 Jetson container scaffold and version lock
 ├── docs/                   # architecture, safety, testing, TBDs, and change log
 ├── firmware/               # MCU placeholder; no protocol is assumed
 ├── lb_*/                   # ROS 2 packages, one responsibility per package
@@ -108,7 +108,7 @@ one-time workflow, and the intentional boundaries.
 
 The current x86_64 Ubuntu 24.04/Jazzy workstation may run structural checks
 only by explicitly setting `LUNABOT_ROS_DISTRO=jazzy`; that does **not** validate
-the Jetson, L4T, CUDA, ZED SDK, or arm64 container runtime. Do not use the
+the Jetson, L4T, CUDA, ZED SDK, or arm64 robot runtime. Do not use the
 Humble provisioning profiles to treat this host as a target-equivalent robot
 environment.
 

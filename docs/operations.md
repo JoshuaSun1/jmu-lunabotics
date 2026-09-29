@@ -11,8 +11,7 @@
 
 ## Safe setup
 
-1. Review `docker/versions.env` and
-   `docs/resources/software_platform_lock.md`. The robot runtime is Ubuntu
+1. Review `docs/resources/software_platform_lock.md`. The robot runtime is Ubuntu
    22.04 / ROS 2 Humble, not the development workstation's Jazzy override.
 2. Provision each supported device once from the repository root:
 

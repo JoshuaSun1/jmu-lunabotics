@@ -17,7 +17,7 @@
 | ROS 2 | Humble Hawksbill | Native Ubuntu 22.04 LTS pairing; use this for robot runtime rather than Jazzy. |
 | ZED SDK | 5.2.3 | Stereolabs publishes this release for JetPack 6.2.2 / L4T 36.5. |
 | ZED ROS 2 wrapper | `v5.2.2` Git tag | Compatible with ZED SDK 5.2 and ROS 2 Humble. Pin the resolved commit SHA when vendored. |
-| Container architecture | `linux/arm64` | Required on the Jetson. |
+| CPU architecture | `aarch64` | Native architecture of the Jetson target. |
 
 ## Sensor integration resolved by the BOM
 
@@ -30,7 +30,7 @@
 1. Update the Jetson developer-kit firmware before installing a JetPack 6 image if the kit still has factory firmware.
 2. Flash a clean JetPack 6.2.2 image, install the exact ZED SDK above, and build the pinned wrapper on the physical Orin Nano.
 3. Verify ZED Mini images, depth, IMU timestamps, and CPU/GPU/memory use at the intended operating rate.
-4. Record exact installed Debian package versions and container image digest in `docker/versions.env` once the Phase 0 scaffold exists.
+4. Record exact installed Debian/ROS package versions in a tracked native-runtime manifest after bootstrap is validated.
 5. Test the complete stack on the physical robot before treating these versions as final competition locks.
 
 ## Important hardware/software dependencies still TBD

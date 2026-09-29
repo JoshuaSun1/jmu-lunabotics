@@ -53,9 +53,8 @@ remains open because the competition tag inventory, multi-camera allocation,
 placement, world poses, uncertainty, and surveyed tag map are not selected.
 `ZED-01` remains independent: a later ZED must use distinct source-scoped
 topics and observation frames, such as `zed_observation_tag_0`.
-The generic Compose profile intentionally has no camera device mapping; its
-least-privilege `/dev/v4l` and V4L2-device pass-through design remains part of
-`OPS-01` before containerized Jetson camera use.
+The native Jetson runtime must validate webcam device identity, permissions,
+V4L2 controls, and reconnect behavior under `OPS-01`.
 
 ## Phase 4.2 field-tag and localizer boundary
 

@@ -3,7 +3,7 @@
 | Specification requirement | Evidence | Status |
 |---|---|---|
 | Repository structure and package ownership | Root `lb_*` package layout and `architecture.md` | Implemented |
-| Version lock | `docker/versions.env`, platform-lock resource | Proposed; physical validation pending |
+| Native runtime version lock | Platform-lock resource and bootstrap target checks | Platform versions proposed; exact installed Debian/ROS manifest pending physical validation |
 | Formatting/lint/test configuration | `.pre-commit-config.yaml`, scripts, package tests | Implemented; restricted-sandbox Black limitation recorded in devlog |
 | Phase 1 parameterized Xacro | `lb_model/urdf/lb_mock.urdf.xacro`, `lb_model/config/mock_geometry.yaml`, model contract test | Implemented as synthetic mock only |
 | Phase 1 sensor and mechanism frames | Xacro links, `docs/phase1_mock_model.md`, mock TF test | Implemented; physical mounts and linkage TBD |
@@ -21,7 +21,7 @@
 | Phase 4.2 tag-map schema and planned field inventory | `lb_localization/config/tag_map.template.yaml`, `docs/phase42_tag_localizer.md` | Implemented as an unverified template for `tag36h11` IDs 1–3, nominal 0.300 m; no field poses/survey or physical claim |
 | Phase 4.2 known-tag localizer core | `lb_localization/src/tag_localizer_core.cpp`, `tag_localizer_node.cpp`, unit/contract tests | Implemented and structurally tested with synthetic fixtures; publishes only map-frame absolute pose and diagnostics, never TF; physical use and the specification's localization-validity monitoring remain pending `CAM-01`, `TAG-01`, and `LOC-01` |
 | Global EKF correction and `map -> odom` authority | `lb_localization/config/ekf_global.template.yaml` | Pending Phase 3 `/odometry/local`, measured tuning, `robot_localization`, and target runtime TF-authority evidence; template is not launched |
-| Container builds on target architecture | `docker/` Phase 1 dependency set | Pending physical arm64 validation |
+| Native target provisions on target architecture | `bootstrap_dev.sh --install --profile jetson` | Pending physical arm64 validation |
 | `colcon build` / `colcon test` | Build/test scripts and package tests | Pending validation in locked Humble environment |
 
 The Phase 4.1 detector baseline and Phase 4.2 synthetic localizer are narrower

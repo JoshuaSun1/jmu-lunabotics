@@ -611,3 +611,50 @@ or the later physical safety and drive integration work.
 **Git evidence:** `6eee304` (`feat: add one-time workspace bootstrap`) is the
 implementation commit; this append-only record is committed separately for
 traceability.
+
+## 2026-09-29 — Native bootstrap selected; local Docker scaffold removed
+
+**Purpose and decision:** Confirmed that the two-developer project will use
+native host provisioning through `scripts/bootstrap_dev.sh` rather than a
+Docker-based robot runtime. Removed the local Docker/Compose build scaffold and
+its image-oriented version file. The ROS Humble container used by GitHub
+Actions remains CI infrastructure only and is not a deployment requirement.
+
+**Components and files:** Removed `docker/` and `.dockerignore`. Updated the
+README, canonical software specification, platform lock, operations/testing
+guides, requirements traceability, TBD register, Phase 1 note, and scaffold and
+webcam contract tests. `scripts/bootstrap_dev.sh` remains the authoritative
+one-time native provisioning and readiness-check entry point. Package manifests
+remain the source for dependencies resolved by `rosdep`.
+
+**ROS interfaces, TF, parameters, and dependencies:** No ROS node, topic,
+service, action, message type, TF frame, transform owner, runtime parameter, or
+hardware dependency changed. The proposed platform remains JetPack 6.2.2 / L4T
+36.5.0, Ubuntu 22.04, ROS 2 Humble, ZED SDK 5.2.3, and ZED wrapper v5.2.2. Those
+values are manufacturer/version-selection inputs awaiting physical-target
+validation; they are not measured robot parameters.
+
+**Architecture and alternatives:** Native provisioning was selected for its
+lower operational complexity with Jetson GPU, USB, CAN/serial, and camera
+devices. A local Docker runtime was rejected because it was not a team
+requirement and did not itself guarantee exact apt-package reproducibility.
+Clean ROS Humble CI continues to provide an isolated build/test environment.
+
+**Safety and failure behavior:** This change introduces no actuation path and
+does not change the existing fail-closed hardware boundaries. Bootstrap still
+does not flash JetPack, install the ZED SDK, change device permissions, launch
+hardware, or authorize physical motion.
+
+**Verification and remaining work:** Static contracts were updated to validate
+the native bootstrap/platform record and package-manifest sensor dependencies
+without Docker artifacts. The two directly affected pytest files passed 7
+tests; `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` then passed 95
+tests with 0 errors, 0 failures, and 1 expected skip. `git diff --check` passed.
+This remains x86/Jazzy structural evidence. Exact Debian/ROS package revisions
+are not yet locked: after validation on Ubuntu 22.04 and the Orin target,
+capture a tracked machine-readable installed-package manifest and make
+bootstrap verify it. Preserve provisioning output and physical-target results
+as evidence.
+
+**Git evidence:** Working-tree change; replace with the resulting Git commit
+when committed.

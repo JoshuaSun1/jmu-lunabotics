@@ -30,7 +30,6 @@ def test_phase_zero_resources_and_version_lock_exist() -> None:
     """The scaffold retains the specification and its decision inputs."""
     required_paths = (
         "README.md",
-        "docker/versions.env",
         "docs/lunabotics_autonomy_software_spec.md",
         "docs/resources/Master Progressive BOM - MASTER.pdf",
         "docs/resources/software_platform_lock.md",
@@ -43,11 +42,15 @@ def test_phase_zero_resources_and_version_lock_exist() -> None:
 
 
 def test_target_runtime_lock_is_explicit() -> None:
-    """The target lock remains machine-readable and avoids a runtime-image guess."""
-    values = (REPOSITORY_ROOT / "docker" / "versions.env").read_text(encoding="utf-8")
-    assert "TARGET_PLATFORM=linux/arm64" in values
-    assert "ROS_DISTRO=humble" in values
-    assert "JETPACK_VERSION=6.2.2" in values
-    assert "L4T_VERSION=36.5.0" in values
-    assert "ZED_SDK_VERSION=5.2.3" in values
-    assert "JETSON_RUNTIME_IMAGE=TBD_AFTER_TARGET_VALIDATION" in values
+    """Native bootstrap and the platform record retain the proposed target lock."""
+    bootstrap = (REPOSITORY_ROOT / "scripts" / "bootstrap_dev.sh").read_text(
+        encoding="utf-8"
+    )
+    platform_lock = (
+        REPOSITORY_ROOT / "docs" / "resources" / "software_platform_lock.md"
+    ).read_text(encoding="utf-8")
+    assert 'TARGET_ROS_DISTRO="humble"' in bootstrap
+    assert 'TARGET_UBUNTU_VERSION="22.04"' in bootstrap
+    assert 'TARGET_L4T_RELEASE="R36 (release), REVISION: 5.0"' in bootstrap
+    assert "JetPack | 6.2.2" in platform_lock
+    assert "ZED SDK | 5.2.3" in platform_lock

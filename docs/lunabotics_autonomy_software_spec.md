@@ -96,7 +96,7 @@ Preferred policy:
 
 1. Use ROS 2 Humble on Ubuntu 22.04 when that is the validated JetPack/ZED combination for the actual Orin Nano image.
 2. Use ROS 2 Jazzy on Ubuntu 24.04 only when the selected JetPack and ZED SDK combination is validated on the target hardware.
-3. Pin exact versions in `docker/versions.env`, the container image tag, and the repository README.
+3. Record the validated platform versions and exact installed Debian/ROS package versions in tracked native-runtime documentation and a machine-readable manifest.
 4. Do not implement against ROS Rolling or Kilted unless the team explicitly approves the compatibility risk.
 
 A legacy Jetson Nano 4 GB is outside the performance assumptions of this document. The expected target is a Jetson Orin Nano 8 GB.
@@ -738,11 +738,6 @@ lunabot_autonomy/
 ├── LICENSE
 ├── .gitignore
 ├── .pre-commit-config.yaml
-├── docker/
-│   ├── Dockerfile.jetson
-│   ├── docker-compose.yml
-│   ├── versions.env
-│   └── README.md
 ├── docs/
 │   ├── architecture.md
 │   ├── calibration.md
@@ -1028,14 +1023,14 @@ Codex shall implement small, reviewable phases. It shall not attempt the entire 
 Deliverables:
 
 - Repository structure.
-- ROS distribution and container version lock.
+- ROS distribution and native-runtime version lock.
 - Formatting/lint/test configuration.
 - Empty packages with documented ownership.
 - Top-level README and build scripts.
 
 Exit criteria:
 
-- Container builds on target architecture.
+- Bootstrap provisions and verifies the target architecture.
 - `colcon build` and `colcon test` pass.
 
 ### Phase 1 - Description, TF, and mock robot
@@ -1197,7 +1192,7 @@ When implementing from this specification:
 
 ```text
 Read docs/lunabotics_autonomy_software_spec.md. Implement Phase 0 only.
-Create the repository and ROS 2 package scaffold, container/version placeholders,
+Create the repository and ROS 2 package scaffold, native version placeholders,
 build/test scripts, and documentation skeleton. Do not implement hardware logic.
 Mark unresolved platform and hardware values as explicit TBDs. Run available build,
 test, and lint commands and report the results.
@@ -1226,7 +1221,7 @@ The architecture was checked against official or primary project documentation a
 2. Nav2 Costmap 2D, Map Server, Obstacle Layer, Voxel Layer, and Behavior Tree documentation.
 3. `robot_localization` state-estimation documentation and Nav2 odometry setup guide.
 4. `ros2_control` Jazzy documentation and `diff_drive_controller` user documentation.
-5. Stereolabs ZED ROS 2 integration and container guidance.
+5. Stereolabs ZED ROS 2 integration and native Jetson guidance.
 6. `christianrauch/apriltag_ros` ROS 2 repository and AprilRobotics AprilTag reference implementation.
 7. `twist_mux` ROS 2 package documentation.
 

@@ -97,9 +97,9 @@ or safety behavior.
 
 The mock requires `xacro`, `robot_state_publisher`, `joint_state_publisher`
 (for standalone description viewing), `ros2_control`, `ros2_controllers`, and
-launch-testing packages. CI and the generic container declare the Humble
-packages. The available Jazzy host lacks the control/Xacro executables, so
-runtime launch validation remains a Humble CI/container or target task.
+launch-testing packages. CI declares the Humble packages. The available Jazzy
+host lacks the control/Xacro executables, so runtime launch validation remains
+a Humble CI or provisioned-target task.
 
 Remaining blockers include `GEOM-01`, `DRIVE-02`, `DRIVE-03`, `ZED-01`,
 `LIDAR-01`, `TAG-01`, `MISS-01`, and all safety configuration. Phase 2 will
