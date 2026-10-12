@@ -43,6 +43,16 @@ profile at 640 x 480 until a different profile has its own calibration record.
 The synthetic webcam transform in the Phase 1 model is not a physical extrinsic
 and must not be used for this validation.
 
+The development-only arena replay uses a separate, explicit temporary
+extrinsic: translation `[0.0, 0.0, 0.40]` m and rear optical rotation
+RPY `[-pi/2, 0, +pi/2]` rad from `base_link`. It also estimates tag 1 at
+`[0.0, 1.0, 0.75]` m with detector-frame RPY
+`[+pi/2, 0, +pi/2]`. These values exist only to visualize
+`test1_AT1`; they are not copied into the production tag-map template, robot
+model, or C++ localizer configuration. Replace them after measuring the camera
+mount and surveying the tag center/orientation, and record uncertainty and
+method with the resulting calibration.
+
 ## Phase 4.2 future field-tag plan
 
 The user-selected field inventory is `tag36h11` IDs **1, 2, and 3**, each with

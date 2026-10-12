@@ -35,6 +35,7 @@ ament_target_dependencies(tag_localizer
 
 install(PROGRAMS
   scripts/tag_replay_visualizer.py
+  scripts/tag_replay_robot_pose.py
   DESTINATION lib/${PROJECT_NAME})
 
 install(
@@ -66,6 +67,7 @@ if(BUILD_TESTING)
   endif()
   ament_add_pytest_test(phase42_localizer_contract test/test_phase42_localizer_contract.py)
   ament_add_pytest_test(tag_replay_visualizer_test test/test_tag_replay_visualizer.py)
+  ament_add_pytest_test(tag_replay_robot_pose_test test/test_tag_replay_robot_pose.py)
 endif()
 
 ament_export_include_directories(include)

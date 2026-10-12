@@ -151,3 +151,22 @@ at 0.05 m/cell. Its one-cell occupied boundary lies outside the usable interior,
 and the YAML image origin is `[-0.05, -0.05, 0.0]`. The center support column,
 keepouts, and surveyed arena verification remain TBD rather than being inferred
 from the guidebook illustration.
+
+## Development-only map-frame pose replay
+
+`lb_sim/launch/arena_pose_replay.launch.py` combines the static map, the
+recorded `test1_AT1` observation stream, and a visualization-only pose adapter.
+`lb_localization/scripts/tag_replay_robot_pose.py` composes the estimated
+`map -> tag_1` pose with the inverse recorded
+`webcam_optical_frame -> webcam_observation_tag_1` transform to obtain a raw
+six-degree-of-freedom map-frame camera pose. It then removes a provisional
+`base_link -> webcam_optical_frame` rigid transform and projects the result to
+an XY/yaw `base_link` proxy.
+
+This adapter deliberately does not broadcast TF or publish the canonical
+`/localization/apriltag_pose`. It cannot own `map -> odom` or
+`odom -> base_link`, and it does not start an EKF, planner, controller, or
+hardware. Its finite-lifetime markers and current path disappear on stale tag
+data; no motion is inferred through an observation gap. This is a development
+visualization bridge until wheel odometry, ZED IMU, surveyed tag poses, and a
+measured camera mount support the production localization architecture.

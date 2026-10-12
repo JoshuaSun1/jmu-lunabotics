@@ -3,6 +3,7 @@
 This is the canonical, append-only software development record required for
 competition deliverables. It complements detailed documentation under `docs/`;
 supporting evidence is linked from each entry rather than duplicated here.
+Entries are ordered oldest to newest; add each new record at the bottom.
 
 ## 2026-08-04 — Prototype transition and Phase 0 scaffold
 
@@ -739,111 +740,6 @@ Ctrl+C, and confirm message counts and duration with `ros2 bag info`.
 `1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
 committed.
 
-## 2026-10-11 — Lifecycle-managed static arena map configuration
-
-**Purpose and scope:** Completed the repository portion of the static-map
-server increment. `lb_navigation` now installs map-server parameters, an
-explicit lifecycle launch, and a map-focused RViz profile around the existing
-arena raster. This increment deliberately adds no robot pose, `map -> odom`,
-`odom -> base_link`, localization node, costmap, planner, controller, behavior
-tree, sensor pipeline, or motion output.
-
-**Components, interfaces, and ownership:**
-`lb_navigation/config/map_server.yaml` configures upstream
-`nav2_map_server/map_server` and an autostarting
-`nav2_lifecycle_manager/lifecycle_manager` named `lifecycle_manager_map`; its
-managed-node list contains only `map_server`.
-`lb_navigation/launch/map.launch.py` requires valid map, parameter, and RViz
-files and supplies installed defaults. `lb_navigation/rviz/arena_map.rviz`
-uses fixed frame `map`, a top-down view, and transient-local/reliable `/map`
-QoS. Expected `/map` type is `nav_msgs/msg/OccupancyGrid` with
-`header.frame_id=map`; upstream standard load-map and lifecycle services are
-the only new service interfaces. Map server publishes no TF, so the global EKF
-remains the sole future `map -> odom` owner.
-
-**Parameters and provenance:** Map resolution remains 0.05 m/cell. The 139 x
-102 raster contains a 137 x 100 free interior representing the team-selected
-6.85 m length and guidebook-derived 5.00 m width, surrounded by one occupied
-cell outside the usable interior. YAML image origin remains
-`[-0.05, -0.05, 0.0]`. `autostart=true` and `use_sim_time=false` are software
-profile defaults. The center column pose/dimensions, keepouts, and physical
-control-point survey remain TBD; none was inferred from the illustration.
-
-**Dependencies, failure behavior, and safety:** Added declared runtime
-dependencies on `nav2_map_server`, `nav2_lifecycle_manager`, launch support,
-and RViz, plus bootstrap readiness checks for both Nav2 components. Missing
-map/parameter/RViz files fail before nodes start. A missing upstream package
-fails launch explicitly. The launch is non-actuating and cannot command robot
-hardware. An attempted minimal Jazzy package install made no changes because
-the host requires an interactive sudo password; no credential workaround was
-attempted.
-
-**Verification and evidence:** Focused tests passed 6/6. The Jazzy
-`lb_navigation` build completed and installed all artifacts; installed launch
-argument resolution passed. Package testing reported 8 tests, zero errors,
-failures, or skips. New Python files passed `ament_flake8` and `ament_pep257`.
-Runtime launch reached the expected explicit blocker:
-`package 'nav2_map_server' not found`. Detailed evidence and operator lifecycle,
-topic, metadata, and RViz checks are recorded in
-[`docs/evidence/phase5_map_server_2026-10-11.md`](../docs/evidence/phase5_map_server_2026-10-11.md).
-Runtime Jazzy and target Humble checks, GUI confirmation, measured resource use,
-and physical arena alignment remain open.
-
-**Git evidence:** Map-server code, tests, parameters, launch, and RViz artifacts
-are recorded in `69b0505` (`In the middle of stage 2 of map implementation`).
-The 2026-10-11 documentation/readiness updates remain uncommitted.
-
-## 2026-10-03 — Freshness-gated tag replay and initial arena raster
-
-**Purpose and scope:** Added the first non-actuating development increment for
-the visualization and static-map work packages. The explicit Jazzy
-`bags/test1_AT1` recording can now be replayed with `/clock`, visualized as a
-fresh camera-relative tag pose and bounded contiguous path, and inspected in a
-reusable RViz profile. Added an initial arena occupancy artifact but deliberately
-did not configure `map_server`, Nav2, costmaps, localization TF, or motion.
-
-**Components and interfaces:** `lb_localization` owns
-`scripts/tag_replay_visualizer.py`, which consumes the recorded
-`webcam_optical_frame -> webcam_observation_tag_1` TF and publishes
-`/visualization/webcam/tag_1_pose` (`geometry_msgs/msg/PoseStamped`),
-`/visualization/webcam/tag_1_path` (`nav_msgs/msg/Path`), and replay state on
-`/diagnostics` (`diagnostic_msgs/msg/DiagnosticArray`). It broadcasts no TF.
-`lb_sim/launch/bag_replay.launch.py` requires an explicit rosbag directory and
-starts playback, the visualizer, and optional RViz without starting the live
-camera/detector or any actuator. `lb_navigation` owns the map/YAML, RViz
-profile, install rules, and map contract. Detailed evidence is in
-[`docs/evidence/phase5_replay_map_artifact_2026-10-03.md`](../docs/evidence/phase5_replay_map_artifact_2026-10-03.md).
-
-**Frames, parameters, and provenance:** The observation remains camera-relative
-and is not a robot/map pose. The configurable 0.5 s stale timeout and 500-pose
-bound are initial development values, not measured competition tuning. Loss
-clears the active segment, reacquisition starts another, and a backward `/clock`
-jump clears replay state. The agreed REP-103 map origin is the starting-zone
-corner; +X runs 6.85 m away from the starting zone, +Y runs 5.00 m across the
-arena, and zero yaw faces +X. The 6.85 m length is team-selected; 5.00 m comes
-from the guidebook. The development assumption places tag 1 at
-`(0.0, 1.0, 0.75)` m with its face normal toward +X, but no tag quaternion or
-surveyed runtime map was created. The physical webcam extrinsic remains TBD.
-
-**Map and safety behavior:** `arena.pgm` uses 0.05 m/cell, a 137 x 100 free
-interior, and one occupied cell outside every edge, producing 139 x 102 cells
-with YAML origin `[-0.05, -0.05, 0.0]`. The center column is omitted pending a
-survey; changing obstacles are intentionally excluded. The replay path never
-interpolates through a stale interval, commands no hardware, and publishes no
-`map -> odom` or `odom -> base_link` transform.
-
-**Verification and remaining work:** The focused tests passed 8/8. A Jazzy
-selected build completed and selected package testing reported 106 tests, zero
-errors/failures, and one existing conditional skip. New Python files passed
-`ament_flake8`. The headless launch resolved and opened `test1_AT1` and started
-the installed node, but restricted-sandbox socket denial prevented DDS graph
-validation; graphical RViz, maneuver metrics, dropout durations, CPU/memory,
-and Humble validation remain operator work. The next increment is map-server
-configuration and physical/map-origin verification, after review of this map.
-
-**Git evidence:** Replay visualization and initial arena artifacts are recorded
-in `69b0505` (`In the middle of stage 2 of map implementation`).
-
 ## 2026-10-02 — Register webcam tags 1–3
 
 **Purpose and files:** Expanded `lb_sensors/config/webcam_apriltag.yaml` to
@@ -903,3 +799,179 @@ name remains to be verified; resource usage was not measured.
 **Git evidence:** Uncommitted change based on
 `1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
 committed.
+## 2026-10-03 — Freshness-gated tag replay and initial arena raster
+
+**Purpose and scope:** Added the first non-actuating development increment for
+the visualization and static-map work packages. The explicit Jazzy
+`bags/test1_AT1` recording can now be replayed with `/clock`, visualized as a
+fresh camera-relative tag pose and bounded contiguous path, and inspected in a
+reusable RViz profile. Added an initial arena occupancy artifact but deliberately
+did not configure `map_server`, Nav2, costmaps, localization TF, or motion.
+
+**Components and interfaces:** `lb_localization` owns
+`scripts/tag_replay_visualizer.py`, which consumes the recorded
+`webcam_optical_frame -> webcam_observation_tag_1` TF and publishes
+`/visualization/webcam/tag_1_pose` (`geometry_msgs/msg/PoseStamped`),
+`/visualization/webcam/tag_1_path` (`nav_msgs/msg/Path`), and replay state on
+`/diagnostics` (`diagnostic_msgs/msg/DiagnosticArray`). It broadcasts no TF.
+`lb_sim/launch/bag_replay.launch.py` requires an explicit rosbag directory and
+starts playback, the visualizer, and optional RViz without starting the live
+camera/detector or any actuator. `lb_navigation` owns the map/YAML, RViz
+profile, install rules, and map contract. Detailed evidence is in
+[`docs/evidence/phase5_replay_map_artifact_2026-10-03.md`](../docs/evidence/phase5_replay_map_artifact_2026-10-03.md).
+
+**Frames, parameters, and provenance:** The observation remains camera-relative
+and is not a robot/map pose. The configurable 0.5 s stale timeout and 500-pose
+bound are initial development values, not measured competition tuning. Loss
+clears the active segment, reacquisition starts another, and a backward `/clock`
+jump clears replay state. The agreed REP-103 map origin is the starting-zone
+corner; +X runs 6.85 m away from the starting zone, +Y runs 5.00 m across the
+arena, and zero yaw faces +X. The 6.85 m length is team-selected; 5.00 m comes
+from the guidebook. The development assumption places tag 1 at
+`(0.0, 1.0, 0.75)` m with its face normal toward +X, but no tag quaternion or
+surveyed runtime map was created. The physical webcam extrinsic remains TBD.
+
+**Map and safety behavior:** `arena.pgm` uses 0.05 m/cell, a 137 x 100 free
+interior, and one occupied cell outside every edge, producing 139 x 102 cells
+with YAML origin `[-0.05, -0.05, 0.0]`. The center column is omitted pending a
+survey; changing obstacles are intentionally excluded. The replay path never
+interpolates through a stale interval, commands no hardware, and publishes no
+`map -> odom` or `odom -> base_link` transform.
+
+**Verification and remaining work:** The focused tests passed 8/8. A Jazzy
+selected build completed and selected package testing reported 106 tests, zero
+errors/failures, and one existing conditional skip. New Python files passed
+`ament_flake8`. The headless launch resolved and opened `test1_AT1` and started
+the installed node, but restricted-sandbox socket denial prevented DDS graph
+validation; graphical RViz, maneuver metrics, dropout durations, CPU/memory,
+and Humble validation remain operator work. The next increment is map-server
+configuration and physical/map-origin verification, after review of this map.
+
+**Git evidence:** Replay visualization and initial arena artifacts are recorded
+in `69b0505` (`In the middle of stage 2 of map implementation`).
+
+## 2026-10-11 — Lifecycle-managed static arena map configuration
+
+**Purpose and scope:** Completed the repository portion of the static-map
+server increment. `lb_navigation` now installs map-server parameters, an
+explicit lifecycle launch, and a map-focused RViz profile around the existing
+arena raster. This increment deliberately adds no robot pose, `map -> odom`,
+`odom -> base_link`, localization node, costmap, planner, controller, behavior
+tree, sensor pipeline, or motion output.
+
+**Components, interfaces, and ownership:**
+`lb_navigation/config/map_server.yaml` configures upstream
+`nav2_map_server/map_server` and an autostarting
+`nav2_lifecycle_manager/lifecycle_manager` named `lifecycle_manager_map`; its
+managed-node list contains only `map_server`.
+`lb_navigation/launch/map.launch.py` requires valid map, parameter, and RViz
+files and supplies installed defaults. `lb_navigation/rviz/arena_map.rviz`
+uses fixed frame `map`, a top-down view, and transient-local/reliable `/map`
+QoS. Expected `/map` type is `nav_msgs/msg/OccupancyGrid` with
+`header.frame_id=map`; upstream standard load-map and lifecycle services are
+the only new service interfaces. Map server publishes no TF, so the global EKF
+remains the sole future `map -> odom` owner.
+
+**Parameters and provenance:** Map resolution remains 0.05 m/cell. The 139 x
+102 raster contains a 137 x 100 free interior representing the team-selected
+6.85 m length and guidebook-derived 5.00 m width, surrounded by one occupied
+cell outside the usable interior. YAML image origin remains
+`[-0.05, -0.05, 0.0]`. `autostart=true` and `use_sim_time=false` are software
+profile defaults. The center column pose/dimensions, keepouts, and physical
+control-point survey remain TBD; none was inferred from the illustration.
+
+**Dependencies, failure behavior, and safety:** Added declared runtime
+dependencies on `nav2_map_server`, `nav2_lifecycle_manager`, launch support,
+and RViz, plus bootstrap readiness checks for both Nav2 components. Missing
+map/parameter/RViz files fail before nodes start. A missing upstream package
+fails launch explicitly. The launch is non-actuating and cannot command robot
+hardware. An attempted minimal Jazzy package install made no changes because
+the host requires an interactive sudo password; no credential workaround was
+attempted.
+
+**Verification and evidence:** Focused tests passed 6/6. The Jazzy
+`lb_navigation` build completed and installed all artifacts; installed launch
+argument resolution passed. Package testing reported 8 tests, zero errors,
+failures, or skips. New Python files passed `ament_flake8` and `ament_pep257`.
+Runtime launch reached the expected explicit blocker:
+`package 'nav2_map_server' not found`. Detailed evidence and operator lifecycle,
+topic, metadata, and RViz checks are recorded in
+[`docs/evidence/phase5_map_server_2026-10-11.md`](../docs/evidence/phase5_map_server_2026-10-11.md).
+Runtime Jazzy and target Humble checks, GUI confirmation, measured resource use,
+and physical arena alignment remain open.
+
+**Git evidence:** Map-server code, tests, parameters, launch, and RViz artifacts
+are recorded in `69b0505` (`In the middle of stage 2 of map implementation`).
+The 2026-10-11 documentation/readiness updates remain uncommitted.
+
+## 2026-10-12 — Provisional map-frame robot-pose bag replay
+
+**Purpose and scope:** Added the third development increment for the agreed
+work packages: `bags/test1_AT1` can now drive a raw six-degree-of-freedom webcam
+pose and a planar `base_link` proxy over the static arena map. This is an
+assumption-labeled visualization aid while wheel odometry and the ZED IMU do not
+exist; it is not production localization and cannot command the robot.
+
+**Components and files:** `lb_localization/scripts/tag_replay_robot_pose.py`
+owns rigid-transform composition, freshness checks, bounded path segmentation,
+expiring/deleted visualization markers, and diagnostics. The explicit
+`lb_sim/launch/arena_pose_replay.launch.py` replays one bag with `/clock`,
+optionally includes the lifecycle-managed static map, and optionally starts
+`lb_navigation/rviz/arena_pose_replay.rviz`. Unit and launch-contract tests,
+operator procedures, interface/calibration/architecture records, and detailed
+evidence were added. See
+[`docs/evidence/phase5_tag_pose_replay_2026-10-12.md`](../docs/evidence/phase5_tag_pose_replay_2026-10-12.md).
+
+**Interfaces and TF ownership:** The node publishes raw camera
+`/visualization/replay/webcam_pose_raw` (`PoseStamped`), planar robot
+`/visualization/replay/base_pose_planar` (`PoseStamped`), bounded current
+`/visualization/replay/base_path_planar` (`Path`), expiring
+`/visualization/replay/markers` (`MarkerArray`), and replay state on
+`/diagnostics` (`DiagnosticArray`). It consumes the recorded
+`webcam_optical_frame -> webcam_observation_tag_1` TF but broadcasts no TF and
+does not publish `/localization/apriltag_pose`. Future EKFs retain sole
+`map -> odom` and `odom -> base_link` authority.
+
+**Parameters and provenance:** Tag 1 remains estimated at
+`[0.0, 1.0, 0.75]` m. Its face normal is user-specified as arena `+X`; the
+recorded `apriltag_ros` PnP TF establishes emitted upright tag axes with `+z`
+out of the printed face, yielding map RPY `[+pi/2, 0, +pi/2]` rad. The webcam
+is temporarily estimated at `[0.0, 0.0, 0.40]` m from `base_link` with rear
+optical RPY `[-pi/2, 0, +pi/2]`. The 0.40 m height is user-selected; X/Y
+coincidence and rotation are engineering assumptions. Neither transform is
+surveyed or copied into production configuration. The 0.5 s stale timeout and
+500-pose path bound are development defaults, not experimentally tuned
+competition values.
+
+**Failure, safety, and alternatives:** A stale/missing observation deletes the
+camera/base markers and clears the path; reacquisition starts a new segment.
+Backward replay time also clears state. No odometric interpolation or dead
+reckoning is attempted. Raw and planar pose topics both remain available, while
+RViz uses finite-lifetime markers because a normal pose display retains its last
+sample. Publishing `map -> base_link` TF was rejected because it would bypass
+the specified local/global EKF ownership. The initial raw-library tag-axis
+interpretation was also rejected: live replay placed the camera at negative X
+with yaw near pi. The recorded PnP TF showed that its emitted tag `+z` points
+outward, so the final tag roll is `+pi/2`. The launch starts no detector,
+controller, planner, command topic, or hardware.
+
+**Dependencies, verification, and limitations:** Added the declared
+`visualization_msgs` dependency and declared `lb_sim`'s existing
+`ament_index_python` runtime import; existing geometry, navigation, diagnostics,
+TF, launch, rosbag, RViz, and optional Nav2 map-server dependencies are reused.
+Focused math/state/launch checks passed 12/12. Jazzy builds of
+`lb_localization`, `lb_navigation`, and `lb_sim` passed; their suites reported
+41 tests with zero errors, failures, or skips. New Python lint/docstyle and
+diff checks passed. A headless actual-bag run published the full graph and a
+corrected planar map sample `(1.815, 0.782, 0.0)` m with yaw about 0.084 rad;
+live loss at 0.52 s cleared the path, loop rewind reported `CLOCK_RESET`, and
+shutdown was clean. Combined `/map` and GUI validation remain pending the
+missing Nav2 map-server packages; graphical RViz inspection, resource
+measurements, Humble target validation, physical tag/map survey, and camera
+extrinsic measurement also remain open. The hand-moved camera bag cannot
+validate chassis dynamics or localization accuracy, and the adapter performs
+no quality gating, covariance estimation, multi-tag fusion, or propagation
+through tag loss.
+
+**Git evidence:** Uncommitted implementation based on `553ecb8` (`Phase 2
+complete`); record the resulting commit after review.

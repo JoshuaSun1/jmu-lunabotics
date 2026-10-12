@@ -1,0 +1,157 @@
+Panels:
+  - Class: rviz_common/Displays
+    Name: Displays
+  - Class: rviz_common/Views
+    Name: Views
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Class: rviz_default_plugins/Grid
+      Alpha: 0.5
+      Cell Size: 0.5
+      Color: 100; 100; 100
+      Enabled: true
+      Name: 0.5 m Reference Grid
+      Plane: XY
+      Value: true
+    - Alpha: 0.8
+      Class: rviz_default_plugins/Map
+      Color Scheme: map
+      Draw Behind: false
+      Enabled: true
+      Name: Static Arena Map
+      Topic:
+        Depth: 1
+        Durability Policy: Transient Local
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map
+      Update Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /map_updates
+      Use Timestamp: false
+      Value: true
+    - Class: rviz_default_plugins/Image
+      Enabled: true
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: Recorded Rectified Webcam
+      Normalize Range: true
+      Topic:
+        Depth: 5
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /sensors/webcam/image_rect
+      Value: true
+    - Class: rviz_default_plugins/MarkerArray
+      Enabled: true
+      Name: Expiring Pose Markers
+      Namespaces:
+        assumed_tag_1: true
+        planar_base_link_proxy: true
+        raw_webcam_axes: true
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /visualization/replay/markers
+      Value: true
+    - Alpha: 1
+      Buffer Length: 1
+      Class: rviz_default_plugins/Path
+      Color: 20; 220; 255
+      Enabled: true
+      Head Diameter: 0.05
+      Head Length: 0.03
+      Length: 0.03
+      Line Style: Lines
+      Line Width: 0.03
+      Name: Current Planar Robot Path (clears on tag loss)
+      Offset:
+        X: 0
+        Y: 0
+        Z: 0
+      Pose Color: 20; 220; 255
+      Pose Style: None
+      Radius: 0.03
+      Shaft Diameter: 0.02
+      Shaft Length: 0.03
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /visualization/replay/base_path_planar
+      Value: true
+    - Alpha: 1
+      Axes Length: 0.25
+      Axes Radius: 0.02
+      Class: rviz_default_plugins/Pose
+      Color: 255; 255; 255
+      Enabled: false
+      Head Length: 0.08
+      Head Radius: 0.04
+      Name: Raw Webcam Pose Topic (disabled; marker expires safely)
+      Shaft Length: 0.2
+      Shaft Radius: 0.02
+      Shape: Axes
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /visualization/replay/webcam_pose_raw
+      Value: false
+    - Alpha: 1
+      Axes Length: 0.25
+      Axes Radius: 0.02
+      Class: rviz_default_plugins/Pose
+      Color: 20; 220; 255
+      Enabled: false
+      Head Length: 0.12
+      Head Radius: 0.06
+      Name: Planar Base Pose Topic (disabled; marker expires safely)
+      Shaft Length: 0.45
+      Shaft Radius: 0.04
+      Shape: Arrow
+      Topic:
+        Depth: 10
+        Durability Policy: Volatile
+        History Policy: Keep Last
+        Reliability Policy: Reliable
+        Value: /visualization/replay/base_pose_planar
+      Value: false
+  Enabled: true
+  Global Options:
+    Background Color: 35; 35; 35
+    Fixed Frame: map
+    Frame Rate: 30
+  Name: root
+  Tools:
+    - Class: rviz_default_plugins/Interact
+    - Class: rviz_default_plugins/MoveCamera
+    - Class: rviz_default_plugins/Select
+    - Class: rviz_default_plugins/FocusCamera
+    - Class: rviz_default_plugins/Measure
+  Transformation:
+    Current:
+      Class: rviz_default_plugins/TF
+  Value: true
+  Views:
+    Current:
+      Angle: 0
+      Class: rviz_default_plugins/TopDownOrtho
+      Name: Arena Top-Down
+      Scale: 85
+      Target Frame: map
+      X: 3.425
+      Y: 2.5
+Window Geometry:
+  Height: 900
+  Width: 1600

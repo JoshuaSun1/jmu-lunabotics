@@ -96,6 +96,22 @@ multi-tag requirement. It never publishes `/tag_detections`, `/odometry/global`,
 The replay launch consumes an explicit rosbag path and `/clock`. It starts no
 camera, detector, hardware, map server, Nav2 component, or TF broadcaster.
 
+### Provisional map-frame pose replay
+
+| Interface | Type | Publisher | Consumer | Boundary |
+|---|---|---|---|---|
+| `/visualization/replay/webcam_pose_raw` | `geometry_msgs/msg/PoseStamped` | `tag_replay_robot_pose` | Inspection/tools | Raw six-degree-of-freedom camera pose in `map`, derived from one tag and estimated geometry; it is not a filtered robot pose. |
+| `/visualization/replay/base_pose_planar` | `geometry_msgs/msg/PoseStamped` | `tag_replay_robot_pose` | Inspection/tools | Provisional `base_link` XY/yaw pose with `z=0`; no covariance, odometry propagation, or control use is permitted. |
+| `/visualization/replay/base_path_planar` | `nav_msgs/msg/Path` | `tag_replay_robot_pose` | RViz | Bounded current contiguous segment; clears on tag loss, reacquisition boundary, and backward `/clock` jump. |
+| `/visualization/replay/markers` | `visualization_msgs/msg/MarkerArray` | `tag_replay_robot_pose` | RViz | Assumed tag plane, raw camera RGB axes, and planar robot arrow. Dynamic markers expire and are deleted on tag loss. |
+| `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | `tag_replay_robot_pose` | Operator/logger | Reports `LOST`, `REACQUIRED`, and `CLOCK_RESET`, plus explicit estimated-geometry and no-odometry status. |
+
+No pose replay topic is an input to an EKF, Nav2, or a motor path. The node
+publishes no TF; therefore it cannot conflict with the future global EKF's
+`map -> odom` authority or local EKF's `odom -> base_link` authority. A
+`PoseStamped` subscriber may retain its last sample, so the reusable RViz
+profile uses expiring/deleted markers for the visible current pose.
+
 ## Static map interfaces
 
 | Interface | Type | Publisher | Consumer | Boundary |

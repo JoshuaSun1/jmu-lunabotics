@@ -174,3 +174,43 @@ outer occupied cell is outside the 6.85 m x 5.00 m free interior. This launch
 publishes no TF or robot pose. Do not use RViz alignment alone as a physical
 arena survey, and do not add the center column until its pose and dimensions
 are measured.
+
+## Provisional robot-pose replay in the arena
+
+This profile is a non-actuating development aid for `bags/test1_AT1`. It treats
+the hand-moved recorded webcam as though it were rigidly mounted to the robot,
+so its arrow is useful for checking transform direction, motion shape, loss,
+and reacquisition—not localization accuracy.
+
+Install the map-server dependencies listed above, build, and source the
+workspace. From the repository root, run:
+
+```bash
+ros2 launch lb_sim arena_pose_replay.launch.py \
+  bag_path:=$PWD/bags/test1_AT1 \
+  playback_rate:=0.25
+```
+
+The default RViz profile shows the arena map, recorded image, orange assumed
+tag plane, raw camera RGB axes, cyan planar `base_link` arrow, and current
+contiguous planar path. The camera is provisionally colocated in X/Y with
+`base_link`, 0.40 m above it, and rear-facing. Tag 1 is provisionally centered
+at `(0.0, 1.0, 0.75)` m and faces arena `+X`. Both transforms are estimates.
+
+When the tag leaves view for more than 0.5 s, the camera axes and robot arrow
+are deleted, the path is cleared, and no dead reckoning occurs. Reacquisition
+starts a new path segment. The bag's `--loop` clock rewind also clears state.
+Inspect interfaces in another sourced terminal if needed:
+
+```bash
+ros2 topic echo /visualization/replay/webcam_pose_raw --once
+ros2 topic echo /visualization/replay/base_pose_planar --once
+ros2 topic echo /diagnostics
+```
+
+For a headless pose-only check when Nav2 map-server packages are unavailable,
+add `use_rviz:=false use_map_server:=false`. This omits `/map` but still replays
+the pose adapter. Do not feed these visualization topics into Nav2, an EKF, or
+robot control. Replace the tag pose and camera extrinsic only with documented
+survey/calibration values; production localization remains the C++ localizer
+plus the future local/global EKFs.
