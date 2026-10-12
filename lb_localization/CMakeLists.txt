@@ -5,6 +5,7 @@ find_package(ament_cmake REQUIRED)
 find_package(apriltag_msgs REQUIRED)
 find_package(diagnostic_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
@@ -31,6 +32,10 @@ ament_target_dependencies(tag_localizer
   tf2
   tf2_geometry_msgs
   tf2_ros)
+
+install(PROGRAMS
+  scripts/tag_replay_visualizer.py
+  DESTINATION lib/${PROJECT_NAME})
 
 install(
   TARGETS tag_localizer_core tag_localizer
@@ -60,6 +65,7 @@ if(BUILD_TESTING)
       PRIVATE TEST_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures")
   endif()
   ament_add_pytest_test(phase42_localizer_contract test/test_phase42_localizer_contract.py)
+  ament_add_pytest_test(tag_replay_visualizer_test test/test_tag_replay_visualizer.py)
 endif()
 
 ament_export_include_directories(include)

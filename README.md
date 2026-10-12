@@ -23,8 +23,8 @@ than claims about the physical robot. The exact boundaries are in the
 Phase 4.1 adds a calibrated Logitech webcam pipeline in `lb_sensors`:
 `v4l2-ctl` fail-closed 15 Hz source-rate preflight, `v4l2_camera`, `image_proc`
 rectification, and `apriltag_ros`. It publishes only source-scoped webcam data
-and newly stamped dynamic `webcam_optical_frame -> webcam_observation_tag_0`
-samples while the configured tag is visible. A future consumer must reject a
+and newly stamped dynamic `webcam_optical_frame -> webcam_observation_tag_<id>`
+samples while a configured tag (ID 0–3) is visible. A future consumer must reject a
 cached stale TF sample after tag loss. The phase has no physical base-to-camera
 extrinsic, tag map, localizer, EKF, `map`/`odom` transform, or robot-pose
 output. See the [Phase 4.1 webcam AprilTag note](docs/phase41_webcam_apriltag.md).
@@ -35,7 +35,8 @@ extrinsic into a covariance-bearing `/localization/apriltag_pose` measurement.
 It supports separate webcam/ZED source contracts, deduplicates two views of
 the same tag, and emits diagnostics, but never publishes TF. The planned field
 inventory is `tag36h11` IDs 1–3 at nominal 0.300 m detector-corner edges;
-those markers and their poses are not yet physical/surveyed. The ID-0 0.250 m
+those markers are now registered for webcam detection with user-provided
+0.300 m sizes, but their map poses remain unsurveyed. The ID-0 0.250 m
 tag remains bench-only. The normal launch fails unless its explicit files
 validate as surveyed; an all-synthetic test set additionally requires an
 explicit opt-in. See the [Phase 4.2 localizer note](docs/phase42_tag_localizer.md).

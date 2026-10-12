@@ -1,0 +1,10 @@
+# Initial static arena geometry derived from the 2027 guidebook and team decision.
+# The free interior is x=[0.0, 6.85), y=[0.0, 5.00). The one-cell occupied
+# perimeter lies outside that interior. The permanent center column remains TBD.
+image: arena.pgm
+mode: trinary
+resolution: 0.05
+origin: [-0.05, -0.05, 0.0]
+negate: 0
+occupied_thresh: 0.65
+free_thresh: 0.196

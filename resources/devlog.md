@@ -658,3 +658,194 @@ as evidence.
 
 **Git evidence:** Working-tree change; replace with the resulting Git commit
 when committed.
+
+## 2026-10-02 — Optional live webcam feed
+
+**Purpose and files:** Added a desktop image viewer to
+`lb_sensors/launch/webcam_apriltag.launch.py` and forwarded its option through
+`lb_launch/launch/bringup.launch.py`. Declared `image_view` in
+`lb_sensors/package.xml`; updated the Phase 4.1 bench procedure.
+
+**Interface and decision:** `show_live_feed` is a launch-time boolean, default
+`false` (an operator-selected setting, not a measured or tuned physical value).
+When enabled, `image_view/image_view` runs as `live_feed` inside the configured
+camera namespace and subscribes to `image_rect` (`sensor_msgs/msg/Image`).
+The default topic is `/sensors/webcam/image_rect`. Chose the existing simple
+viewer instead of an rqt plugin or custom overlay implementation. Restart the
+launch to toggle it. Bringup uses the option only with `enable_apriltags:=true`.
+No services, actions, TF frames, transform ownership, or actuation behavior
+changed. Camera source-rate preflight still gates startup; the viewer is off
+for headless use and requires a graphical desktop when enabled. No detection
+overlays are provided.
+
+**Verification and evidence:** Non-target x86/Jazzy build completed all 10
+packages; colcon reported 95 tests, 0 errors, 0 failures, 1 expected skip.
+Both installed launches exposed the new argument via `--show-args`.
+`git diff --check`, Python syntax checks, package XML lint, and individual-file
+Black checks passed. Full pre-commit lint stalled at multi-file Black and was
+interrupted; individual-file Black checks passed without changes. Logs are
+preserved in `docs/resources/evidence/2026-10-02-live-feed/` and workspace
+`build/*/test_results/`. A temporary ROS log directory was used for launch
+argument inspection because the default home log directory was read-only.
+
+**Remaining validation:** Confirm the window displays a live rectified image
+on a desktop, repeat with a custom camera namespace, and confirm default
+headless startup. No live camera/GUI test or target Humble/Jetson test was run;
+CPU, memory, and frame-rate impact have not been measured.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the final change commit after
+commit creation.
+
+## 2026-10-02 — One-command bag recording setup
+
+**Purpose and files:** Added executable `scripts/start_bag.sh` to activate the
+ROS underlay and built workspace overlay before delegating to the existing
+`scripts/record_bag.sh`. Updated `docs/operations.md`. This supports recording
+from a fresh terminal after the system launch is already running.
+
+**Configuration and architecture:** Default profile is `webcam_apriltag`;
+`--profile` selects the existing recorder groups. `--ros-distro` selects the
+underlay, with an explicit non-Humble selection opting into non-target use.
+Without that option, the existing activation policy and environment apply.
+`--dry-run` previews without activation or recording. These are operator
+settings, not measured hardware parameters. Reused the recorder instead of
+duplicating topic lists, storage policy, or signal handling. Output remains
+under repository `bags/`, ignored by Git; Ctrl+C reaches rosbag directly through
+the exec chain and finalizes recording. Existing ROS_DOMAIN_ID and middleware
+settings are inherited and must match the launch.
+
+**Interfaces, dependencies, and failure behavior:** No topic, service, action,
+message type, TF frame, or transform owner changed. The default group records
+webcam raw/rectified `sensor_msgs/msg/Image`, `sensor_msgs/msg/CameraInfo`,
+`apriltag_msgs/msg/AprilTagDetectionArray`, and `/tf` (`tf2_msgs/msg/TFMessage`).
+Dependencies are Bash, installed ROS/rosbag2, and the built workspace overlay.
+No build, installation, motor enable, or robot launch occurs. Invalid arguments
+fail with exit 2; activation errors stop recording. Missing topic publishers
+are not startup errors: rosbag waits for discovery. Default camera topic names
+still require the default camera namespace; custom namespaces need a separate
+recording command. Storage and CPU usage have not been measured.
+
+**Verification and evidence:** Bash syntax and seven CLI checks passed,
+covering help, default/hardware previews, missing values, invalid options and
+profiles, and execution from outside the repository. Relevant pre-commit hooks
+and `git diff --check` passed; formatter hooks for Python/C++ were skipped
+because this change adds only Bash and Markdown. Evidence is preserved under
+`docs/resources/evidence/2026-10-02-bag-start/`. No live recording was started
+as part of verification. Remaining work: record a live webcam run, stop with
+Ctrl+C, and confirm message counts and duration with `ros2 bag info`.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
+committed.
+
+## 2026-10-03 — Freshness-gated tag replay and initial arena raster
+
+**Purpose and scope:** Added the first non-actuating development increment for
+the visualization and static-map work packages. The explicit Jazzy
+`bags/test1_AT1` recording can now be replayed with `/clock`, visualized as a
+fresh camera-relative tag pose and bounded contiguous path, and inspected in a
+reusable RViz profile. Added an initial arena occupancy artifact but deliberately
+did not configure `map_server`, Nav2, costmaps, localization TF, or motion.
+
+**Components and interfaces:** `lb_localization` owns
+`scripts/tag_replay_visualizer.py`, which consumes the recorded
+`webcam_optical_frame -> webcam_observation_tag_1` TF and publishes
+`/visualization/webcam/tag_1_pose` (`geometry_msgs/msg/PoseStamped`),
+`/visualization/webcam/tag_1_path` (`nav_msgs/msg/Path`), and replay state on
+`/diagnostics` (`diagnostic_msgs/msg/DiagnosticArray`). It broadcasts no TF.
+`lb_sim/launch/bag_replay.launch.py` requires an explicit rosbag directory and
+starts playback, the visualizer, and optional RViz without starting the live
+camera/detector or any actuator. `lb_navigation` owns the map/YAML, RViz
+profile, install rules, and map contract. Detailed evidence is in
+[`docs/evidence/phase5_replay_map_artifact_2026-10-03.md`](../docs/evidence/phase5_replay_map_artifact_2026-10-03.md).
+
+**Frames, parameters, and provenance:** The observation remains camera-relative
+and is not a robot/map pose. The configurable 0.5 s stale timeout and 500-pose
+bound are initial development values, not measured competition tuning. Loss
+clears the active segment, reacquisition starts another, and a backward `/clock`
+jump clears replay state. The agreed REP-103 map origin is the starting-zone
+corner; +X runs 6.85 m away from the starting zone, +Y runs 5.00 m across the
+arena, and zero yaw faces +X. The 6.85 m length is team-selected; 5.00 m comes
+from the guidebook. The development assumption places tag 1 at
+`(0.0, 1.0, 0.75)` m with its face normal toward +X, but no tag quaternion or
+surveyed runtime map was created. The physical webcam extrinsic remains TBD.
+
+**Map and safety behavior:** `arena.pgm` uses 0.05 m/cell, a 137 x 100 free
+interior, and one occupied cell outside every edge, producing 139 x 102 cells
+with YAML origin `[-0.05, -0.05, 0.0]`. The center column is omitted pending a
+survey; changing obstacles are intentionally excluded. The replay path never
+interpolates through a stale interval, commands no hardware, and publishes no
+`map -> odom` or `odom -> base_link` transform.
+
+**Verification and remaining work:** The focused tests passed 8/8. A Jazzy
+selected build completed and selected package testing reported 106 tests, zero
+errors/failures, and one existing conditional skip. New Python files passed
+`ament_flake8`. The headless launch resolved and opened `test1_AT1` and started
+the installed node, but restricted-sandbox socket denial prevented DDS graph
+validation; graphical RViz, maneuver metrics, dropout durations, CPU/memory,
+and Humble validation remain operator work. The next increment is map-server
+configuration and physical/map-origin verification, after review of this map.
+
+**Git evidence:** Uncommitted change based on `1db17cb`; record the resulting
+commit when committed.
+
+## 2026-10-02 — Register webcam tags 1–3
+
+**Purpose and files:** Expanded `lb_sensors/config/webcam_apriltag.yaml` to
+detect `tag36h11` IDs 0–3. ID 0 retains 0.250 m; IDs 1, 2, and 3 each use
+0.300 m user-provided edge lengths. Updated the existing detector contract,
+README, Phase 4.1 interface/procedure note, and Phase 4.2 inventory status.
+
+**Interfaces, provenance, and architecture:** Sizes are user-provided, not
+independently measured or experimentally tuned. The new sizes are interpreted
+as detector-corner edges, excluding paper; confirm that convention physically.
+`apriltag_ros` owns newly stamped dynamic transforms from `webcam_optical_frame`
+to `webcam_observation_tag_0`, `_1`, `_2`, and `_3` when each tag is visible.
+Detection topic/type remains `/sensors/webcam/tag_detections`,
+`apriltag_msgs/msg/AprilTagDetectionArray`; transforms use `/tf`,
+`tf2_msgs/msg/TFMessage`. No services/actions or new dependencies were added.
+Per-ID sizes were chosen to preserve ID 0's existing geometry. Detector family,
+default size, quality gates, and tuning remain unchanged. No surveyed map poses
+were invented; localizer templates remain unverified and fail closed.
+
+**Safety, verification, and remaining work:** Camera-only registration adds no
+actuation path. Cached transforms after tag loss remain subject to freshness
+checks. Five relevant existing tests, YAML validation, and relevant lint passed;
+the installed symlinked YAML was parsed to confirm all four ID/size/frame
+mappings. Evidence is under `docs/resources/evidence/2026-10-02-tags/`.
+Restart the detector to load the configuration, then record each tag's ID and
+camera-relative transform and validate scale against measured distance. No
+physical detection/accuracy test or compute/resource measurement was performed.
+Mounting/extrinsic calibration and map survey remain required for localization.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
+committed.
+
+## 2026-10-02 — Custom bag names
+
+**Change and purpose:** Added `--name NAME` to `scripts/start_bag.sh`, forwarded
+as a quoted argument to `scripts/record_bag.sh`, which owns output-path
+selection. Updated `docs/operations.md` and both help texts. Operator-selected
+names save to repository `bags/NAME`; omission retains profile/UTC-timestamp
+naming. Names accept ASCII letters, digits, underscores, and hyphens. Missing,
+empty, or invalid names and existing output paths (including symlinks) are
+rejected with exit 2; recordings are not overwritten. Reused the recorder's
+path logic rather than renaming bags after capture.
+
+**Interfaces and dependencies:** No ROS topics/types, services/actions, TF
+frames/owners, hardware dependencies, or motor behavior changed. The name is a
+CLI setting, not a measured physical parameter. Bash/ROS/rosbag2 dependencies,
+recording profiles, and Ctrl+C finalization remain as previously documented.
+
+**Verification:** Bash syntax, seven CLI checks, relevant pre-commit hooks,
+and `git diff --check` passed. Checks cover explicit output naming, default
+preview, missing/empty names, path traversal, whitespace, and rejection of the
+existing webcam bag. No bags were created. Evidence is preserved under
+`docs/resources/evidence/2026-10-02-bag-name/`. Live recording under a custom
+name remains to be verified; resource usage was not measured.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
+committed.

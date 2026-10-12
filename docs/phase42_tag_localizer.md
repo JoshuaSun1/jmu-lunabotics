@@ -88,7 +88,7 @@ The team-selected future field inventory is:
 
 | Planned use | Family / IDs | Nominal detector-corner edge | Status |
 |---|---|---:|---|
-| Field localization | `tag36h11` / 1, 2, 3 | 0.300 m each | Planned as of 2026-08-24; not printed, measured, mounted, surveyed, or validated. |
+| Field localization | `tag36h11` / 1, 2, 3 | 0.300 m each | Physical tags and 0.300 m sizes reported by the user on 2026-10-02; registered in the webcam detector. Detector-corner size convention, mounting, map survey, and accuracy remain unvalidated. |
 
 `lb_localization/config/tag_map.template.yaml` records that plan but is
 intentionally invalid at runtime: every `pose_map` is `null` and its status is

@@ -83,3 +83,14 @@ source-scoped names and a unique child frame (for example,
 fusion. Two cameras seeing tag 1 therefore do not falsely satisfy a
 multi-tag requirement. It never publishes `/tag_detections`, `/odometry/global`,
 `map -> odom`, or `odom -> base_link`.
+
+## Development bag-replay visualization interfaces
+
+| Interface | Type | Publisher | Consumer | Boundary |
+|---|---|---|---|---|
+| `/visualization/webcam/tag_1_pose` | `geometry_msgs/msg/PoseStamped` | `tag_replay_visualizer` | RViz | Fresh `webcam_observation_tag_1` pose expressed in `webcam_optical_frame`; this is not a robot or map pose. |
+| `/visualization/webcam/tag_1_path` | `nav_msgs/msg/Path` | `tag_replay_visualizer` | RViz | Bounded current contiguous observation segment. It is cleared on staleness and backward replay-clock jumps so tag-loss motion is never interpolated. |
+| `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | `tag_replay_visualizer` | Operator/logger | Reports `LOST`, `REACQUIRED`, and `CLOCK_RESET` replay state. |
+
+The replay launch consumes an explicit rosbag path and `/clock`. It starts no
+camera, detector, hardware, map server, Nav2 component, or TF broadcaster.

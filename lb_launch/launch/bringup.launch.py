@@ -41,6 +41,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("webcam_namespace", default_value="sensors/webcam"),
             DeclareLaunchArgument("webcam_frame", default_value="webcam_optical_frame"),
             DeclareLaunchArgument("webcam_fps", default_value="15.0"),
+            DeclareLaunchArgument("show_live_feed", default_value="false"),
             DeclareLaunchArgument(
                 "webcam_calibration_file",
                 default_value=PathJoinSubstitution(
@@ -86,6 +87,7 @@ def generate_launch_description() -> LaunchDescription:
                     "camera_namespace": LaunchConfiguration("webcam_namespace"),
                     "camera_frame": LaunchConfiguration("webcam_frame"),
                     "camera_fps": LaunchConfiguration("webcam_fps"),
+                    "show_live_feed": LaunchConfiguration("show_live_feed"),
                     "calibration_file": LaunchConfiguration("webcam_calibration_file"),
                     "detector_config": LaunchConfiguration("webcam_detector_config"),
                 }.items(),

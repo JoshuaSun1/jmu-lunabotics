@@ -26,6 +26,8 @@
 | Phase 4.1 observation-TF inspection | `ros2 run tf2_ros tf2_echo webcam_optical_frame webcam_observation_tag_0` | Confirms newly stamped dynamic camera-relative observations while the tag is visible; a cached transform after loss is stale and must not be interpreted as a base-relative or map-frame pose. |
 | Phase 4.1 rate/resource baseline | `ros2 topic hz /sensors/webcam/image_raw` and `/sensors/webcam/tag_detections` | Records actual host rates after V4L2 verifies the configured 15 Hz source rate; measure CPU/memory before making target performance claims. |
 | Phase 4.2 localizer core/contract tests | `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh` | Exercises synthetic tag-map parsing, explicit test-only opt-in, composition, quality/stale-TF contracts, covariance/fusion, duplicate-tag protection, jump gates, and the no-TF-broadcaster boundary. A synthetic node startup is also checked; it does not exercise a running camera/TF graph. |
+| Tag-1 bag replay | `ros2 launch lb_sim bag_replay.launch.py bag_path:=$PWD/bags/test1_AT1 playback_rate:=0.25` | Replays the explicit Jazzy MCAP with `/clock`, opens the camera-relative RViz profile, bounds the current path, clears it on stale observations, and starts a new segment after reacquisition. It starts no camera, detector, map server, Nav2, or hardware. |
+| Arena raster contract | `colcon test --packages-select lb_navigation` | Verifies the 139 x 102 raster, 137 x 100 free interior, occupied one-cell perimeter, 0.05 m resolution, `[-0.05, -0.05, 0.0]` image origin, and omission of the unsurveyed center column. |
 
 An x86/Jazzy result is a development-host result only. It cannot validate the
 Humble/JetPack/ZED runtime combination.

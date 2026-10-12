@@ -31,9 +31,12 @@ def test_detector_uses_the_confirmed_tag_and_camera_scoped_observation_frame() -
     assert "size: 0.250" in detector
     assert "max_hamming: 0" in detector
     assert "pose_estimation_method: pnp" in detector
-    assert "ids: [0]" in detector
-    assert "frames: [webcam_observation_tag_0]" in detector
-    assert "sizes: [0.250]" in detector
+    assert "ids: [0, 1, 2, 3]" in detector
+    assert (
+        "frames: [webcam_observation_tag_0, webcam_observation_tag_1, webcam_observation_tag_2, webcam_observation_tag_3]"
+        in detector
+    )
+    assert "sizes: [0.250, 0.300, 0.300, 0.300]" in detector
     assert "map -> odom" not in detector
     assert "frames: [tag_0]" not in detector
 

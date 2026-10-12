@@ -7,12 +7,16 @@ REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-humble}"
 PROFILE=""
 DRY_RUN="false"
+BAG_NAME=""
 
 usage() {
   cat <<'EOF'
-Usage: scripts/record_bag.sh --profile PROFILE [--dry-run]
+Usage: scripts/record_bag.sh --profile PROFILE [--name NAME] [--dry-run]
 
 Profiles: localization, perception, navigation, hardware, mission, webcam_apriltag
+
+--name selects bags/NAME instead of the default profile and UTC timestamp name.
+Use letters, digits, underscores, or hyphens; existing outputs are rejected.
 
 The bag output is written below ./bags/ and is ignored by Git. This script
 never enables motors and only records the canonical topic groups documented in
@@ -22,8 +26,20 @@ EOF
 
 while [[ "$#" -gt 0 ]]; do
   case "$1" in
-    --profile)
-      PROFILE="${2:-}"
+    --profile|--name)
+      if [[ "$#" -lt 2 || -z "$2" || "$2" == --* ]]; then
+        echo "Missing value for $1." >&2
+        exit 2
+      fi
+      if [[ "$1" == "--profile" ]]; then
+        PROFILE="$2"
+      else
+        BAG_NAME="$2"
+        if [[ ! "${BAG_NAME}" =~ ^[A-Za-z0-9_-]+$ ]]; then
+          echo 'Bag name must contain only letters, digits, underscores, or hyphens.' >&2
+          exit 2
+        fi
+      fi
       shift
       ;;
     --dry-run)
@@ -74,7 +90,14 @@ case "${PROFILE}" in
     ;;
 esac
 
-OUTPUT_DIRECTORY="${REPOSITORY_ROOT}/bags/${PROFILE}-$(date -u +%Y%m%dT%H%M%SZ)"
+if [[ -z "${BAG_NAME}" ]]; then
+  BAG_NAME="${PROFILE}-$(date -u +%Y%m%dT%H%M%SZ)"
+fi
+OUTPUT_DIRECTORY="${REPOSITORY_ROOT}/bags/${BAG_NAME}"
+if [[ -e "${OUTPUT_DIRECTORY}" || -L "${OUTPUT_DIRECTORY}" ]]; then
+  echo "Bag output already exists: ${OUTPUT_DIRECTORY}. Choose another name." >&2
+  exit 2
+fi
 printf 'profile: %s\noutput: %s\ntopics: %s\n' "${PROFILE}" "${OUTPUT_DIRECTORY}" "${TOPICS[*]}"
 
 if [[ "${DRY_RUN}" == "true" ]]; then

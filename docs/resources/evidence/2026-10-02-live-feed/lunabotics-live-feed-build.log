@@ -1,0 +1,358 @@
+warning: jazzy is a non-target structural-check override
+Starting >>> lb_model
+Starting >>> lb_sensors
+Starting >>> lb_interfaces
+Starting >>> lb_localization
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found apriltag_msgs: 2.0.1 (/opt/ros/jazzy/share/apriltag_msgs/cmake)
+-- Found ament_cmake_pytest: 2.5.5 (/opt/ros/jazzy/share/ament_cmake_pytest/cmake)
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Found ament_cmake_pytest: 2.5.5 (/opt/ros/jazzy/share/ament_cmake_pytest/cmake)
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (2.7s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_interfaces
+-- Found diagnostic_msgs: 5.3.6 (/opt/ros/jazzy/share/diagnostic_msgs/cmake)
+-- Found geometry_msgs: 5.3.6 (/opt/ros/jazzy/share/geometry_msgs/cmake)
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/ament_index/resource_index/package_run_dependencies/lb_interfaces
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/ament_index/resource_index/parent_prefix_path/lb_interfaces
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/package.dsv
+-- Found rclcpp: 28.1.16 (/opt/ros/jazzy/share/rclcpp/cmake)
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/ament_index/resource_index/packages/lb_interfaces
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/cmake/lb_interfacesConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/cmake/lb_interfacesConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_interfaces/share/lb_interfaces/package.xml
+Finished <<< lb_interfaces [3.84s]
+Starting >>> lb_navigation
+-- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found tf2: 0.36.19 (/opt/ros/jazzy/share/tf2/cmake)
+-- Found tf2_geometry_msgs: 0.36.19 (/opt/ros/jazzy/share/tf2_geometry_msgs/cmake)
+-- Found eigen3_cmake_module: 0.3.0 (/opt/ros/jazzy/share/eigen3_cmake_module/cmake)
+-- Ensuring Eigen3 include directory is part of orocos-kdl CMake target
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (5.2s)
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (1.6s)
+-- Generating done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_sensors
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_navigation
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (5.4s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_model
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/config/webcam_apriltag.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/config/webcam_calibration.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/launch/webcam_apriltag.launch.py
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/ament_index/resource_index/package_run_dependencies/lb_sensors
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/ament_index/resource_index/parent_prefix_path/lb_sensors
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/package.dsv
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/ament_index/resource_index/package_run_dependencies/lb_navigation
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/ament_index/resource_index/parent_prefix_path/lb_navigation
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/package.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/ament_index/resource_index/packages/lb_sensors
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/cmake/lb_sensorsConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/ament_index/resource_index/packages/lb_navigation
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/cmake/lb_navigationConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/cmake/lb_navigationConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/cmake/lb_sensorsConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_navigation/share/lb_navigation/package.xml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/package.xml
+Finished <<< lb_navigation [2.18s]
+Starting >>> lb_safety
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/config/mock_geometry.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/launch/description.launch.py
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/rviz/phase1_mock.rviz
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/urdf/lb_mock.urdf.xacro
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/ament_index/resource_index/package_run_dependencies/lb_model
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/ament_index/resource_index/parent_prefix_path/lb_model
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/environment/ament_prefix_path.sh
+Finished <<< lb_sensors [6.13s]
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/local_setup.zsh
+Starting >>> lb_state_manager
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_model/share/lb_model/package.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/ament_index/resource_index/packages/lb_model
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/cmake/lb_modelConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/cmake/lb_modelConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_model/share/lb_model/package.xml
+Finished <<< lb_model [6.28s]
+Starting >>> lb_hardware
+-- Found yaml_cpp_vendor: 9.0.1 (/opt/ros/jazzy/share/yaml_cpp_vendor/cmake)
+-- Setting yaml-cpp_DIR to: '/opt/ros/jazzy/share/yaml_cpp_vendor/cmake/../../../opt/yaml_cpp_vendor/share/cmake/yaml-cpp'
+-- Found ament_cmake_gtest: 2.5.5 (/opt/ros/jazzy/share/ament_cmake_gtest/cmake)
+-- Found ament_cmake_pytest: 2.5.5 (/opt/ros/jazzy/share/ament_cmake_pytest/cmake)
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Found gtest sources under '/opt/ros/jazzy/src/gtest_vendor': C++ tests using 'Google Test' will be built
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+-- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (1.8s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_state_manager
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (2.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_safety
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/ament_index/resource_index/package_run_dependencies/lb_safety
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/ament_index/resource_index/parent_prefix_path/lb_safety
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/local_setup.bash
+-- Install configuration: ""
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/package.dsv
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/ament_index/resource_index/package_run_dependencies/lb_state_manager
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/ament_index/resource_index/parent_prefix_path/lb_state_manager
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/package.dsv
+-- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/ament_index/resource_index/packages/lb_safety
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/cmake/lb_safetyConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/cmake/lb_safetyConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_safety/share/lb_safety/package.xml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/ament_index/resource_index/packages/lb_state_manager
+Finished <<< lb_safety [2.88s]
+Starting >>> lb_sim
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/cmake/lb_state_managerConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/cmake/lb_state_managerConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_state_manager/share/lb_state_manager/package.xml
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+Finished <<< lb_state_manager [2.90s]
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Found TinyXML2 via Config file: /usr/lib/x86_64-linux-gnu/cmake/tinyxml2
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (9.0s)
+-- Generating done (0.2s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_localization
+-- Skipping lb_hardware ros2_control plugin: target ROS control dependencies unavailable
+-- Found ament_cmake_pytest: 2.5.5 (/opt/ros/jazzy/share/ament_cmake_pytest/cmake)
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+[ 20%] Built target tag_localizer_core
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ament_cmake_pytest: 2.5.5 (/opt/ros/jazzy/share/ament_cmake_pytest/cmake)
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Found python_cmake_module: 0.11.1 (/opt/ros/jazzy/share/python_cmake_module/cmake)
+[ 40%] Built target gtest
+[ 60%] Built target tag_localizer
+[ 80%] Built target gtest_main
+[100%] Built target tag_localizer_core_test
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/lib/libtag_localizer_core.a
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/lib/lb_localization/tag_localizer
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/config/ekf_global.template.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/config/tag_localizer.template.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/config/tag_map.template.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/launch/tag_localizer.launch.py
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/include/lb_localization/tag_localizer_core.hpp
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/ament_index/resource_index/package_run_dependencies/lb_localization
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/ament_index/resource_index/parent_prefix_path/lb_localization
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/package.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/ament_index/resource_index/packages/lb_localization
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/cmake/ament_cmake_export_dependencies-extras.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/cmake/lb_localizationConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/cmake/lb_localizationConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_localization/share/lb_localization/package.xml
+Finished <<< lb_localization [10.6s]
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (4.5s)
+-- Found rosidl_generator_c: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_c/cmake)
+-- Generating done (0.0s)
+-- Found rosidl_generator_cpp: 4.6.7 (/opt/ros/jazzy/share/rosidl_generator_cpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_hardware
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[ 60%] Built target lb_drive_transport
+[100%] Built target mock_drive_transport_test
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/config/mock_drive_controllers.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/launch/hardware.launch.py
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/include/lb_hardware/drive_transport.hpp
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/include/lb_hardware/lunabot_drive_hardware.hpp
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/include/lb_hardware/mock_drive_transport.hpp
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/include/lb_hardware/real_drive_transport.hpp
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/lib/liblb_drive_transport.so
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/environment/library_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/environment/library_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/ament_index/resource_index/package_run_dependencies/lb_hardware
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/ament_index/resource_index/parent_prefix_path/lb_hardware
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/package.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/ament_index/resource_index/packages/lb_hardware
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/cmake/ament_cmake_export_include_directories-extras.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/cmake/ament_cmake_export_libraries-extras.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/cmake/lb_hardwareConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/cmake/lb_hardwareConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/package.xml
+Finished <<< lb_hardware [5.11s]
+-- Found rmw_implementation_cmake: 7.3.3 (/opt/ros/jazzy/share/rmw_implementation_cmake/cmake)
+-- Found rmw_fastrtps_cpp: 8.4.3 (/opt/ros/jazzy/share/rmw_fastrtps_cpp/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Skipping lb_sim runtime launch test: missing xacro or ROS 2 control test dependencies
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (3.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_sim
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/config/mock_controllers.yaml
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/launch/mock_robot.launch.py
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/ament_index/resource_index/package_run_dependencies/lb_sim
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/ament_index/resource_index/parent_prefix_path/lb_sim
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/package.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/ament_index/resource_index/packages/lb_sim
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/cmake/lb_simConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/cmake/lb_simConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_sim/share/lb_sim/package.xml
+Finished <<< lb_sim [4.60s]
+Starting >>> lb_launch
+-- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+-- Override CMake install command with custom implementation using symlinks instead of copying resources
+-- Found ament_cmake_pytest: 2.5.5 (/opt/ros/jazzy/share/ament_cmake_pytest/cmake)
+-- Found ament_lint_auto: 0.17.4 (/opt/ros/jazzy/share/ament_lint_auto/cmake)
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done (4.2s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/jsun3/dev_ws/build/lb_launch
+-- Install configuration: ""
+-- Execute custom install script
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/launch/bench_test.launch.py
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/launch/bringup.launch.py
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/ament_index/resource_index/package_run_dependencies/lb_launch
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/ament_index/resource_index/parent_prefix_path/lb_launch
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/environment/ament_prefix_path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/environment/ament_prefix_path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/environment/path.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/environment/path.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/local_setup.bash
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/local_setup.sh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/local_setup.zsh
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/local_setup.dsv
+-- Symlinking: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/package.dsv
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/ament_index/resource_index/packages/lb_launch
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/cmake/lb_launchConfig.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/cmake/lb_launchConfig-version.cmake
+-- Up-to-date symlink: /home/jsun3/dev_ws/install/lb_launch/share/lb_launch/package.xml
+Finished <<< lb_launch [4.56s]
+
+Summary: 10 packages finished [19.7s]

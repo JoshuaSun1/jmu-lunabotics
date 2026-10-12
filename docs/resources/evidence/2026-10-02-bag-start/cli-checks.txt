@@ -1,0 +1,59 @@
+['--dry-run']: exit 0
+profile: webcam_apriltag
+output: /home/jsun3/dev_ws/src/jmu-lunabotics/bags/webcam_apriltag-20261002T205904Z
+topics: /sensors/webcam/image_raw /sensors/webcam/camera_info /sensors/webcam/image_rect /sensors/webcam/tag_detections /tf
+
+['--profile', 'hardware', '--dry-run']: exit 0
+profile: hardware
+output: /home/jsun3/dev_ws/src/jmu-lunabotics/bags/hardware-20261002T205904Z
+topics: /joint_states /odom/wheel /cmd_vel /diagnostics
+
+['--help']: exit 0
+Usage: scripts/start_bag.sh [--profile PROFILE] [--ros-distro DISTRO] [--dry-run]
+
+Start your launch first, then run this script in another terminal. It sources
+the ROS underlay and built workspace overlay and starts recording immediately.
+The default profile is webcam_apriltag; the default ROS distribution is Humble
+(or LUNABOT_ROS_DISTRO). Explicit --ros-distro jazzy opts into non-target use.
+
+Profiles: localization, perception, navigation, hardware, mission, webcam_apriltag
+
+Examples:
+  scripts/start_bag.sh
+  scripts/start_bag.sh --ros-distro jazzy
+  scripts/start_bag.sh --profile hardware
+
+Bags are saved under the repository's bags/ directory. Press Ctrl+C to finish.
+Use the same ROS_DOMAIN_ID and middleware/discovery settings as your launch.
+--dry-run prints the recording plan without activation or recording.
+This script does not build, install dependencies, or start robot nodes.
+
+['--profile']: exit 2
+Missing value for --profile.
+
+['--ros-distro']: exit 2
+Missing value for --ros-distro.
+
+['--profile', 'unknown']: exit 2
+Unknown profile: unknown
+
+['--unknown']: exit 2
+Unknown option: --unknown
+Usage: scripts/start_bag.sh [--profile PROFILE] [--ros-distro DISTRO] [--dry-run]
+
+Start your launch first, then run this script in another terminal. It sources
+the ROS underlay and built workspace overlay and starts recording immediately.
+The default profile is webcam_apriltag; the default ROS distribution is Humble
+(or LUNABOT_ROS_DISTRO). Explicit --ros-distro jazzy opts into non-target use.
+
+Profiles: localization, perception, navigation, hardware, mission, webcam_apriltag
+
+Examples:
+  scripts/start_bag.sh
+  scripts/start_bag.sh --ros-distro jazzy
+  scripts/start_bag.sh --profile hardware
+
+Bags are saved under the repository's bags/ directory. Press Ctrl+C to finish.
+Use the same ROS_DOMAIN_ID and middleware/discovery settings as your launch.
+--dry-run prints the recording plan without activation or recording.
+This script does not build, install dependencies, or start robot nodes.

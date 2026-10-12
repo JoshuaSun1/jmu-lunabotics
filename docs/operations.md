@@ -85,6 +85,24 @@ ros2 run tf2_ros tf2_echo webcam_optical_frame webcam_observation_tag_0
 scripts/record_bag.sh --profile webcam_apriltag
 ```
 
+For recording from a fresh terminal after the launch is running, use
+`scripts/start_bag.sh` from the repository root. It activates the built
+workspace and starts the webcam AprilTag profile by default. On the current
+Jazzy workstation, run `scripts/start_bag.sh --ros-distro jazzy`; this explicitly
+opts into non-target development use. Select another group with
+`--profile hardware` (or another recorder profile), and preview with
+`--dry-run`. Preserve the launch terminal's `ROS_DOMAIN_ID` and any custom
+middleware/discovery environment settings. The script does not start nodes or
+install software; unavailable selected topics can appear later and are not
+evidence of successful capture until messages arrive. Press Ctrl+C to finish
+recording. The printed output directory is under the repository's `bags/`;
+inspect it with `ros2 bag info <directory>` and preserve the entire directory.
+
+Add `--name tag_test_01` to save to `bags/tag_test_01` instead of a timestamped
+directory, for example `scripts/start_bag.sh --ros-distro jazzy --name tag_test_01`.
+Names accept letters, digits, underscores, and hyphens; existing outputs are
+rejected. The same flag is available on `scripts/record_bag.sh`.
+
 Do not interpret the observation as a robot or global pose. There is no
 physical `base_link -> webcam_optical_frame` extrinsic, tag map, localizer,
 EKF, `map`/`odom` transform, or motion path in this phase. Record the device

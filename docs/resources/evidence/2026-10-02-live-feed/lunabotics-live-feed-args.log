@@ -1,0 +1,146 @@
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'webcam_device':
+        no description given
+        (default: '/dev/v4l/by-id/usb-046d_0825_961026E0-video-index0')
+
+    'camera_namespace':
+        no description given
+        (default: 'sensors/webcam')
+
+    'camera_name':
+        no description given
+        (default: 'uvc_camera_(046d:0825)')
+
+    'camera_frame':
+        no description given
+        (default: 'webcam_optical_frame')
+
+    'camera_fps':
+        no description given
+        (default: '15.0')
+
+    'show_live_feed':
+        Open a rectified camera image window; requires a graphical desktop.
+        (default: 'false')
+
+    'calibration_file':
+        no description given
+        (default: '/home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/config/webcam_calibration.yaml')
+
+    'detector_config':
+        no description given
+        (default: '/home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/config/webcam_apriltag.yaml')
+Arguments (pass arguments as '<name>:=<value>'):
+
+    'use_sim_time':
+        no description given
+        (default: 'false')
+
+    'use_mock_hardware':
+        no description given
+        (default: 'true')
+
+    'enable_motors':
+        no description given
+        (default: 'false')
+
+    'enable_zed':
+        no description given
+        (default: 'false')
+
+    'enable_lidar':
+        no description given
+        (default: 'false')
+
+    'enable_apriltags':
+        no description given
+        (default: 'false')
+
+    'enable_depth_perception':
+        no description given
+        (default: 'false')
+
+    'enable_nav2':
+        no description given
+        (default: 'false')
+
+    'enable_mission':
+        no description given
+        (default: 'false')
+
+    'map':
+        no description given
+        (default: '')
+
+    'params_file':
+        no description given
+        (default: '')
+
+    'use_rviz':
+        no description given
+        (default: 'false')
+
+    'webcam_device':
+        no description given
+        (default: '/dev/v4l/by-id/usb-046d_0825_961026E0-video-index0')
+
+    'webcam_namespace':
+        no description given
+        (default: 'sensors/webcam')
+
+    'webcam_frame':
+        no description given
+        (default: 'webcam_optical_frame')
+
+    'webcam_fps':
+        no description given
+        (default: '15.0')
+
+    'show_live_feed':
+        no description given
+        (default: 'false')
+
+    'webcam_calibration_file':
+        no description given
+        (default: PathJoinSubstitution('FindPackageShare(pkg='lb_sensors'), 'config', 'webcam_calibration.yaml''))
+
+    'webcam_detector_config':
+        no description given
+        (default: PathJoinSubstitution('FindPackageShare(pkg='lb_sensors'), 'config', 'webcam_apriltag.yaml''))
+
+    'geometry_file':
+        no description given
+        (default: PathJoinSubstitution('FindPackageShare(pkg='lb_model'), 'config', 'mock_geometry.yaml''))
+
+    'mock_communication_loss_after_reads':
+        no description given
+        (default: '-1')
+
+    'mock_command_timeout_s':
+        no description given
+        (default: '0.25')
+
+    'camera_namespace':
+        no description given
+        (default: 'sensors/webcam')
+
+    'camera_name':
+        no description given
+        (default: 'uvc_camera_(046d:0825)')
+
+    'camera_frame':
+        no description given
+        (default: 'webcam_optical_frame')
+
+    'camera_fps':
+        no description given
+        (default: '15.0')
+
+    'calibration_file':
+        no description given
+        (default: '/home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/config/webcam_calibration.yaml')
+
+    'detector_config':
+        no description given
+        (default: '/home/jsun3/dev_ws/install/lb_sensors/share/lb_sensors/config/webcam_apriltag.yaml')

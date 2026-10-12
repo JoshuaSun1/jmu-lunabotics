@@ -17,6 +17,7 @@ if(BUILD_TESTING)
   find_package(controller_manager_msgs QUIET)
   ament_lint_auto_find_test_dependencies()
   ament_add_pytest_test(mock_launch_contract test/test_mock_launch_contract.py)
+  ament_add_pytest_test(bag_replay_contract test/test_bag_replay_contract.py)
 
   find_program(XACRO_EXECUTABLE xacro)
   if(launch_testing_ament_cmake_FOUND AND controller_manager_msgs_FOUND AND XACRO_EXECUTABLE)

@@ -4,6 +4,8 @@
 # The 0.250 m size is user-confirmed on 2026-08-17 and is the edge between the
 # AprilTag detector corners, not the outside paper edge.  All detector tuning
 # values below are archived baseline settings, not measured competition tuning.
+# IDs 1, 2, and 3 use user-provided 0.300 m edges (2026-10-02), interpreted
+# as detector-corner edges. Confirm that this excludes the surrounding paper.
 /**:
   ros__parameters:
     image_transport: raw
@@ -21,6 +23,6 @@
     # These child frames are dynamic camera observations, not static surveyed
     # world tags.  A second camera must use a different child-frame prefix.
     tag:
-      ids: [0]
-      frames: [webcam_observation_tag_0]
-      sizes: [0.250]
+      ids: [0, 1, 2, 3]
+      frames: [webcam_observation_tag_0, webcam_observation_tag_1, webcam_observation_tag_2, webcam_observation_tag_3]
+      sizes: [0.250, 0.300, 0.300, 0.300]

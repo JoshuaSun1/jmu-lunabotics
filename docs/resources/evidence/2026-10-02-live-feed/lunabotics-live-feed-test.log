@@ -1,0 +1,822 @@
+Starting >>> lb_model
+Starting >>> lb_sensors
+Starting >>> lb_interfaces
+Starting >>> lb_localization
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_interfaces/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_interfaces/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_interfaces/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_interfaces/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_interfaces
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_sensors/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_sensors/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_sensors/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_sensors/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_sensors
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: phase41_webcam_contract
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/phase41_webcam_contract.xunit.xml" "--package-name" "lb_sensors" "--output-file" "/home/jsun3/dev_ws/build/lb_sensors/ament_cmake_pytest/phase41_webcam_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sensors/test/test_phase41_webcam_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_sensors/ament_cmake_pytest/phase41_webcam_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/phase41_webcam_contract.xunit.xml" "--junit-prefix=lb_sensors"
+1: Working Directory: /home/jsun3/dev_ws/build/lb_sensors
+1: Test timeout computed to be: 60
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: lint_cmake
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/lint_cmake.xunit.xml" "--package-name" "lb_interfaces" "--output-file" "/home/jsun3/dev_ws/build/lb_interfaces/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/lint_cmake.xunit.xml"
+1: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_interfaces
+1: Test timeout computed to be: 60
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_localization/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_localization/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_localization/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_localization/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_localization
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: tag_localizer_core_test
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/tag_localizer_core_test.gtest.xml" "--package-name" "lb_localization" "--output-file" "/home/jsun3/dev_ws/build/lb_localization/ament_cmake_gtest/tag_localizer_core_test.txt" "--command" "/home/jsun3/dev_ws/build/lb_localization/tag_localizer_core_test" "--gtest_output=xml:/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/tag_localizer_core_test.gtest.xml"
+1: Working Directory: /home/jsun3/dev_ws/build/lb_localization
+1: Test timeout computed to be: 60
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_model/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_model/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_model/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_model/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_model
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: model_contract
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/model_contract.xunit.xml" "--package-name" "lb_model" "--output-file" "/home/jsun3/dev_ws/build/lb_model/ament_cmake_pytest/model_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_model/test/test_model_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_model/ament_cmake_pytest/model_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/model_contract.xunit.xml" "--junit-prefix=lb_model"
+1: Working Directory: /home/jsun3/dev_ws/build/lb_model
+1: Test timeout computed to be: 60
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_interfaces':
+1:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/lint_cmake.xunit.xml
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_model':
+1:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_model/test/test_model_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_model/ament_cmake_pytest/model_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/model_contract.xunit.xml --junit-prefix=lb_model
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_localization':
+1:  - /home/jsun3/dev_ws/build/lb_localization/tag_localizer_core_test --gtest_output=xml:/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/tag_localizer_core_test.gtest.xml
+1: Running main() from /opt/ros/jazzy/src/gtest_vendor/src/gtest_main.cc
+1: [==========] Running 11 tests from 3 test suites.
+1: [----------] Global test environment set-up.
+1: [----------] 3 tests from TagMapTest
+1: [ RUN      ] TagMapTest.SyntheticFixtureHasPlannedFieldInventoryButNoBenchTag
+1: [       OK ] TagMapTest.SyntheticFixtureHasPlannedFieldInventoryButNoBenchTag (2 ms)
+1: [ RUN      ] TagMapTest.SyntheticInputsRequireAnExplicitTestOnlyOptIn
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_sensors':
+1:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sensors/test/test_phase41_webcam_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_sensors/ament_cmake_pytest/phase41_webcam_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/phase41_webcam_contract.xunit.xml --junit-prefix=lb_sensors
+1: [       OK ] TagMapTest.SyntheticInputsRequireAnExplicitTestOnlyOptIn (33 ms)
+1: [ RUN      ] TagMapTest.RejectsDuplicateRecordsAndTheBenchOnlyId
+1: [       OK ] TagMapTest.RejectsDuplicateRecordsAndTheBenchOnlyId (8 ms)
+1: [----------] 3 tests from TagMapTest (43 ms total)
+1: 
+1: [----------] 5 tests from TagLocalizerMathTest
+1: [ RUN      ] TagLocalizerMathTest.RecoversBasePoseFromKnownTagAndCameraExtrinsic
+1: [       OK ] TagLocalizerMathTest.RecoversBasePoseFromKnownTagAndCameraExtrinsic (0 ms)
+1: [ RUN      ] TagLocalizerMathTest.RecoversRotatedAndFullThreeDimensionalGeometry
+1: [       OK ] TagLocalizerMathTest.RecoversRotatedAndFullThreeDimensionalGeometry (0 ms)
+1: [ RUN      ] TagLocalizerMathTest.DifferentCameraExtrinsicsRecoverTheSameBasePose
+1: [       OK ] TagLocalizerMathTest.DifferentCameraExtrinsicsRecoverTheSameBasePose (0 ms)
+1: [ RUN      ] TagLocalizerMathTest.QualityGatesRejectOutOfRangeOrWeakObservations
+1: [       OK ] TagLocalizerMathTest.QualityGatesRejectOutOfRangeOrWeakObservations (0 ms)
+1: [ RUN      ] TagLocalizerMathTest.CovarianceGrowsForPoorerObservations
+1: [       OK ] TagLocalizerMathTest.CovarianceGrowsForPoorerObservations (0 ms)
+1: [----------] 5 tests from TagLocalizerMathTest (0 ms total)
+1: 
+1: [----------] 3 tests from TagLocalizerFusionTest
+1: [ RUN      ] TagLocalizerFusionTest.UsesInverseCovarianceWeightsAndIsOrderIndependent
+1: [       OK ] TagLocalizerFusionTest.UsesInverseCovarianceWeightsAndIsOrderIndependent (0 ms)
+1: [ RUN      ] TagLocalizerFusionTest.HandlesWrappedYawAndDeduplicatesPhysicalTags
+1: [       OK ] TagLocalizerFusionTest.HandlesWrappedYawAndDeduplicatesPhysicalTags (0 ms)
+1: [ RUN      ] TagLocalizerFusionTest.RejectsIntertagDisagreementAndImplausibleJumps
+1: [       OK ] TagLocalizerFusionTest.RejectsIntertagDisagreementAndImplausibleJumps (0 ms)
+1: [----------] 3 tests from TagLocalizerFusionTest (0 ms total)
+1: 
+1: [----------] Global test environment tear-down
+1: [==========] 11 tests from 3 test suites ran. (47 ms total)
+1: [  PASSED  ] 11 tests.
+1: -- run_test.py: return code 0
+1: -- run_test.py: inject classname prefix into gtest result file '/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/tag_localizer_core_test.gtest.xml'
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/tag_localizer_core_test.gtest.xml'
+1/4 Test #1: tag_localizer_core_test ..........   Passed    0.71 sec
+test 2
+    Start 2: phase42_localizer_contract
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml" "--package-name" "lb_localization" "--output-file" "/home/jsun3/dev_ws/build/lb_localization/ament_cmake_pytest/phase42_localizer_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization/test/test_phase42_localizer_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_localization/ament_cmake_pytest/phase42_localizer_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml" "--junit-prefix=lb_localization"
+2: Working Directory: /home/jsun3/dev_ws/build/lb_localization
+2: Test timeout computed to be: 60
+1: 
+1: No problems found
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/lint_cmake.xunit.xml'
+1/2 Test #1: lint_cmake .......................   Passed    0.84 sec
+test 2
+    Start 2: xmllint
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/xmllint.xunit.xml" "--package-name" "lb_interfaces" "--output-file" "/home/jsun3/dev_ws/build/lb_interfaces/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/xmllint.xunit.xml"
+2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_interfaces
+2: Test timeout computed to be: 60
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_interfaces':
+2:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/xmllint.xunit.xml
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_localization':
+2:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization/test/test_phase42_localizer_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_localization/ament_cmake_pytest/phase42_localizer_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml --junit-prefix=lb_localization
+1: ============================= test session starts ==============================
+1: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+1: cachedir: build/lb_model/ament_cmake_pytest/model_contract/.cache
+1: rootdir: /home/jsun3/dev_ws
+1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+1: collected 3 items
+1: 
+1: ../../src/jmu-lunabotics/lb_model/test/test_model_contract.py ..s        [100%]
+1: 
+1: - generated xml file: /home/jsun3/dev_ws/build/lb_model/test_results/lb_model/model_contract.xunit.xml -
+1: ========================= 2 passed, 1 skipped in 0.10s =========================
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/model_contract.xunit.xml'
+1/3 Test #1: model_contract ...................   Passed    1.86 sec
+test 2
+    Start 2: lint_cmake
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/lint_cmake.xunit.xml" "--package-name" "lb_model" "--output-file" "/home/jsun3/dev_ws/build/lb_model/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/lint_cmake.xunit.xml"
+2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_model
+2: Test timeout computed to be: 60
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_model':
+2:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_model/test_results/lb_model/lint_cmake.xunit.xml
+2: File 'package.xml' is valid
+2: 
+2: No problems found
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/xmllint.xunit.xml'
+2/2 Test #2: xmllint ..........................   Passed    1.48 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Label Time Summary:
+lint_cmake    =   0.84 sec*proc (1 test)
+linter        =   2.32 sec*proc (2 tests)
+xmllint       =   1.48 sec*proc (1 test)
+
+Total Test time (real) =   2.34 sec
+Finished <<< lb_interfaces [2.66s]
+Starting >>> lb_navigation
+2: ============================= test session starts ==============================
+2: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+2: cachedir: build/lb_localization/ament_cmake_pytest/phase42_localizer_contract/.cache
+2: rootdir: /home/jsun3/dev_ws
+2: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+2: collected 4 items
+2: 
+2: ../../src/jmu-lunabotics/lb_localization/test/test_phase42_localizer_contract.py . [ 25%]
+2: ...                                                                      [100%]
+2: 
+2: - generated xml file: /home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml -
+2: ============================== 4 passed in 0.08s ===============================
+2: 
+2: No problems found
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml'
+2/4 Test #2: phase42_localizer_contract .......   Passed    2.00 sec
+test 3
+    Start 3: lint_cmake
+
+3: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/lint_cmake.xunit.xml" "--package-name" "lb_localization" "--output-file" "/home/jsun3/dev_ws/build/lb_localization/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/lint_cmake.xunit.xml"
+3: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization
+3: Test timeout computed to be: 60
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/lint_cmake.xunit.xml'
+2/3 Test #2: lint_cmake .......................   Passed    0.83 sec
+test 3
+    Start 3: xmllint
+
+3: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/xmllint.xunit.xml" "--package-name" "lb_model" "--output-file" "/home/jsun3/dev_ws/build/lb_model/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/xmllint.xunit.xml"
+3: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_model
+3: Test timeout computed to be: 60
+1: ============================= test session starts ==============================
+1: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_navigation/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_navigation/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_navigation/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_navigation/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_navigation
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: lint_cmake
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/lint_cmake.xunit.xml" "--package-name" "lb_navigation" "--output-file" "/home/jsun3/dev_ws/build/lb_navigation/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/lint_cmake.xunit.xml"
+1: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation
+1: Test timeout computed to be: 60
+1: cachedir: build/lb_sensors/ament_cmake_pytest/phase41_webcam_contract/.cache
+1: rootdir: /home/jsun3/dev_ws
+1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+1: collected 4 items
+1: 
+1: ../../src/jmu-lunabotics/lb_sensors/test/test_phase41_webcam_contract.py . [ 25%]
+1: ...                                                                      [100%]
+1: 
+1: - generated xml file: /home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/phase41_webcam_contract.xunit.xml -
+1: ============================== 4 passed in 0.09s ===============================
+3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization':
+3:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/lint_cmake.xunit.xml
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation':
+1:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/lint_cmake.xunit.xml
+3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_model':
+3:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_model/test_results/lb_model/xmllint.xunit.xml
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/phase41_webcam_contract.xunit.xml'
+3: 
+3: No problems found
+1/3 Test #1: phase41_webcam_contract ..........   Passed    3.21 sec
+test 2
+    Start 2: lint_cmake
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/lint_cmake.xunit.xml" "--package-name" "lb_sensors" "--output-file" "/home/jsun3/dev_ws/build/lb_sensors/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/lint_cmake.xunit.xml"
+2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sensors
+2: Test timeout computed to be: 60
+3: -- run_test.py: return code 0
+3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/lint_cmake.xunit.xml'
+3/4 Test #3: lint_cmake .......................   Passed    0.49 sec
+test 4
+    Start 4: xmllint
+
+4: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/xmllint.xunit.xml" "--package-name" "lb_localization" "--output-file" "/home/jsun3/dev_ws/build/lb_localization/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/xmllint.xunit.xml"
+4: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization
+4: Test timeout computed to be: 60
+4: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization':
+4:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/xmllint.xunit.xml
+1: 
+1: No problems found
+3: File 'package.xml' is valid
+3: 
+3: No problems found
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/lint_cmake.xunit.xml'
+1/2 Test #1: lint_cmake .......................   Passed    0.74 sec
+test 2
+    Start 2: xmllint
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/xmllint.xunit.xml" "--package-name" "lb_navigation" "--output-file" "/home/jsun3/dev_ws/build/lb_navigation/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/xmllint.xunit.xml"
+2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation
+2: Test timeout computed to be: 60
+4: File 'package.xml' is valid
+4: 
+4: No problems found
+3: -- run_test.py: return code 0
+3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/xmllint.xunit.xml'
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sensors':
+2:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/lint_cmake.xunit.xml
+4: -- run_test.py: return code 0
+4: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/xmllint.xunit.xml'
+4/4 Test #4: xmllint ..........................   Passed    0.43 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Label Time Summary:
+gtest         =   0.71 sec*proc (1 test)
+lint_cmake    =   0.49 sec*proc (1 test)
+linter        =   0.92 sec*proc (2 tests)
+pytest        =   2.00 sec*proc (1 test)
+xmllint       =   0.43 sec*proc (1 test)
+
+Total Test time (real) =   3.65 sec
+Finished <<< lb_localization [3.91s]
+Starting >>> lb_safety
+3/3 Test #3: xmllint ..........................   Passed    0.93 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+lint_cmake    =   0.83 sec*proc (1 test)
+linter        =   1.77 sec*proc (2 tests)
+pytest        =   1.86 sec*proc (1 test)
+xmllint       =   0.93 sec*proc (1 test)
+
+Total Test time (real) =   3.64 sec
+Finished <<< lb_model [4.13s]
+Starting >>> lb_hardware
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation':
+2:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/xmllint.xunit.xml
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_safety/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_safety/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_safety/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_safety/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_safety
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: lint_cmake
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/lint_cmake.xunit.xml" "--package-name" "lb_safety" "--output-file" "/home/jsun3/dev_ws/build/lb_safety/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/lint_cmake.xunit.xml"
+1: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_safety
+1: Test timeout computed to be: 60
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_hardware/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_hardware/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_hardware/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_hardware/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_hardware
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: mock_drive_transport_test
+
+1: Test command: /home/jsun3/dev_ws/build/lb_hardware/mock_drive_transport_test
+1: Working Directory: /home/jsun3/dev_ws/build/lb_hardware
+1: Test timeout computed to be: 10000000
+1/4 Test #1: mock_drive_transport_test ........   Passed    0.01 sec
+test 2
+    Start 2: phase2_contract
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml" "--package-name" "lb_hardware" "--output-file" "/home/jsun3/dev_ws/build/lb_hardware/ament_cmake_pytest/phase2_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware/test/test_phase2_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_hardware/ament_cmake_pytest/phase2_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml" "--junit-prefix=lb_hardware"
+2: Working Directory: /home/jsun3/dev_ws/build/lb_hardware
+2: Test timeout computed to be: 60
+2: 
+2: No problems found
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/lint_cmake.xunit.xml'
+2/3 Test #2: lint_cmake .......................   Passed    0.82 sec
+test 3
+    Start 3: xmllint
+
+3: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/xmllint.xunit.xml" "--package-name" "lb_sensors" "--output-file" "/home/jsun3/dev_ws/build/lb_sensors/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/xmllint.xunit.xml"
+3: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sensors
+3: Test timeout computed to be: 60
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_hardware':
+2:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware/test/test_phase2_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_hardware/ament_cmake_pytest/phase2_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml --junit-prefix=lb_hardware
+2: File 'package.xml' is valid
+2: 
+2: No problems found
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_safety':
+1:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/lint_cmake.xunit.xml
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/xmllint.xunit.xml'
+2/2 Test #2: xmllint ..........................   Passed    0.67 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Label Time Summary:
+lint_cmake    =   0.74 sec*proc (1 test)
+linter        =   1.41 sec*proc (2 tests)
+xmllint       =   0.67 sec*proc (1 test)
+
+Total Test time (real) =   1.42 sec
+Finished <<< lb_navigation [1.87s]
+Starting >>> lb_sim
+3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sensors':
+3:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/xmllint.xunit.xml
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_sim/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_sim/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_sim/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_sim/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_sim
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: mock_launch_contract
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml" "--package-name" "lb_sim" "--output-file" "/home/jsun3/dev_ws/build/lb_sim/ament_cmake_pytest/mock_launch_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim/test/test_mock_launch_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_sim/ament_cmake_pytest/mock_launch_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml" "--junit-prefix=lb_sim"
+1: Working Directory: /home/jsun3/dev_ws/build/lb_sim
+1: Test timeout computed to be: 60
+1: 
+1: No problems found
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/lint_cmake.xunit.xml'
+1/2 Test #1: lint_cmake .......................   Passed    0.74 sec
+test 2
+    Start 2: xmllint
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/xmllint.xunit.xml" "--package-name" "lb_safety" "--output-file" "/home/jsun3/dev_ws/build/lb_safety/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/xmllint.xunit.xml"
+2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_safety
+2: Test timeout computed to be: 60
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_sim':
+1:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim/test/test_mock_launch_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_sim/ament_cmake_pytest/mock_launch_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml --junit-prefix=lb_sim
+3: File 'package.xml' is valid
+3: 
+3: No problems found
+3: -- run_test.py: return code 0
+3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/xmllint.xunit.xml'
+3/3 Test #3: xmllint ..........................   Passed    0.87 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+lint_cmake    =   0.82 sec*proc (1 test)
+linter        =   1.69 sec*proc (2 tests)
+pytest        =   3.21 sec*proc (1 test)
+xmllint       =   0.87 sec*proc (1 test)
+
+Total Test time (real) =   4.91 sec
+Finished <<< lb_sensors [5.20s]
+Starting >>> lb_state_manager
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_safety':
+2:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/xmllint.xunit.xml
+2: ============================= test session starts ==============================
+2: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+2: cachedir: build/lb_hardware/ament_cmake_pytest/phase2_contract/.cache
+2: rootdir: /home/jsun3/dev_ws
+2: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+2: collected 4 items
+2: 
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_state_manager/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_state_manager/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_state_manager/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_state_manager/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_state_manager
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: lint_cmake
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/lint_cmake.xunit.xml" "--package-name" "lb_state_manager" "--output-file" "/home/jsun3/dev_ws/build/lb_state_manager/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/lint_cmake.xunit.xml"
+1: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_state_manager
+1: Test timeout computed to be: 60
+2: ../../src/jmu-lunabotics/lb_hardware/test/test_phase2_contract.py ....   [100%]
+2: 
+2: - generated xml file: /home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml -
+2: ============================== 4 passed in 0.05s ===============================
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml'
+2/4 Test #2: phase2_contract ..................   Passed    1.40 sec
+test 3
+    Start 3: lint_cmake
+
+3: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/lint_cmake.xunit.xml" "--package-name" "lb_hardware" "--output-file" "/home/jsun3/dev_ws/build/lb_hardware/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/lint_cmake.xunit.xml"
+3: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware
+3: Test timeout computed to be: 60
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_state_manager':
+1:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/lint_cmake.xunit.xml
+3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware':
+3:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/lint_cmake.xunit.xml
+2: File 'package.xml' is valid
+2: 
+2: No problems found
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/xmllint.xunit.xml'
+2/2 Test #2: xmllint ..........................   Passed    1.01 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Label Time Summary:
+lint_cmake    =   0.74 sec*proc (1 test)
+linter        =   1.75 sec*proc (2 tests)
+xmllint       =   1.01 sec*proc (1 test)
+
+Total Test time (real) =   1.75 sec
+Finished <<< lb_safety [1.90s]
+1: 
+1: No problems found
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/lint_cmake.xunit.xml'
+1/2 Test #1: lint_cmake .......................   Passed    0.66 sec
+test 2
+    Start 2: xmllint
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/xmllint.xunit.xml" "--package-name" "lb_state_manager" "--output-file" "/home/jsun3/dev_ws/build/lb_state_manager/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/xmllint.xunit.xml"
+2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_state_manager
+2: Test timeout computed to be: 60
+3: 
+3: No problems found
+3: -- run_test.py: return code 0
+3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/lint_cmake.xunit.xml'
+3/4 Test #3: lint_cmake .......................   Passed    0.62 sec
+test 4
+    Start 4: xmllint
+
+4: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/xmllint.xunit.xml" "--package-name" "lb_hardware" "--output-file" "/home/jsun3/dev_ws/build/lb_hardware/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/xmllint.xunit.xml"
+4: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware
+4: Test timeout computed to be: 60
+1: ============================= test session starts ==============================
+1: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+1: cachedir: build/lb_sim/ament_cmake_pytest/mock_launch_contract/.cache
+1: rootdir: /home/jsun3/dev_ws
+1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+1: collected 2 items
+1: 
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_state_manager':
+2:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/xmllint.xunit.xml
+1: ../../src/jmu-lunabotics/lb_sim/test/test_mock_launch_contract.py ..     [100%]
+1: 
+1: - generated xml file: /home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml -
+1: ============================== 2 passed in 0.08s ===============================
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml'
+1/3 Test #1: mock_launch_contract .............   Passed    1.81 sec
+test 2
+    Start 2: lint_cmake
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/lint_cmake.xunit.xml" "--package-name" "lb_sim" "--output-file" "/home/jsun3/dev_ws/build/lb_sim/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/lint_cmake.xunit.xml"
+2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim
+2: Test timeout computed to be: 60
+2: File 'package.xml' is valid
+2: 
+2: No problems found
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim':
+2:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/lint_cmake.xunit.xml
+4: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware':
+4:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/xmllint.xunit.xml
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/xmllint.xunit.xml'
+2/2 Test #2: xmllint ..........................   Passed    0.58 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Label Time Summary:
+lint_cmake    =   0.66 sec*proc (1 test)
+linter        =   1.25 sec*proc (2 tests)
+xmllint       =   0.58 sec*proc (1 test)
+
+Total Test time (real) =   1.25 sec
+Finished <<< lb_state_manager [1.53s]
+2: 
+2: No problems found
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/lint_cmake.xunit.xml'
+2/3 Test #2: lint_cmake .......................   Passed    0.38 sec
+test 3
+    Start 3: xmllint
+
+3: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/xmllint.xunit.xml" "--package-name" "lb_sim" "--output-file" "/home/jsun3/dev_ws/build/lb_sim/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/xmllint.xunit.xml"
+3: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim
+3: Test timeout computed to be: 60
+4: File 'lb_hardware_plugins.xml' is valid
+4: 
+4: File 'package.xml' is valid
+4: 
+4: No problems found
+4: -- run_test.py: return code 0
+4: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/xmllint.xunit.xml'
+4/4 Test #4: xmllint ..........................   Passed    0.73 sec
+
+100% tests passed, 0 tests failed out of 4
+
+Label Time Summary:
+lint_cmake    =   0.62 sec*proc (1 test)
+linter        =   1.35 sec*proc (2 tests)
+pytest        =   1.40 sec*proc (1 test)
+xmllint       =   0.73 sec*proc (1 test)
+
+Total Test time (real) =   2.76 sec
+Finished <<< lb_hardware [2.95s]
+3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim':
+3:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/xmllint.xunit.xml
+3: File 'package.xml' is valid
+3: 
+3: No problems found
+3: -- run_test.py: return code 0
+3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/xmllint.xunit.xml'
+3/3 Test #3: xmllint ..........................   Passed    0.39 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Label Time Summary:
+lint_cmake    =   0.38 sec*proc (1 test)
+linter        =   0.77 sec*proc (2 tests)
+pytest        =   1.81 sec*proc (1 test)
+xmllint       =   0.39 sec*proc (1 test)
+
+Total Test time (real) =   2.59 sec
+Finished <<< lb_sim [2.70s]
+Starting >>> lb_launch
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_launch/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_launch/CTestConfiguration.ini
+   Site: jmu-lunabotics
+   Build name: (empty)
+ Add coverage exclude regular expressions.
+Create new tag: 20261002-2046 - Experimental
+UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_launch/CTestConfiguration.ini
+Parse Config file:/home/jsun3/dev_ws/build/lb_launch/CTestConfiguration.ini
+Test project /home/jsun3/dev_ws/build/lb_launch
+Constructing a list of tests
+Done constructing a list of tests
+Updating test list for fixtures
+Added 0 tests to meet fixture requirements
+Checking test dependency graph...
+Checking test dependency graph end
+test 1
+    Start 1: test_scaffold
+
+1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/test_scaffold.xunit.xml" "--package-name" "lb_launch" "--output-file" "/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/test_scaffold.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_scaffold.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/test_scaffold/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/test_scaffold.xunit.xml" "--junit-prefix=lb_launch"
+1: Working Directory: /home/jsun3/dev_ws/build/lb_launch
+1: Test timeout computed to be: 60
+1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_launch':
+1:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_scaffold.py -o cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/test_scaffold/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/test_scaffold.xunit.xml --junit-prefix=lb_launch
+1: ============================= test session starts ==============================
+1: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+1: cachedir: build/lb_launch/ament_cmake_pytest/test_scaffold/.cache
+1: rootdir: /home/jsun3/dev_ws
+1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+1: collected 3 items
+1: 
+1: ../../src/jmu-lunabotics/lb_launch/test/test_scaffold.py ...             [100%]
+1: 
+1: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/test_scaffold.xunit.xml -
+1: ============================== 3 passed in 0.04s ===============================
+1: -- run_test.py: return code 0
+1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/test_scaffold.xunit.xml'
+1/7 Test #1: test_scaffold ....................   Passed    0.87 sec
+test 2
+    Start 2: phase1_launch_contract
+
+2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase1_launch_contract.xunit.xml" "--package-name" "lb_launch" "--output-file" "/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase1_launch_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_phase1_launch_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase1_launch_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase1_launch_contract.xunit.xml" "--junit-prefix=lb_launch"
+2: Working Directory: /home/jsun3/dev_ws/build/lb_launch
+2: Test timeout computed to be: 60
+2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_launch':
+2:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_phase1_launch_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase1_launch_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase1_launch_contract.xunit.xml --junit-prefix=lb_launch
+2: ============================= test session starts ==============================
+2: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+2: cachedir: build/lb_launch/ament_cmake_pytest/phase1_launch_contract/.cache
+2: rootdir: /home/jsun3/dev_ws
+2: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+2: collected 1 item
+2: 
+2: ../../src/jmu-lunabotics/lb_launch/test/test_phase1_launch_contract.py . [100%]
+2: 
+2: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase1_launch_contract.xunit.xml -
+2: ============================== 1 passed in 0.03s ===============================
+2: -- run_test.py: return code 0
+2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase1_launch_contract.xunit.xml'
+2/7 Test #2: phase1_launch_contract ...........   Passed    0.82 sec
+test 3
+    Start 3: phase2_launch_contract
+
+3: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase2_launch_contract.xunit.xml" "--package-name" "lb_launch" "--output-file" "/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase2_launch_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_phase2_launch_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase2_launch_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase2_launch_contract.xunit.xml" "--junit-prefix=lb_launch"
+3: Working Directory: /home/jsun3/dev_ws/build/lb_launch
+3: Test timeout computed to be: 60
+3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_launch':
+3:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_phase2_launch_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase2_launch_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase2_launch_contract.xunit.xml --junit-prefix=lb_launch
+3: ============================= test session starts ==============================
+3: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+3: cachedir: build/lb_launch/ament_cmake_pytest/phase2_launch_contract/.cache
+3: rootdir: /home/jsun3/dev_ws
+3: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+3: collected 2 items
+3: 
+3: ../../src/jmu-lunabotics/lb_launch/test/test_phase2_launch_contract.py . [ 50%]
+3: .                                                                        [100%]
+3: 
+3: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase2_launch_contract.xunit.xml -
+3: ============================== 2 passed in 0.03s ===============================
+3: -- run_test.py: return code 0
+3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase2_launch_contract.xunit.xml'
+3/7 Test #3: phase2_launch_contract ...........   Passed    1.13 sec
+test 4
+    Start 4: phase41_launch_contract
+
+4: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase41_launch_contract.xunit.xml" "--package-name" "lb_launch" "--output-file" "/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase41_launch_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_phase41_launch_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase41_launch_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase41_launch_contract.xunit.xml" "--junit-prefix=lb_launch"
+4: Working Directory: /home/jsun3/dev_ws/build/lb_launch
+4: Test timeout computed to be: 60
+4: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_launch':
+4:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_phase41_launch_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/phase41_launch_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase41_launch_contract.xunit.xml --junit-prefix=lb_launch
+4: ============================= test session starts ==============================
+4: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+4: cachedir: build/lb_launch/ament_cmake_pytest/phase41_launch_contract/.cache
+4: rootdir: /home/jsun3/dev_ws
+4: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+4: collected 1 item
+4: 
+4: ../../src/jmu-lunabotics/lb_launch/test/test_phase41_launch_contract.py . [100%]
+4: 
+4: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase41_launch_contract.xunit.xml -
+4: ============================== 1 passed in 0.03s ===============================
+4: -- run_test.py: return code 0
+4: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase41_launch_contract.xunit.xml'
+4/7 Test #4: phase41_launch_contract ..........   Passed    0.89 sec
+test 5
+    Start 5: bootstrap_contract
+
+5: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/bootstrap_contract.xunit.xml" "--package-name" "lb_launch" "--output-file" "/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/bootstrap_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_bootstrap_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/bootstrap_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/bootstrap_contract.xunit.xml" "--junit-prefix=lb_launch"
+5: Working Directory: /home/jsun3/dev_ws/build/lb_launch
+5: Test timeout computed to be: 60
+5: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_launch':
+5:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch/test/test_bootstrap_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_launch/ament_cmake_pytest/bootstrap_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/bootstrap_contract.xunit.xml --junit-prefix=lb_launch
+5: ============================= test session starts ==============================
+5: platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+5: cachedir: build/lb_launch/ament_cmake_pytest/bootstrap_contract/.cache
+5: rootdir: /home/jsun3/dev_ws
+5: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+5: collected 7 items
+5: 
+5: ../../src/jmu-lunabotics/lb_launch/test/test_bootstrap_contract.py ..... [ 71%]
+5: ..                                                                       [100%]
+5: 
+5: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/bootstrap_contract.xunit.xml -
+5: ============================== 7 passed in 0.07s ===============================
+5: -- run_test.py: return code 0
+5: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/bootstrap_contract.xunit.xml'
+5/7 Test #5: bootstrap_contract ...............   Passed    0.93 sec
+test 6
+    Start 6: lint_cmake
+
+6: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/lint_cmake.xunit.xml" "--package-name" "lb_launch" "--output-file" "/home/jsun3/dev_ws/build/lb_launch/ament_lint_cmake/lint_cmake.txt" "--command" "/opt/ros/jazzy/bin/ament_lint_cmake" "--xunit-file" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/lint_cmake.xunit.xml"
+6: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch
+6: Test timeout computed to be: 60
+6: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch':
+6:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/lint_cmake.xunit.xml
+6: 
+6: No problems found
+6: -- run_test.py: return code 0
+6: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/lint_cmake.xunit.xml'
+6/7 Test #6: lint_cmake .......................   Passed    0.32 sec
+test 7
+    Start 7: xmllint
+
+7: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/xmllint.xunit.xml" "--package-name" "lb_launch" "--output-file" "/home/jsun3/dev_ws/build/lb_launch/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/xmllint.xunit.xml"
+7: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch
+7: Test timeout computed to be: 60
+7: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch':
+7:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/xmllint.xunit.xml
+7: File 'package.xml' is valid
+7: 
+7: No problems found
+7: -- run_test.py: return code 0
+7: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/xmllint.xunit.xml'
+7/7 Test #7: xmllint ..........................   Passed    0.29 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Label Time Summary:
+lint_cmake    =   0.32 sec*proc (1 test)
+linter        =   0.61 sec*proc (2 tests)
+pytest        =   4.65 sec*proc (5 tests)
+xmllint       =   0.29 sec*proc (1 test)
+
+Total Test time (real) =   5.30 sec
+Finished <<< lb_launch [5.37s]
+
+Summary: 10 packages finished [13.6s]
+Summary: 95 tests, 0 errors, 0 failures, 1 skipped
