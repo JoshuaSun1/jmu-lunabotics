@@ -142,3 +142,35 @@ argument in robot bringup or treat its pose output as a field pose. The node
 publishes `/localization/apriltag_pose` and `/diagnostics` but never publishes
 `map -> odom`. Until Phase 3 local odometry and a validated global EKF exist,
 there is no live global-localization or navigation path.
+
+## Static arena map
+
+Install the dependencies declared by `lb_navigation` through the supported
+bootstrap/rosdep workflow. On the current opt-in Jazzy development host, the
+equivalent packages are `ros-jazzy-nav2-map-server` and
+`ros-jazzy-nav2-lifecycle-manager`; this does not validate the target Humble
+runtime.
+
+After building and sourcing the workspace, launch the non-actuating map profile:
+
+```bash
+ros2 launch lb_navigation map.launch.py
+```
+
+The default launch uses the installed `maps/arena.yaml`, autostarts the
+`map_server` lifecycle node, and opens the installed top-down RViz profile.
+For a headless check, set `use_rviz:=false`. In another sourced terminal:
+
+```bash
+ros2 lifecycle get /map_server
+ros2 topic echo /map --once --field header
+ros2 topic echo /map --once --field info
+ros2 topic info /map --verbose
+```
+
+Expected state is `active`; the grid frame is `map`, resolution is 0.05 m,
+width/height are 139/102 cells, and origin position is `(-0.05, -0.05)`. The
+outer occupied cell is outside the 6.85 m x 5.00 m free interior. This launch
+publishes no TF or robot pose. Do not use RViz alignment alone as a physical
+arena survey, and do not add the center column until its pose and dimensions
+are measured.

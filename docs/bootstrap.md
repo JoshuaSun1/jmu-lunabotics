@@ -117,7 +117,10 @@ workspace. It intentionally does **not**:
 
 Consequently, a successful bootstrap makes the software dependencies available
 for mock development and, when a connected webcam passes its own preflight,
-the non-actuating webcam-AprilTag bench. It does not certify a physical robot,
+the non-actuating webcam-AprilTag bench. The declared `lb_navigation`
+dependencies also install the upstream Nav2 map server and lifecycle manager
+needed for static-map publication; bootstrap does not prove their runtime map
+output or configure the rest of Nav2. It does not certify a physical robot,
 the ZED path, target performance, or competition readiness. Follow the
 [operations guide](operations.md), the [platform lock](resources/software_platform_lock.md),
 and the ordered hardware/safety phases before using physical hardware.

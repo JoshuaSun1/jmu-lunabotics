@@ -248,6 +248,8 @@ run_check() {
     tf2_ros
     yaml_cpp_vendor
     rosbag2
+    nav2_map_server
+    nav2_lifecycle_manager
   )
   local -a required_workspace_packages=(
     lb_interfaces

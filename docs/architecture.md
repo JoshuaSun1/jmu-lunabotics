@@ -135,3 +135,19 @@ excluded. Synthetic fixture maps/extrinsics may run only with an explicit
 test-only opt-in and are never included from system bringup. See
 [`phase42_tag_localizer.md`](phase42_tag_localizer.md) for the full TF,
 fusion, failure, and remaining-hardware contract.
+
+## Static arena map boundary
+
+`lb_navigation` owns the initial static arena image, metadata, map-server
+parameters, lifecycle launch, and map-focused RViz profile. The lifecycle
+manager autostarts only `map_server`; no planner, controller, behavior tree,
+costmap, localization node, hardware process, or robot-pose publisher is part
+of this boundary. `map_server` publishes `/map` as
+`nav_msgs/msg/OccupancyGrid` with `header.frame_id=map`; it does not publish a
+transform. The future global EKF remains the only `map -> odom` authority.
+
+The current artifact represents a team-selected 6.85 m x 5.00 m free interior
+at 0.05 m/cell. Its one-cell occupied boundary lies outside the usable interior,
+and the YAML image origin is `[-0.05, -0.05, 0.0]`. The center support column,
+keepouts, and surveyed arena verification remain TBD rather than being inferred
+from the guidebook illustration.

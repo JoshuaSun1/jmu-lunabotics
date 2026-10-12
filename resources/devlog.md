@@ -739,6 +739,60 @@ Ctrl+C, and confirm message counts and duration with `ros2 bag info`.
 `1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
 committed.
 
+## 2026-10-11 — Lifecycle-managed static arena map configuration
+
+**Purpose and scope:** Completed the repository portion of the static-map
+server increment. `lb_navigation` now installs map-server parameters, an
+explicit lifecycle launch, and a map-focused RViz profile around the existing
+arena raster. This increment deliberately adds no robot pose, `map -> odom`,
+`odom -> base_link`, localization node, costmap, planner, controller, behavior
+tree, sensor pipeline, or motion output.
+
+**Components, interfaces, and ownership:**
+`lb_navigation/config/map_server.yaml` configures upstream
+`nav2_map_server/map_server` and an autostarting
+`nav2_lifecycle_manager/lifecycle_manager` named `lifecycle_manager_map`; its
+managed-node list contains only `map_server`.
+`lb_navigation/launch/map.launch.py` requires valid map, parameter, and RViz
+files and supplies installed defaults. `lb_navigation/rviz/arena_map.rviz`
+uses fixed frame `map`, a top-down view, and transient-local/reliable `/map`
+QoS. Expected `/map` type is `nav_msgs/msg/OccupancyGrid` with
+`header.frame_id=map`; upstream standard load-map and lifecycle services are
+the only new service interfaces. Map server publishes no TF, so the global EKF
+remains the sole future `map -> odom` owner.
+
+**Parameters and provenance:** Map resolution remains 0.05 m/cell. The 139 x
+102 raster contains a 137 x 100 free interior representing the team-selected
+6.85 m length and guidebook-derived 5.00 m width, surrounded by one occupied
+cell outside the usable interior. YAML image origin remains
+`[-0.05, -0.05, 0.0]`. `autostart=true` and `use_sim_time=false` are software
+profile defaults. The center column pose/dimensions, keepouts, and physical
+control-point survey remain TBD; none was inferred from the illustration.
+
+**Dependencies, failure behavior, and safety:** Added declared runtime
+dependencies on `nav2_map_server`, `nav2_lifecycle_manager`, launch support,
+and RViz, plus bootstrap readiness checks for both Nav2 components. Missing
+map/parameter/RViz files fail before nodes start. A missing upstream package
+fails launch explicitly. The launch is non-actuating and cannot command robot
+hardware. An attempted minimal Jazzy package install made no changes because
+the host requires an interactive sudo password; no credential workaround was
+attempted.
+
+**Verification and evidence:** Focused tests passed 6/6. The Jazzy
+`lb_navigation` build completed and installed all artifacts; installed launch
+argument resolution passed. Package testing reported 8 tests, zero errors,
+failures, or skips. New Python files passed `ament_flake8` and `ament_pep257`.
+Runtime launch reached the expected explicit blocker:
+`package 'nav2_map_server' not found`. Detailed evidence and operator lifecycle,
+topic, metadata, and RViz checks are recorded in
+[`docs/evidence/phase5_map_server_2026-10-11.md`](../docs/evidence/phase5_map_server_2026-10-11.md).
+Runtime Jazzy and target Humble checks, GUI confirmation, measured resource use,
+and physical arena alignment remain open.
+
+**Git evidence:** Map-server code, tests, parameters, launch, and RViz artifacts
+are recorded in `69b0505` (`In the middle of stage 2 of map implementation`).
+The 2026-10-11 documentation/readiness updates remain uncommitted.
+
 ## 2026-10-03 — Freshness-gated tag replay and initial arena raster
 
 **Purpose and scope:** Added the first non-actuating development increment for
@@ -787,8 +841,8 @@ validation; graphical RViz, maneuver metrics, dropout durations, CPU/memory,
 and Humble validation remain operator work. The next increment is map-server
 configuration and physical/map-origin verification, after review of this map.
 
-**Git evidence:** Uncommitted change based on `1db17cb`; record the resulting
-commit when committed.
+**Git evidence:** Replay visualization and initial arena artifacts are recorded
+in `69b0505` (`In the middle of stage 2 of map implementation`).
 
 ## 2026-10-02 — Register webcam tags 1–3
 

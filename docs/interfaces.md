@@ -15,6 +15,7 @@ topic leakage into the system design:
 | `/perception/terrain_hazards` | Terrain node | Nav2 costmap |
 | `/cmd_vel_nav`, `/cmd_vel_teleop`, `/cmd_vel` | Nav2/teleop/mux | Drive controller |
 | `/diagnostics` | Major subsystems | Operator/logger |
+| `/map` | Nav2 `map_server` | RViz; future global costmap | Static `nav_msgs/msg/OccupancyGrid` in `map`; not a TF. |
 
 High-rate sensor data uses sensor-data QoS unless a driver requires reliable
 delivery. Commands, safety, mission, and hardware state are reliable. Exact
@@ -94,3 +95,14 @@ multi-tag requirement. It never publishes `/tag_detections`, `/odometry/global`,
 
 The replay launch consumes an explicit rosbag path and `/clock`. It starts no
 camera, detector, hardware, map server, Nav2 component, or TF broadcaster.
+
+## Static map interfaces
+
+| Interface | Type | Publisher | Consumer | Boundary |
+|---|---|---|---|---|
+| `/map` | `nav_msgs/msg/OccupancyGrid` | `nav2_map_server/map_server` | RViz; future static costmap layer | Transient-local static arena grid with `header.frame_id=map`; the map origin is grid metadata, not a transform. |
+| `/map_server/load_map` | `nav2_msgs/srv/LoadMap` | `nav2_map_server/map_server` | Operator/future bringup | Standard Nav2 map replacement service; only explicitly supplied map YAML files are valid. |
+| `/map_server/*` lifecycle services | `lifecycle_msgs` services | `nav2_map_server/map_server` | Lifecycle manager/operator | Standard managed-node state and transition interfaces. |
+
+`lifecycle_manager_map` manages only `map_server`. Neither node publishes
+`map -> odom`, `odom -> base_link`, a robot pose, a costmap, or a velocity.
