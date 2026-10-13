@@ -4,9 +4,9 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-TARGET_ROS_DISTRO="humble"
-TARGET_UBUNTU_VERSION="22.04"
-TARGET_L4T_RELEASE="R36 (release), REVISION: 5.0"
+TARGET_ROS_DISTRO="jazzy"
+TARGET_UBUNTU_VERSION="24.04"
+TARGET_L4T_RELEASE="R39 (release), REVISION: 2.1"
 REQUESTED_ROS_DISTRO="${LUNABOT_ROS_DISTRO:-${TARGET_ROS_DISTRO}}"
 
 infer_workspace_root() {
@@ -42,7 +42,7 @@ modifying the host.
 Actions:
   --check                 Check the selected ROS environment and workspace.
   --install               One-time provision of this repository's declared
-                          Humble dependencies, then build and test it.
+                          Jazzy dependencies, then build and test it.
   --install-hooks         Install repository-local pre-commit hooks only.
   --install-host-tools    Legacy generic-tools-only action; does not install
                           ROS or repository dependencies.
@@ -56,14 +56,14 @@ Options:
                           PATH/src/jmu-lunabotics. A standalone repository
                           root is accepted for CI and creates build artifacts
                           there.
-  --strict-target         Require the locked Orin Nano/L4T 36.5 target during
+  --strict-target         Require the locked Orin Nano/L4T 39.2.1 target during
                           --check. Implied by --profile jetson.
   --yes                   Do not ask for confirmation before a modifying
                           action.
   --dry-run               Print an --install plan without modifying the host.
   -h, --help              Show this help text.
 
---install is intentionally limited to Ubuntu 22.04 and ROS 2 Humble. It adds
+--install is intentionally limited to Ubuntu 24.04 and ROS 2 Jazzy. It adds
 the ROS apt source if needed, installs ROS base plus rosdep-resolved repository
 dependencies, builds, and tests. It never edits shell profiles, flashes or
 upgrades JetPack, installs the ZED SDK/wrapper, changes device permissions, or
@@ -436,7 +436,7 @@ confirm_modifying_action() {
 validate_install_platform() {
   read_os_release
   if [[ "${REQUESTED_ROS_DISTRO}" != "${TARGET_ROS_DISTRO}" ]]; then
-    printf '%s\n' '--install supports only the locked ROS 2 Humble distribution.' >&2
+    printf '%s\n' '--install supports only the locked ROS 2 Jazzy distribution.' >&2
     return 1
   fi
   if [[ "${OS_ID}" != "ubuntu" || "${OS_VERSION_ID}" != "${TARGET_UBUNTU_VERSION}" ]]; then
@@ -593,8 +593,6 @@ validate_requested_ros_distro() {
 }
 
 main() {
-  require_not_root
-
   while [[ "$#" -gt 0 ]]; do
     case "$1" in
       --check)
@@ -651,6 +649,7 @@ main() {
     STRICT_TARGET="true"
   fi
   validate_requested_ros_distro
+  require_not_root
 
   case "${ACTION}" in
     check)

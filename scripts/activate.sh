@@ -18,12 +18,12 @@ else
 fi
 
 LB_ACTIVATE_WORKSPACE_ROOT="${LUNABOT_WORKSPACE_ROOT:-${LB_ACTIVATE_DEFAULT_WORKSPACE}}"
-LB_ACTIVATE_ROS_DISTRO="${LUNABOT_ROS_DISTRO:-humble}"
+LB_ACTIVATE_ROS_DISTRO="${LUNABOT_ROS_DISTRO:-jazzy}"
 if [[ ! "${LB_ACTIVATE_ROS_DISTRO}" =~ ^[A-Za-z0-9_-]+$ ]]; then
   echo "Invalid ROS distribution name: ${LB_ACTIVATE_ROS_DISTRO}" >&2
   return 1
 fi
-if [[ "${LB_ACTIVATE_ROS_DISTRO}" != "humble" ]]; then
+if [[ "${LB_ACTIVATE_ROS_DISTRO}" != "jazzy" ]]; then
   if [[ "${LUNABOT_ALLOW_NON_TARGET_ACTIVATION:-}" != "1" ]]; then
     cat >&2 <<EOF
 Refusing to activate non-target ROS 2 ${LB_ACTIVATE_ROS_DISTRO}.

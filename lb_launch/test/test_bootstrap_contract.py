@@ -56,16 +56,18 @@ def test_bootstrap_rejects_conflicting_actions_before_host_work() -> None:
     assert "conflicting actions" in result.stderr
 
 
-def test_installer_uses_humble_and_rosdep_as_the_dependency_authority() -> None:
+def test_installer_uses_jazzy_and_rosdep_as_the_dependency_authority() -> None:
     """Packages come from manifests rather than a stale hand-maintained list."""
     source = _bootstrap_source()
 
-    assert 'TARGET_ROS_DISTRO="humble"' in source
+    assert 'TARGET_ROS_DISTRO="jazzy"' in source
+    assert 'TARGET_UBUNTU_VERSION="24.04"' in source
+    assert 'TARGET_L4T_RELEASE="R39 (release), REVISION: 2.1"' in source
     assert "rosdep install" in source
     assert "--from-paths" in source
     assert "--ignore-src" in source
     assert re.search(
-        r"ros-(?:humble|\$\{?TARGET_ROS_DISTRO\}?)-ros-base",
+        r"ros-(?:jazzy|\$\{?TARGET_ROS_DISTRO\}?)-ros-base",
         source,
     )
 

@@ -1,7 +1,7 @@
 # Container workflow
 
 This directory defines the Phase 0 build-container scaffold. It locks the
-target architecture and proposed ROS/JetPack/ZED versions in `versions.env`.
+target architecture and reported ROS/JetPack/ZED versions in `versions.env`.
 
 ## What this container proves
 
@@ -12,13 +12,12 @@ docker compose --env-file docker/versions.env -f docker/docker-compose.yml build
 ```
 
 The result establishes that the package scaffold can build on the requested
-architecture. The current generic `ubuntu:22.04` base intentionally does not
+architecture. The current generic `ubuntu:24.04` base intentionally does not
 claim to validate CUDA, L4T, ZED SDK, or camera access.
 
 ## Before sensor/runtime use
 
-1. Update the Orin firmware when required and flash the selected JetPack 6.2.2
-   image.
+1. Verify JetPack 7.2.1 / L4T 39.2.1 and the Orin Nano model on the target.
 2. Verify the actual L4T, CUDA, ZED SDK, and ZED wrapper combination on the
    physical Jetson and ZED Mini.
 3. Record the actual base-image digest and wrapper commit in `versions.env`.

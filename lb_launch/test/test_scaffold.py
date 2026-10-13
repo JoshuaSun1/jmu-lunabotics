@@ -46,8 +46,11 @@ def test_target_runtime_lock_is_explicit() -> None:
     """The target lock remains machine-readable and avoids a runtime-image guess."""
     values = (REPOSITORY_ROOT / "docker" / "versions.env").read_text(encoding="utf-8")
     assert "TARGET_PLATFORM=linux/arm64" in values
-    assert "ROS_DISTRO=humble" in values
-    assert "JETPACK_VERSION=6.2.2" in values
-    assert "L4T_VERSION=36.5.0" in values
-    assert "ZED_SDK_VERSION=5.2.3" in values
+    assert "ROS_DISTRO=jazzy" in values
+    assert "JETPACK_VERSION=7.2.1" in values
+    assert "L4T_VERSION=39.2.1" in values
+    assert "UBUNTU_VERSION=24.04" in values
+    assert "CUDA_VERSION=13.2.2" in values
+    assert "ZED_SDK_VERSION=5.5.0" in values
+    assert "ZED_ROS2_WRAPPER_VERSION=v5.5.0" in values
     assert "JETSON_RUNTIME_IMAGE=TBD_AFTER_TARGET_VALIDATION" in values

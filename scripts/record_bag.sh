@@ -4,7 +4,7 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-humble}"
+ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-jazzy}"
 PROFILE=""
 DRY_RUN="false"
 

@@ -1,9 +1,9 @@
 # Phase 4.1 build container. It deliberately does not install the ZED SDK:
 # that installation must be validated against the physical Jetson image first.
-ARG BASE_IMAGE=ubuntu:22.04
+ARG BASE_IMAGE=ubuntu:24.04
 FROM ${BASE_IMAGE}
 
-ARG ROS_DISTRO=humble
+ARG ROS_DISTRO=jazzy
 ARG TARGET_PLATFORM=linux/arm64
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -16,9 +16,6 @@ RUN apt-get update \
         curl \
         gnupg \
         lsb-release \
-        python3-colcon-common-extensions \
-        python3-rosdep \
-        python3-vcstool \
         v4l-utils \
     && curl -sSL https://raw.githubusercontent.com/ros/rosdistro/master/ros.key \
         -o /usr/share/keyrings/ros-archive-keyring.gpg \
@@ -26,6 +23,10 @@ RUN apt-get update \
         > /etc/apt/sources.list.d/ros2.list \
     && apt-get update \
     && apt-get install -y --no-install-recommends \
+        build-essential \
+        python3-colcon-common-extensions \
+        python3-rosdep \
+        python3-vcstool \
         ros-${ROS_DISTRO}-ros-base \
         ros-${ROS_DISTRO}-ament-lint-auto \
         ros-${ROS_DISTRO}-ament-cmake-lint-cmake \

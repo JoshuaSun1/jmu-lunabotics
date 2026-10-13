@@ -5,34 +5,40 @@
 | Check | Command | What it establishes |
 |---|---|---|
 | Bootstrap readiness check | `./scripts/bootstrap_dev.sh --check` | Non-mutating report of the selected ROS environment, tools, declared runtime packages, and built workspace. It should fail usefully before first provisioning. |
-| One-time Jammy development provisioning | `./scripts/bootstrap_dev.sh --install --profile development` | On a supported Ubuntu 22.04 development host, installs the repository's ROS/development dependencies and prepares the workspace for mock and webcam-AprilTag work. It is not a routine per-session test. |
-| One-time Jetson provisioning | `./scripts/bootstrap_dev.sh --install --profile jetson` | On the manually verified arm64 Orin Nano / JetPack 6.2.2 / L4T 36.5 target, prepares the target ROS workspace dependencies. It does not flash or validate JetPack, ZED, cameras, robot hardware, or safety hardware. |
+| One-time Noble development provisioning | `./scripts/bootstrap_dev.sh --install --profile development` | On a supported Ubuntu 24.04 development host, installs the repository's ROS/development dependencies and prepares the workspace for mock and webcam-AprilTag work. It is not a routine per-session test. |
+| One-time Jetson provisioning | `./scripts/bootstrap_dev.sh --install --profile jetson` | On the verified arm64 Orin Nano / JetPack 7.2.1 / L4T 39.2.1 target, prepares the target ROS workspace dependencies. It does not flash or validate JetPack, ZED, cameras, robot hardware, or safety hardware. |
 | Per-terminal activation | `source scripts/activate.sh` | Sources the ROS and workspace overlays in the current shell without editing a persistent shell profile. |
-| Bootstrap contract | `scripts/test.sh` | Statically verifies the explicit installer interface, safe default, workspace validation, Humble/rosdep authority, ROS-source ordering, activation helper, and target-only omissions without changing a host. |
+| Bootstrap contract | `scripts/test.sh` | Statically verifies the explicit installer interface, safe default, workspace validation, Jazzy/rosdep authority, ROS-source ordering, activation helper, and target-only omissions without changing a host. |
 | Scaffold contract | `scripts/test.sh` | Package manifests and required Phase 0 files are present. |
 | ROS package build | `scripts/build.sh` | The empty package scaffold configures and builds. |
 | Style and hygiene | `scripts/lint.sh` | Pre-commit hooks and local syntax checks pass. |
 | Target container | `docker compose --env-file docker/versions.env -f docker/docker-compose.yml build` | Must be run natively on the arm64 Jetson. |
 | Xacro contract | `scripts/test.sh` | Expands the synthetic model when `xacro` is installed; checks the nonphysical profile and required frame names. |
-| Mock launch | `scripts/test.sh` in Humble CI/container | Starts `GenericSystem`, confirms an active `joint_state_broadcaster`, required TFs, single publishers, and no `map`/`odom`. |
+| Mock launch | `scripts/test.sh` in Jazzy CI/container | Starts `GenericSystem`, confirms an active `joint_state_broadcaster`, required TFs, single publishers, and no `map`/`odom`. Passed in the x86_64 generic container on 2026-10-13. |
 | Live TF authority | `scripts/check_tf_authority.py --runtime` | Checks a separately launched `lb_sim mock_robot.launch.py` graph without commanding hardware. |
 | Manual RViz smoke | `ros2 launch lb_sim mock_robot.launch.py use_rviz:=true` | Displays the synthetic four-wheel, scoop proxy, and sensor-mount TF tree; no motor hardware is needed. |
 | Phase 2 transport unit test | `scripts/test.sh` | Verifies disabled mock startup, explicit mock motion, zero stop, command timeout, communication loss, and real-skeleton rejection. |
 | Phase 2 static controller contract | `scripts/test.sh` | Verifies four wheel groups, synthetic-only geometry, stamped command configuration, limits, and disabled odometry TF. |
 | Phase 2 mock bench | `ros2 launch lb_launch bench_test.launch.py` | Starts headless, disabled mock hardware. It must not be used for physical propulsion. |
-| Phase 2 enabled mock exercise | `ros2 launch lb_launch bench_test.launch.py enable_motors:=true` | Enables in-memory mock output only; target Humble runtime test must verify wheel motion, wheel odometry, command timeout, and no `odom -> base_link` TF. |
+| Phase 2 enabled mock exercise | `ros2 launch lb_launch bench_test.launch.py enable_motors:=true` | Enables in-memory mock output only; target Jazzy runtime test must verify wheel motion, wheel odometry, command timeout, and no `odom -> base_link` TF. |
 | Phase 4.1 webcam contract | `scripts/test.sh` | Verifies source-scoped launch/configuration, 640 x 480 inherited calibration profile, V4L2 15 Hz preflight, `tag36h11` ID 0/0.250 m/hamming-0 baseline, unique webcam observation frame, and absence of a localizer/EKF/static camera TF. |
 | Phase 4.1 calibrated webcam bench | `ros2 launch lb_sensors webcam_apriltag.launch.py` | Runs fail-closed V4L2 rate preflight, `v4l2_camera -> image_proc -> apriltag_ros`, without a motor, localizer, or global TF path. Requires the webcam, calibrated 640 x 480 profile, and visible test tag. |
 | Phase 4.1 detection inspection | `ros2 topic echo /sensors/webcam/tag_detections --once` | Confirms the source-scoped detection's family, ID, hamming, decision margin, and camera header frame. It does not measure pose accuracy. |
 | Phase 4.1 observation-TF inspection | `ros2 run tf2_ros tf2_echo webcam_optical_frame webcam_observation_tag_0` | Confirms newly stamped dynamic camera-relative observations while the tag is visible; a cached transform after loss is stale and must not be interpreted as a base-relative or map-frame pose. |
 | Phase 4.1 rate/resource baseline | `ros2 topic hz /sensors/webcam/image_raw` and `/sensors/webcam/tag_detections` | Records actual host rates after V4L2 verifies the configured 15 Hz source rate; measure CPU/memory before making target performance claims. |
-| Phase 4.2 localizer core/contract tests | `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh` | Exercises synthetic tag-map parsing, explicit test-only opt-in, composition, quality/stale-TF contracts, covariance/fusion, duplicate-tag protection, jump gates, and the no-TF-broadcaster boundary. A synthetic node startup is also checked; it does not exercise a running camera/TF graph. |
+| Phase 4.2 localizer core/contract tests | `./scripts/test.sh` | Exercises synthetic tag-map parsing, explicit test-only opt-in, composition, quality/stale-TF contracts, covariance/fusion, duplicate-tag protection, jump gates, and the no-TF-broadcaster boundary. A synthetic node startup is also checked; it does not exercise a running camera/TF graph. |
 
 An x86/Jazzy result is a development-host result only. It cannot validate the
-Humble/JetPack/ZED runtime combination.
+Jetson/JetPack/ZED runtime combination.
+
+On 2026-10-13, the generic Ubuntu 24.04/Jazzy x86_64 container built all ten
+packages and passed 100 tests. A headless mock `bench_test.launch.py` run
+loaded `LunabotDriveHardware` and activated both the joint-state broadcaster
+and drive controller. It did not command motors or test arm64, JetPack, CUDA,
+the ZED SDK, or a connected ZED Mini.
 
 Bootstrap's `--install` path is intentionally tested only on an appropriate
-Jammy host or the verified Jetson target because it changes that device's
+Noble host or the verified Jetson target because it changes that device's
 package installation. The default `--check` path is the safe diagnostic to run
 elsewhere. Neither path starts a hardware launch, enables a motor, installs the
 ZED SDK or wrapper, edits a shell profile, or proves a camera feed; a
@@ -44,7 +50,7 @@ connected hardware and later bench preflights permit.
 The Phase 1 runtime launch test is enabled only when `xacro`, ros2_control, and
 its test dependencies are installed. Phase 2 always runs the ROS-independent
 transport unit and static controller/launch contracts. A host lacking the
-target Humble controller stack cannot claim plugin loading, controller,
+target Jazzy controller stack cannot claim plugin loading, controller,
 topic-remap, wheel-odometry, timeout, or TF runtime validation. Later phases
 will add unit tests for localization, terrain hazards, mission, safety, and
 protocol encoding; launch/integration tests for costmaps, Nav2, and safety
@@ -54,7 +60,7 @@ canonical specification.
 Phase 4.1 must preserve the camera calibration/detector YAML, device identity,
 V4L2 rate-preflight output, terminal output, observation-TF output, and a
 short rosbag or equivalent evidence for each meaningful bench run. A
-development-host pass is not a Humble/Jetson/Orin validation and does not
+development-host pass is not a Jetson/Orin validation and does not
 establish metric pose accuracy. Phase 4.2 adds offline tag-map/localizer,
 covariance/quality-gate, and multi-source collision contracts, but physical
 localization still needs measured camera-to-tag accuracy, a surveyed physical

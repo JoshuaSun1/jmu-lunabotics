@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WORKSPACE_ROOT="${LUNABOT_WORKSPACE_ROOT:-$(cd "${REPOSITORY_ROOT}/../.." && pwd)}"
-ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-humble}"
+ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-jazzy}"
 SKIP_BUILD="false"
 
 usage() {
@@ -13,7 +13,7 @@ usage() {
 Usage: scripts/test.sh [--skip-build]
 
 Runs a repository-scoped colcon build followed by colcon test. The runtime
-target is Humble; an explicit LUNABOT_ROS_DISTRO override is structural-only.
+target is Jazzy; an explicit LUNABOT_ROS_DISTRO override is structural-only.
 EOF
 }
 

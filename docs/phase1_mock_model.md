@@ -50,7 +50,9 @@ transforms and document the change before both URDF and driver frames exist.
 ## Mock control and interfaces
 
 `lb_sim/launch/mock_robot.launch.py` expands one Xacro description and passes
-the same result to `robot_state_publisher` and `controller_manager`.
+the result to `robot_state_publisher`, which publishes Jazzy's
+`robot_description` topic for `controller_manager`. The broadcaster spawner
+receives the controller YAML with `--param-file`.
 `controller_manager` loads upstream `mock_components/GenericSystem`; it is not
 a custom `lb_hardware` plugin. `joint_state_broadcaster` is the sole
 `/joint_states` publisher. The only live application-visible Phase 1 interfaces
@@ -73,7 +75,7 @@ inferred here.
 
 ## Running and verifying
 
-On a Humble development environment after building and sourcing the workspace:
+On a Jazzy development environment after building and sourcing the workspace:
 
 ```bash
 ros2 launch lb_sim mock_robot.launch.py use_rviz:=true
@@ -97,9 +99,8 @@ or safety behavior.
 
 The mock requires `xacro`, `robot_state_publisher`, `joint_state_publisher`
 (for standalone description viewing), `ros2_control`, `ros2_controllers`, and
-launch-testing packages. CI and the generic container declare the Humble
-packages. The available Jazzy host lacks the control/Xacro executables, so
-runtime launch validation remains a Humble CI/container or target task.
+launch-testing packages. The generic Jazzy x86_64 container passes the mock
+runtime launch test; arm64 target validation remains open.
 
 Remaining blockers include `GEOM-01`, `DRIVE-02`, `DRIVE-03`, `ZED-01`,
 `LIDAR-01`, `TAG-01`, `MISS-01`, and all safety configuration. Phase 2 will

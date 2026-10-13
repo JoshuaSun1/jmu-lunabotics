@@ -49,16 +49,20 @@ def test_mock_controller_uses_all_four_wheels_and_never_owns_odom_tf() -> None:
     for wheel_joint in WHEEL_JOINTS:
         assert wheel_joint in controllers
     assert "type: diff_drive_controller/DiffDriveController" in controllers
-    assert "wheels_per_side: 2" in controllers
+    assert "wheels_per_side:" not in controllers
     assert "wheel_radius: 0.12  # m, synthetic_mock_only" in controllers
     assert "wheel_separation: 0.68  # m, synthetic_mock_only" in controllers
     assert "enable_odom_tf: false" in controllers
     assert "open_loop: false" in controllers
     assert "position_feedback: true" in controllers
-    assert "use_stamped_vel: true" in controllers
+    assert "use_stamped_vel:" not in controllers
     assert "cmd_vel_timeout: 0.25" in controllers
-    assert "linear.x.has_jerk_limits: true" in controllers
-    assert "angular.z.has_jerk_limits: true" in controllers
+    assert "linear.x.max_deceleration: -0.50" in controllers
+    assert "angular.z.max_deceleration: -1.00" in controllers
+    assert ".has_velocity_limits:" not in controllers
+    assert ".has_acceleration_limits:" not in controllers
+    assert ".has_jerk_limits:" not in controllers
+    assert ".min_acceleration:" not in controllers
 
 
 def test_phase_two_launch_is_mock_first_and_fail_closed() -> None:
@@ -78,8 +82,18 @@ def test_phase_two_launch_is_mock_first_and_fail_closed() -> None:
     assert "transport_type = PythonExpression" in hardware_launch
     assert 'DeclareLaunchArgument("enable_motors", default_value="false")' in bench_launch
     assert 'DeclareLaunchArgument("use_mock_hardware", default_value="true")' in bench_launch
-    assert '"/drive_controller/cmd_vel", "/cmd_vel"' in hardware_launch
-    assert '"/drive_controller/odom", "/odom/wheel"' in hardware_launch
+    assert '"-r /drive_controller/cmd_vel:=/cmd_vel"' in hardware_launch
+    assert '"-r /drive_controller/odom:=/odom/wheel"' in hardware_launch
+    assert hardware_launch.count('"--controller-ros-args",') == 2
+    assert hardware_launch.count('"--param-file",') == 2
+    assert (
+        'parameters=[{"robot_description": robot_description, "use_sim_time": use_sim_time}]'
+        in hardware_launch
+    )
+    assert (
+        '{"robot_description": robot_description, "use_sim_time": use_sim_time},\n                    controllers_file'
+        not in hardware_launch
+    )
 
 
 def test_plugin_stops_and_disables_before_reporting_transport_errors() -> None:
@@ -93,3 +107,8 @@ def test_plugin_stops_and_disables_before_reporting_transport_errors() -> None:
     write_body = plugin.split("hardware_interface::return_type LunabotDriveHardware::write", 1)[1]
     assert "disable_and_stop();" in read_body
     assert "disable_and_stop();" in write_body
+    assert "set_state(interface_name(" in plugin
+    assert "get_command(interface_name(" in plugin
+    assert "set_command(interface_name(" in plugin
+    assert "export_state_interfaces()" not in plugin
+    assert "export_command_interfaces()" not in plugin

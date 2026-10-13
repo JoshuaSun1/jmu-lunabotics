@@ -42,14 +42,15 @@ explicit opt-in. See the [Phase 4.2 localizer note](docs/phase42_tag_localizer.m
 
 The intended robot runtime is:
 
-| Component | Proposed lock |
+| Component | Robot baseline |
 |---|---|
 | Compute | NVIDIA Jetson Orin Nano Developer Kit, 8 GB |
-| JetPack / L4T | 6.2.2 / 36.5.0 |
-| OS / ROS 2 | Ubuntu 22.04 / Humble |
-| ZED Mini software | ZED SDK 5.2.3; ZED ROS 2 Wrapper `v5.2.2` |
+| JetPack / L4T | 7.2.1 / 39.2.1 |
+| OS / ROS 2 | Ubuntu 24.04 / Jazzy |
+| CUDA | 13.2.2 (JetPack supplied) |
+| ZED Mini software | ZED SDK 5.5.0; ZED ROS 2 Wrapper `v5.5.0` |
 
-This is a proposed baseline, not proof of target validation. See
+The platform versions reflect the reported robot image; target software and camera behavior still need verification. See
 [`docker/versions.env`](docker/versions.env) and
 [the platform lock note](docs/resources/software_platform_lock.md).
 
@@ -67,19 +68,19 @@ This is a proposed baseline, not proof of target validation. See
 
 ## Development workflow
 
-The runtime lock requires ROS 2 Humble on Ubuntu 22.04 (Jammy). Bootstrap is
+The runtime lock requires ROS 2 Jazzy on Ubuntu 24.04 (Noble). Bootstrap is
 intended as a **one-time provisioning step on each supported device**, not a
 command to run for every development session.
 
-On a Jammy development host, provision the declared ROS and development
+On a Noble development host, provision the declared ROS and development
 dependencies from the repository root:
 
 ```bash
 ./scripts/bootstrap_dev.sh --install --profile development
 ```
 
-On the physical target, first manually install and verify the locked JetPack
-6.2.2 / L4T 36.5 image on the Jetson Orin Nano. Then provision the ROS
+On the physical target, first verify the reported JetPack
+7.2.1 / L4T 39.2.1 image on the Jetson Orin Nano. Then provision the ROS
 workspace with the Jetson profile:
 
 ```bash
@@ -106,14 +107,12 @@ shell-profile changes. Later code changes build into the enclosing
 See [bootstrap and activation](docs/bootstrap.md) for profiles, the expected
 one-time workflow, and the intentional boundaries.
 
-The current x86_64 Ubuntu 24.04/Jazzy workstation may run structural checks
-only by explicitly setting `LUNABOT_ROS_DISTRO=jazzy`; that does **not** validate
-the Jetson, L4T, CUDA, ZED SDK, or arm64 container runtime. Do not use the
-Humble provisioning profiles to treat this host as a target-equivalent robot
-environment.
+An x86_64 Ubuntu 24.04/Jazzy workstation can build and test the same ROS
+distribution as the robot. It does **not** validate the Jetson, L4T, CUDA,
+ZED SDK, or arm64 container runtime.
 
 ```bash
-LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh
+./scripts/test.sh
 ```
 
 For the non-actuating Phase 4.1 webcam bench, use a stable camera path rather
@@ -130,7 +129,7 @@ user-confirmed `tag36h11` ID 0 tag visible, inspect
 `webcam_optical_frame -> webcam_observation_tag_0` transform. This is a
 camera-relative observation only; do not use it as robot/global localization.
 
-On a Humble development environment with the Phase 1 dependencies installed,
+On a Jazzy development environment with the Phase 1 dependencies installed,
 inspect the mock TF tree in RViz without any motor hardware:
 
 ```bash

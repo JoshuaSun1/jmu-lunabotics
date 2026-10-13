@@ -41,7 +41,7 @@ move a physical robot.
 
 | Interface | Type | Publisher | Consumer | Boundary |
 |---|---|---|---|---|
-| `/cmd_vel` | `geometry_msgs/msg/TwistStamped` | Bench/manual test source; later command mux | `drive_controller` through declared launch remap | The controller accepts linear X in m/s and angular Z in rad/s. Humble remap validation is pending. |
+| `/cmd_vel` | `geometry_msgs/msg/TwistStamped` | Bench/manual test source; later command mux | `drive_controller` through declared launch remap | The controller accepts linear X in m/s and angular Z in rad/s. Jazzy remap validation is pending. |
 | `front_*` / `rear_*` wheel velocity interfaces | ros2_control internal interface, rad/s | `drive_controller` | `LunabotDriveHardware` | Four mock wheel-joint commands; not a public ROS topic or a claim about final motor-channel count. |
 | `/joint_states` | `sensor_msgs/msg/JointState` | `joint_state_broadcaster` | `robot_state_publisher` | Position in rad and velocity in rad/s from mock transport. |
 | `/odom/wheel` | `nav_msgs/msg/Odometry` | `drive_controller` through declared launch remap | Future local EKF | Mock feedback-derived odometry only; `enable_odom_tf: false` preserves Phase 3 TF ownership. |

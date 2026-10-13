@@ -611,3 +611,33 @@ or the later physical safety and drive integration work.
 **Git evidence:** `6eee304` (`feat: add one-time workspace bootstrap`) is the
 implementation commit; this append-only record is committed separately for
 traceability.
+
+## 2026-10-13 — JetPack 7.2.1 and Jazzy robot baseline
+
+**Purpose and decision:** The team reported that the Orin Nano robot runs
+JetPack 7.2.1 on Ubuntu 24.04 with CUDA 13 and ZED SDK 5.5. ADR 0002 selects
+ROS 2 Jazzy, L4T 39.2.1, CUDA 13.2.2, ZED SDK 5.5.0, and ZED wrapper
+`v5.5.0` as the repository software baseline. Exact installed CUDA and SDK
+patches still require confirmation on the robot.
+
+**Components and interfaces:** Updated bootstrap guards, ROS defaults,
+container and CI images, version contracts, and operating documentation.
+Migrated the custom hardware plugin to Jazzy's interface API and the mock
+controller profile to current `diff_drive_controller` parameters. The two
+mock launches now provide controller YAML to the spawners and publish the URDF
+on the `robot_description` topic. The drive spawner owns its topic remaps.
+No physical device path, motor enable, or ZED launch was added.
+
+**Verification:** An Ubuntu 24.04/Jazzy x86_64 Docker build completed all 10
+packages. `scripts/test.sh --skip-build` passed 100 tests with no failures or
+skips. A timed headless mock bench launch loaded `LunabotDriveHardware` and
+activated both controllers; the timeout stopped the otherwise continuous
+launch. Bootstrap's development install dry run selected Noble and Jazzy.
+Static contract tests and shell syntax checks passed. Pre-commit's non-Black
+hooks passed; Black checked each changed Python file individually because its
+multi-file invocation stalled in this sandbox.
+
+**Remaining work:** Capture versions and test ZED Mini RGB, depth, IMU,
+timing, TF ownership, and resource use on the JetPack 7.2.1 Orin Nano. Rebuild
+and test the workspace on arm64. Confirm physical calibration, sensor mounts,
+motor protocol, and safety behavior before any real robot use.

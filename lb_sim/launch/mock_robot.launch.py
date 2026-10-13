@@ -61,7 +61,7 @@ def generate_launch_description() -> LaunchDescription:
                 name="controller_manager",
                 output="screen",
                 parameters=[
-                    {"robot_description": robot_description, "use_sim_time": use_sim_time},
+                    {"use_sim_time": use_sim_time},
                     controllers_file,
                 ],
             ),
@@ -76,6 +76,8 @@ def generate_launch_description() -> LaunchDescription:
                     "/controller_manager",
                     "--controller-manager-timeout",
                     "20",
+                    "--param-file",
+                    controllers_file,
                 ],
             ),
             Node(

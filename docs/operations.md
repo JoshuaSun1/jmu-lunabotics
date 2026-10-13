@@ -4,7 +4,7 @@
 
 - **Development host:** may run static checks and mock/simulation work. It does
   not validate the Jetson runtime lock.
-- **Jetson bench:** requires the locked JetPack/L4T, Humble, ZED SDK, and
+- **Jetson bench:** requires the locked JetPack/L4T, Jazzy, ZED SDK, and
   wrapper versions to be verified on the physical target before sensor work.
 - **Competition:** headless runtime; motors disabled by default and RViz run
   offboard where possible.
@@ -13,11 +13,11 @@
 
 1. Review `docker/versions.env` and
    `docs/resources/software_platform_lock.md`. The robot runtime is Ubuntu
-   22.04 / ROS 2 Humble, not the development workstation's Jazzy override.
+   24.04 / ROS 2 Jazzy.
 2. Provision each supported device once from the repository root:
 
    ```bash
-   # Ubuntu 22.04 (Jammy) development host
+   # Ubuntu 24.04 (Noble) development host
    ./scripts/bootstrap_dev.sh --install --profile development
 
    # Only after the locked JetPack / L4T image is manually verified on Orin

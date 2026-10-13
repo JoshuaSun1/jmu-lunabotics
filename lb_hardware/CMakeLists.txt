@@ -44,7 +44,7 @@ if(hardware_interface_FOUND AND pluginlib_FOUND AND rclcpp_FOUND AND rclcpp_life
       $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
       $<INSTALL_INTERFACE:include>
   )
-  target_link_libraries(lb_hardware_plugin PRIVATE lb_drive_transport)
+  target_link_libraries(lb_hardware_plugin lb_drive_transport)
   ament_target_dependencies(
     lb_hardware_plugin
     hardware_interface

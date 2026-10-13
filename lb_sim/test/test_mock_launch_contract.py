@@ -26,3 +26,18 @@ def test_mock_launch_is_headless_and_uses_upstream_mock_hardware() -> None:
     assert 'package="rviz2"' in launch_file
     assert "joint_state_broadcaster/JointStateBroadcaster" in controllers
     assert "mock_components/GenericSystem" in model
+
+
+def test_jazzy_controller_receives_its_own_parameters() -> None:
+    """Jazzy spawners load controller parameters and RSP publishes the URDF topic."""
+    launch_file = (PACKAGE_ROOT / "launch" / "mock_robot.launch.py").read_text(encoding="utf-8")
+    assert '"--param-file",' in launch_file
+    assert "controllers_file," in launch_file
+    assert (
+        'parameters=[{"robot_description": robot_description, "use_sim_time": use_sim_time}]'
+        in launch_file
+    )
+    assert (
+        '{"robot_description": robot_description, "use_sim_time": use_sim_time},\n                    controllers_file'
+        not in launch_file
+    )
