@@ -33,6 +33,7 @@ def test_launch_uses_installed_defaults_and_has_no_localization_or_navigation():
     assert "'yaml_filename': str(map_yaml)" in source
     assert "'node_names': ['map_server']" in source
     assert "package='rviz2'" in source
+    assert "executable='arena_scene_markers.py'" in source
     assert 'controller_server' not in source
     assert 'planner_server' not in source
     assert 'robot_localization' not in source
@@ -47,3 +48,5 @@ def test_rviz_uses_map_frame_and_transient_local_map_qos():
     assert 'Value: /map' in rviz
     assert 'Durability Policy: Transient Local' in rviz
     assert 'Class: rviz_default_plugins/TopDownOrtho' in rviz
+    assert 'Value: /visualization/arena/markers' in rviz
+    assert 'Name: Guidebook Arena Scene (visual only)' in rviz

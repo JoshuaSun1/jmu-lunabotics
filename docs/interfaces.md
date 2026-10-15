@@ -103,7 +103,7 @@ camera, detector, hardware, map server, Nav2 component, or TF broadcaster.
 | `/visualization/replay/webcam_pose_raw` | `geometry_msgs/msg/PoseStamped` | `tag_replay_robot_pose` | Inspection/tools | Raw six-degree-of-freedom camera pose in `map`, derived from one tag and estimated geometry; it is not a filtered robot pose. |
 | `/visualization/replay/base_pose_planar` | `geometry_msgs/msg/PoseStamped` | `tag_replay_robot_pose` | Inspection/tools | Provisional `base_link` XY/yaw pose with `z=0`; no covariance, odometry propagation, or control use is permitted. |
 | `/visualization/replay/base_path_planar` | `nav_msgs/msg/Path` | `tag_replay_robot_pose` | RViz | Bounded current contiguous segment; clears on tag loss, reacquisition boundary, and backward `/clock` jump. |
-| `/visualization/replay/markers` | `visualization_msgs/msg/MarkerArray` | `tag_replay_robot_pose` | RViz | Assumed tag plane, raw camera RGB axes, and planar robot arrow. Dynamic markers expire and are deleted on tag loss. |
+| `/visualization/replay/markers` | `visualization_msgs/msg/MarkerArray` | `tag_replay_robot_pose` | RViz | Assumed tag plane, raw camera RGB axes, planar robot arrow, synthetic chassis/footprint, and provisional webcam/ZED bodies and view arrows. Dynamic markers expire and are deleted on tag loss. |
 | `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | `tag_replay_robot_pose` | Operator/logger | Reports `LOST`, `REACQUIRED`, and `CLOCK_RESET`, plus explicit estimated-geometry and no-odometry status. |
 
 No pose replay topic is an input to an EKF, Nav2, or a motor path. The node
@@ -119,6 +119,7 @@ profile uses expiring/deleted markers for the visible current pose.
 | `/map` | `nav_msgs/msg/OccupancyGrid` | `nav2_map_server/map_server` | RViz; future static costmap layer | Transient-local static arena grid with `header.frame_id=map`; the map origin is grid metadata, not a transform. |
 | `/map_server/load_map` | `nav2_msgs/srv/LoadMap` | `nav2_map_server/map_server` | Operator/future bringup | Standard Nav2 map replacement service; only explicitly supplied map YAML files are valid. |
 | `/map_server/*` lifecycle services | `lifecycle_msgs` services | `nav2_map_server/map_server` | Lifecycle manager/operator | Standard managed-node state and transition interfaces. |
+| `/visualization/arena/markers` | `visualization_msgs/msg/MarkerArray` | `arena_scene_markers` | RViz only | Transient-local, visualization-only arena outline, zone boundaries, berm target, and assumed tag poses. It is not occupancy/costmap data and publishes no column or TF. |
 
 `lifecycle_manager_map` manages only `map_server`. Neither node publishes
 `map -> odom`, `odom -> base_link`, a robot pose, a costmap, or a velocity.

@@ -57,11 +57,16 @@ def _launch_setup(context, *args, **kwargs):
     map_launch = (
         Path(get_package_share_directory('lb_navigation')) / 'launch' / 'map.launch.py'
     )
+    scene_launch = (
+        Path(get_package_share_directory('lb_navigation'))
+        / 'launch'
+        / 'arena_scene.launch.py'
+    )
     return [
         LogInfo(
             msg=(
                 'Development-only replay: robot pose expires on tag loss and uses '
-                'an estimated tag pose plus an estimated 0.40 m webcam extrinsic. '
+                'an estimated tag pose, camera mounts, and mock chassis geometry. '
                 'No odometry, EKF, navigation, or control is started.'
             )
         ),
@@ -72,8 +77,13 @@ def _launch_setup(context, *args, **kwargs):
                 'params_file': str(map_params),
                 'use_sim_time': 'true',
                 'use_rviz': 'false',
+                'use_arena_scene': 'false',
             }.items(),
             condition=IfCondition(LaunchConfiguration('use_map_server')),
+        ),
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(str(scene_launch)),
+            launch_arguments={'use_sim_time': 'true'}.items(),
         ),
         ExecuteProcess(cmd=command, output='screen'),
         Node(
@@ -106,6 +116,21 @@ def _launch_setup(context, *args, **kwargs):
                         _float_argument(context, 'camera_roll_rad'),
                         _float_argument(context, 'camera_pitch_rad'),
                         _float_argument(context, 'camera_yaw_rad'),
+                    ],
+                    'base_to_zed_position_m': [
+                        _float_argument(context, 'zed_x_m'),
+                        _float_argument(context, 'zed_y_m'),
+                        _float_argument(context, 'zed_z_m'),
+                    ],
+                    'base_to_zed_rpy_rad': [
+                        _float_argument(context, 'zed_roll_rad'),
+                        _float_argument(context, 'zed_pitch_rad'),
+                        _float_argument(context, 'zed_yaw_rad'),
+                    ],
+                    'chassis_dimensions_m': [
+                        _float_argument(context, 'chassis_length_m'),
+                        _float_argument(context, 'chassis_width_m'),
+                        _float_argument(context, 'chassis_height_m'),
                     ],
                     'stale_timeout_s': _float_argument(context, 'stale_timeout_s'),
                     'max_path_poses': int(
@@ -168,6 +193,15 @@ def generate_launch_description():
             DeclareLaunchArgument('camera_roll_rad', default_value=f'-{half_pi}'),
             DeclareLaunchArgument('camera_pitch_rad', default_value='0.0'),
             DeclareLaunchArgument('camera_yaw_rad', default_value=half_pi),
+            DeclareLaunchArgument('zed_x_m', default_value='0.0'),
+            DeclareLaunchArgument('zed_y_m', default_value='0.0'),
+            DeclareLaunchArgument('zed_z_m', default_value='0.40'),
+            DeclareLaunchArgument('zed_roll_rad', default_value=f'-{half_pi}'),
+            DeclareLaunchArgument('zed_pitch_rad', default_value='0.0'),
+            DeclareLaunchArgument('zed_yaw_rad', default_value=f'-{half_pi}'),
+            DeclareLaunchArgument('chassis_length_m', default_value='0.90'),
+            DeclareLaunchArgument('chassis_width_m', default_value='0.60'),
+            DeclareLaunchArgument('chassis_height_m', default_value='0.25'),
             DeclareLaunchArgument('stale_timeout_s', default_value='0.5'),
             DeclareLaunchArgument('max_path_poses', default_value='500'),
             OpaqueFunction(function=_launch_setup),

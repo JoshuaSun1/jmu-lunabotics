@@ -53,6 +53,12 @@ model, or C++ localizer configuration. Replace them after measuring the camera
 mount and surveying the tag center/orientation, and record uncertainty and
 method with the resulting calibration.
 
+For development visualization only, the ZED is also assumed at translation
+`[0.0, 0.0, 0.40]` m, colocated with the webcam, with forward optical RPY
+`[-pi/2, 0, -pi/2]` rad. Both camera positions and orientations are engineering
+assumptions pending physical installation and measurement; they must not be
+copied into production TF calibration without verification.
+
 ## Phase 4.2 future field-tag plan
 
 The user-selected field inventory is `tag36h11` IDs **1, 2, and 3**, each with

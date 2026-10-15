@@ -167,10 +167,44 @@ def planarized(transform: RigidTransform) -> RigidTransform:
     )
 
 
+def rectangle_corners(
+    transform: RigidTransform, length_m: float, width_m: float, z_m: float = 0.01
+) -> list[tuple[float, float, float]]:
+    """Return a closed rectangular outline transformed into its parent frame."""
+    if length_m <= 0.0 or width_m <= 0.0:
+        raise ValueError('rectangle dimensions must be positive')
+    half_length = 0.5 * length_m
+    half_width = 0.5 * width_m
+    local_corners = [
+        (half_length, half_width, z_m),
+        (half_length, -half_width, z_m),
+        (-half_length, -half_width, z_m),
+        (-half_length, half_width, z_m),
+        (half_length, half_width, z_m),
+    ]
+    return [
+        compose(
+            transform, RigidTransform(corner, (0.0, 0.0, 0.0, 1.0))
+        ).translation
+        for corner in local_corners
+    ]
+
+
 class TagReplayRobotPose(Node):
     """Compute non-production map poses from one recorded observation TF."""
 
-    _DYNAMIC_MARKER_IDS = (10, 11, 12, 20)
+    _DYNAMIC_MARKERS = (
+        ('raw_webcam_axes', 10),
+        ('raw_webcam_axes', 11),
+        ('raw_webcam_axes', 12),
+        ('planar_base_link_proxy', 20),
+        ('synthetic_robot_chassis', 30),
+        ('synthetic_robot_footprint', 31),
+        ('provisional_sensor_bodies', 40),
+        ('provisional_sensor_bodies', 41),
+        ('provisional_sensor_directions', 42),
+        ('provisional_sensor_directions', 43),
+    )
 
     def __init__(self) -> None:
         super().__init__('tag_replay_robot_pose')
@@ -185,6 +219,13 @@ class TagReplayRobotPose(Node):
         self.declare_parameter(
             'base_to_camera_rpy_rad', [-math.pi / 2.0, 0.0, math.pi / 2.0]
         )
+        self.declare_parameter('base_to_zed_position_m', [0.0, 0.0, 0.4])
+        self.declare_parameter(
+            'base_to_zed_rpy_rad', [-math.pi / 2.0, 0.0, -math.pi / 2.0]
+        )
+        self.declare_parameter('chassis_dimensions_m', [0.90, 0.60, 0.25])
+        self.declare_parameter('webcam_visual_dimensions_m', [0.06, 0.03, 0.03])
+        self.declare_parameter('zed_visual_dimensions_m', [0.08, 0.04, 0.03])
         self.declare_parameter(
             'raw_camera_pose_topic', '/visualization/replay/webcam_pose_raw'
         )
@@ -208,11 +249,25 @@ class TagReplayRobotPose(Node):
         tag_rpy = self._three_values('tag_rpy_rad')
         camera_position = self._three_values('base_to_camera_position_m')
         camera_rpy = self._three_values('base_to_camera_rpy_rad')
+        zed_position = self._three_values('base_to_zed_position_m')
+        zed_rpy = self._three_values('base_to_zed_rpy_rad')
+        self.chassis_dimensions = self._positive_three_values(
+            'chassis_dimensions_m'
+        )
+        self.webcam_visual_dimensions = self._positive_three_values(
+            'webcam_visual_dimensions_m'
+        )
+        self.zed_visual_dimensions = self._positive_three_values(
+            'zed_visual_dimensions_m'
+        )
         self.map_to_tag = RigidTransform(
             tag_position, quaternion_from_rpy(*tag_rpy)
         )
         self.base_to_camera = RigidTransform(
             camera_position, quaternion_from_rpy(*camera_rpy)
+        )
+        self.base_to_zed = RigidTransform(
+            zed_position, quaternion_from_rpy(*zed_rpy)
         )
 
         stale_timeout_s = float(self.get_parameter('stale_timeout_s').value)
@@ -248,14 +303,23 @@ class TagReplayRobotPose(Node):
         self.timer = self.create_timer(poll_period_s, self._update)
 
         self.get_logger().warning(
-            'Development assumptions active: tag pose and 0.40 m webcam '
-            'extrinsic are not surveyed; output is visualization-only.'
+            'Development assumptions active: tag pose, 0.40 m camera mounts, '
+            'and 0.90 x 0.60 x 0.25 m chassis are not surveyed; output is '
+            'visualization-only.'
         )
 
     def _three_values(self, parameter_name: str) -> tuple[float, float, float]:
         values = tuple(float(value) for value in self.get_parameter(parameter_name).value)
         if len(values) != 3 or not all(math.isfinite(value) for value in values):
             raise ValueError(f'{parameter_name} must contain three finite values')
+        return values
+
+    def _positive_three_values(
+        self, parameter_name: str
+    ) -> tuple[float, float, float]:
+        values = self._three_values(parameter_name)
+        if any(value <= 0.0 for value in values):
+            raise ValueError(f'{parameter_name} values must be positive')
         return values
 
     @staticmethod
@@ -297,25 +361,6 @@ class TagReplayRobotPose(Node):
         path.header.stamp = stamp
         path.poses = list(self.path_state.poses)
         self.path_publisher.publish(path)
-
-    def _tag_marker(self, stamp) -> Marker:
-        marker = Marker()
-        marker.header.frame_id = self.map_frame
-        marker.header.stamp = stamp
-        marker.ns = 'assumed_tag_1'
-        marker.id = 1
-        marker.type = Marker.CUBE
-        marker.action = Marker.ADD
-        marker.pose = self._pose_message(self.map_to_tag, stamp).pose
-        marker.scale.x = 0.30
-        marker.scale.y = 0.30
-        marker.scale.z = 0.01
-        marker.color.r = 1.0
-        marker.color.g = 0.65
-        marker.color.b = 0.0
-        marker.color.a = 0.75
-        marker.frame_locked = True
-        return marker
 
     def _axis_marker(
         self,
@@ -372,27 +417,157 @@ class TagReplayRobotPose(Node):
         marker.lifetime = self.marker_lifetime
         return marker
 
+    def _chassis_marker(self, transform: RigidTransform, stamp) -> Marker:
+        length_m, width_m, height_m = self.chassis_dimensions
+        chassis_transform = compose(
+            transform,
+            RigidTransform((0.0, 0.0, 0.5 * height_m), (0.0, 0.0, 0.0, 1.0)),
+        )
+        marker = Marker()
+        marker.header.frame_id = self.map_frame
+        marker.header.stamp = stamp
+        marker.ns = 'synthetic_robot_chassis'
+        marker.id = 30
+        marker.type = Marker.CUBE
+        marker.action = Marker.ADD
+        marker.pose = self._pose_message(chassis_transform, stamp).pose
+        marker.scale.x = length_m
+        marker.scale.y = width_m
+        marker.scale.z = height_m
+        marker.color.r = 0.20
+        marker.color.g = 0.35
+        marker.color.b = 0.55
+        marker.color.a = 0.55
+        marker.lifetime = self.marker_lifetime
+        return marker
+
+    def _footprint_marker(self, transform: RigidTransform, stamp) -> Marker:
+        length_m, width_m, _ = self.chassis_dimensions
+        marker = Marker()
+        marker.header.frame_id = self.map_frame
+        marker.header.stamp = stamp
+        marker.ns = 'synthetic_robot_footprint'
+        marker.id = 31
+        marker.type = Marker.LINE_STRIP
+        marker.action = Marker.ADD
+        marker.points = [
+            Point(x=x, y=y, z=z)
+            for x, y, z in rectangle_corners(transform, length_m, width_m)
+        ]
+        marker.scale.x = 0.035
+        marker.color.r = 1.0
+        marker.color.g = 0.85
+        marker.color.b = 0.10
+        marker.color.a = 1.0
+        marker.lifetime = self.marker_lifetime
+        return marker
+
+    def _sensor_body_marker(
+        self,
+        marker_id: int,
+        name: str,
+        map_to_sensor: RigidTransform,
+        dimensions: tuple[float, float, float],
+        color: tuple[float, float, float],
+        stamp,
+    ) -> Marker:
+        marker = Marker()
+        marker.header.frame_id = self.map_frame
+        marker.header.stamp = stamp
+        marker.ns = 'provisional_sensor_bodies'
+        marker.id = marker_id
+        marker.type = Marker.CUBE
+        marker.action = Marker.ADD
+        marker.pose = self._pose_message(map_to_sensor, stamp).pose
+        marker.scale.x, marker.scale.y, marker.scale.z = dimensions
+        marker.color.r, marker.color.g, marker.color.b = color
+        marker.color.a = 0.90
+        marker.text = name
+        marker.lifetime = self.marker_lifetime
+        return marker
+
+    def _sensor_direction_marker(
+        self,
+        marker_id: int,
+        map_to_sensor: RigidTransform,
+        color: tuple[float, float, float],
+        stamp,
+    ) -> Marker:
+        direction = rotate_vector(map_to_sensor.rotation, (0.0, 0.0, 1.0))
+        origin = map_to_sensor.translation
+        marker = Marker()
+        marker.header.frame_id = self.map_frame
+        marker.header.stamp = stamp
+        marker.ns = 'provisional_sensor_directions'
+        marker.id = marker_id
+        marker.type = Marker.ARROW
+        marker.action = Marker.ADD
+        marker.points = [
+            Point(x=origin[0], y=origin[1], z=origin[2]),
+            Point(
+                x=origin[0] + 0.30 * direction[0],
+                y=origin[1] + 0.30 * direction[1],
+                z=origin[2] + 0.30 * direction[2],
+            ),
+        ]
+        marker.scale.x = 0.025
+        marker.scale.y = 0.055
+        marker.scale.z = 0.075
+        marker.color.r, marker.color.g, marker.color.b = color
+        marker.color.a = 1.0
+        marker.lifetime = self.marker_lifetime
+        return marker
+
     def _publish_tracking_markers(
         self, map_to_camera: RigidTransform, map_to_base_planar: RigidTransform, stamp
     ) -> None:
+        map_to_webcam_proxy = compose(map_to_base_planar, self.base_to_camera)
+        map_to_zed_proxy = compose(map_to_base_planar, self.base_to_zed)
+        map_to_webcam_body = RigidTransform(
+            map_to_webcam_proxy.translation, map_to_base_planar.rotation
+        )
+        map_to_zed_body = RigidTransform(
+            map_to_zed_proxy.translation, map_to_base_planar.rotation
+        )
         markers = [
-            self._tag_marker(stamp),
             self._axis_marker(10, map_to_camera, (1.0, 0.0, 0.0), (1.0, 0.0, 0.0), stamp),
             self._axis_marker(11, map_to_camera, (0.0, 1.0, 0.0), (0.0, 1.0, 0.0), stamp),
             self._axis_marker(12, map_to_camera, (0.0, 0.0, 1.0), (0.0, 0.0, 1.0), stamp),
             self._base_marker(map_to_base_planar, stamp),
+            self._chassis_marker(map_to_base_planar, stamp),
+            self._footprint_marker(map_to_base_planar, stamp),
+            self._sensor_body_marker(
+                40,
+                'webcam_rear',
+                map_to_webcam_body,
+                self.webcam_visual_dimensions,
+                (0.95, 0.25, 0.75),
+                stamp,
+            ),
+            self._sensor_body_marker(
+                41,
+                'zed_forward',
+                map_to_zed_body,
+                self.zed_visual_dimensions,
+                (0.10, 0.90, 0.40),
+                stamp,
+            ),
+            self._sensor_direction_marker(
+                42, map_to_webcam_proxy, (0.95, 0.25, 0.75), stamp
+            ),
+            self._sensor_direction_marker(
+                43, map_to_zed_proxy, (0.10, 0.90, 0.40), stamp
+            ),
         ]
         self.marker_publisher.publish(MarkerArray(markers=markers))
 
     def _publish_lost_markers(self, stamp) -> None:
-        markers = [self._tag_marker(stamp)]
-        for marker_id in self._DYNAMIC_MARKER_IDS:
+        markers = []
+        for namespace, marker_id in self._DYNAMIC_MARKERS:
             marker = Marker()
             marker.header.frame_id = self.map_frame
             marker.header.stamp = stamp
-            marker.ns = (
-                'planar_base_link_proxy' if marker_id == 20 else 'raw_webcam_axes'
-            )
+            marker.ns = namespace
             marker.id = marker_id
             marker.action = Marker.DELETE
             markers.append(marker)

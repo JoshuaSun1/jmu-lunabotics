@@ -152,6 +152,15 @@ and the YAML image origin is `[-0.05, -0.05, 0.0]`. The center support column,
 keepouts, and surveyed arena verification remain TBD rather than being inferred
 from the guidebook illustration.
 
+`lb_navigation/scripts/arena_scene_markers.py` is a separate, durable RViz
+scene publisher. It renders the Guidebook Figure 9 nominal 6.88 m x 5.00 m
+outline, `x=2.50 m` excavation boundary, target berm, a dashed provisional
+starting zone, and configured surveyed-or-assumed AprilTags on
+`/visualization/arena/markers`. It intentionally renders no central column.
+The scene publishes no TF and is not an occupancy or costmap input. The 6.88 m
+visual outline and existing 6.85 m cell-aligned development raster retain an
+explicit 0.03 m mismatch until an arena survey selects the authoritative map.
+
 ## Development-only map-frame pose replay
 
 `lb_sim/launch/arena_pose_replay.launch.py` combines the static map, the
@@ -162,6 +171,14 @@ recorded `test1_AT1` observation stream, and a visualization-only pose adapter.
 six-degree-of-freedom map-frame camera pose. It then removes a provisional
 `base_link -> webcam_optical_frame` rigid transform and projects the result to
 an XY/yaw `base_link` proxy.
+
+The same `MarkerArray` now renders that proxy as a translucent synthetic
+0.90 m x 0.60 m x 0.25 m chassis, a rectangular chassis footprint, and two
+provisional camera bodies. Both cameras are colocated at `[0, 0, 0.40]` m:
+the webcam optical axis points toward robot `-X` and the ZED optical axis
+points toward robot `+X`. Distinct colors and view-direction arrows make the
+overlapping camera assumptions visible. These are development markers, not a
+URDF `RobotModel`, measured collision geometry, or a production footprint.
 
 This adapter deliberately does not broadcast TF or publish the canonical
 `/localization/apriltag_pose`. It cannot own `map -> odom` or

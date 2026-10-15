@@ -106,6 +106,28 @@ def test_default_rotations_match_rear_optical_and_detector_tag_axes():
         (1.0, 0.0, 0.0),
     )
 
+    zed_rotation = MODULE.quaternion_from_rpy(
+        -math.pi / 2.0, 0.0, -math.pi / 2.0
+    )
+    assert_vector_close(
+        MODULE.rotate_vector(zed_rotation, (0.0, 0.0, 1.0)),
+        (1.0, 0.0, 0.0),
+    )
+
+
+def test_rectangular_footprint_is_closed_and_tracks_planar_pose():
+    transform = MODULE.RigidTransform(
+        (2.0, 3.0, 0.0), MODULE.quaternion_from_rpy(0.0, 0.0, math.pi / 2.0)
+    )
+    corners = MODULE.rectangle_corners(transform, 0.90, 0.60)
+
+    assert len(corners) == 5
+    assert_vector_close(corners[0], (1.70, 3.45, 0.01))
+    assert_vector_close(corners[-1], corners[0])
+
+    with pytest.raises(ValueError):
+        MODULE.rectangle_corners(transform, 0.0, 0.60)
+
 
 def test_path_is_bounded_and_restarts_after_loss_or_clock_reset():
     state = MODULE.ReplayPoseState(max_poses=2)

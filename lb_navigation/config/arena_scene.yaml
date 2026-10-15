@@ -1,0 +1,25 @@
+arena_scene_markers:
+  ros__parameters:
+    map_frame: map
+    marker_topic: /visualization/arena/markers
+    republish_period_s: 1.0
+
+    # Guidebook Figure 9 nominal geometry. Physical survey remains required.
+    arena_length_m: 6.88
+    arena_width_m: 5.0
+    excavation_boundary_x_m: 2.5
+    berm_center_x_m: 5.38
+    berm_center_y_m: 0.9
+    berm_length_m: 2.2
+    berm_width_m: 0.9
+
+    # Only the 2.0 m X extent is labeled. Y depth is inferred from the figure.
+    starting_zone_length_m: 2.0
+    starting_zone_depth_m: 2.0
+
+    # Flattened arrays contain one size, XYZ triple, and RPY triple per tag ID.
+    # Tag 1 is a development replay assumption, not a surveyed field pose.
+    tag_ids: [1]
+    tag_sizes_m: [0.30]
+    tag_positions_m: [0.0, 1.0, 0.75]
+    tag_rpy_rad: [1.5707963267948966, 0.0, 1.5707963267948966]

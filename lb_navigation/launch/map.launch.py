@@ -29,6 +29,10 @@ def _launch_setup(context, *args, **kwargs):
     )
     use_sim_time = ParameterValue(LaunchConfiguration('use_sim_time'), value_type=bool)
     autostart = ParameterValue(LaunchConfiguration('autostart'), value_type=bool)
+    scene_params = _required_file(
+        LaunchConfiguration('scene_params_file').perform(context),
+        'scene_params_file',
+    )
 
     return [
         Node(
@@ -54,6 +58,14 @@ def _launch_setup(context, *args, **kwargs):
                     'node_names': ['map_server'],
                 },
             ],
+        ),
+        Node(
+            package='lb_navigation',
+            executable='arena_scene_markers.py',
+            name='arena_scene_markers',
+            output='screen',
+            parameters=[str(scene_params), {'use_sim_time': use_sim_time}],
+            condition=IfCondition(LaunchConfiguration('use_arena_scene')),
         ),
         Node(
             package='rviz2',
@@ -84,6 +96,11 @@ def generate_launch_description():
             ),
             DeclareLaunchArgument('use_sim_time', default_value='false'),
             DeclareLaunchArgument('autostart', default_value='true'),
+            DeclareLaunchArgument('use_arena_scene', default_value='true'),
+            DeclareLaunchArgument(
+                'scene_params_file',
+                default_value=str(package_share / 'config' / 'arena_scene.yaml'),
+            ),
             DeclareLaunchArgument('use_rviz', default_value='true'),
             OpaqueFunction(function=_launch_setup),
         ]

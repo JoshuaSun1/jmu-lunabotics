@@ -975,3 +975,145 @@ through tag loss.
 
 **Git evidence:** Uncommitted implementation based on `553ecb8` (`Phase 2
 complete`); record the resulting commit after review.
+
+## 2026-10-15 — Prompt 4 synthetic robot and camera visualization
+
+**Purpose and scope:** Extended the development-only arena replay so the
+provisional planar pose is visibly represented by a chassis, chassis-only
+footprint, rear webcam, and forward ZED instead of only an arrow. This supports
+RViz interpretation of `test1_AT1`; it is not a physical model, production
+localization, or Nav2 collision geometry.
+
+**Components and interfaces:** `lb_localization/scripts/tag_replay_robot_pose.py`
+now adds chassis, footprint, sensor-body, and view-direction namespaces to
+`/visualization/replay/markers` (`visualization_msgs/msg/MarkerArray`).
+`lb_sim/launch/arena_pose_replay.launch.py` exposes chassis and ZED assumptions,
+and `lb_navigation/rviz/arena_pose_replay.rviz` enables every namespace. Unit
+and launch-contract tests plus architecture, interface, calibration,
+operations, testing, traceability, and evidence records were updated. See
+[`docs/evidence/phase5_robot_marker_2026-10-15.md`](../docs/evidence/phase5_robot_marker_2026-10-15.md).
+
+**Parameters and provenance:** The `0.90 x 0.60 x 0.25 m` chassis is reused
+from the explicitly synthetic mock profile. The footprint is the chassis
+rectangle only and excludes the scoop. Webcam and ZED are both temporarily at
+`[0, 0, 0.40] m`; webcam optical RPY `[-pi/2, 0, +pi/2]` points toward robot
+`-X`, while ZED optical RPY `[-pi/2, 0, -pi/2]` points toward `+X`. Camera
+dimensions are synthetic display sizes. None are measured, manufacturer
+provided, or experimentally tuned.
+
+**TF ownership, safety, and failure behavior:** The display still publishes no
+TF and cannot usurp the future EKF-owned `map -> odom` or `odom -> base_link`
+transforms. It starts no planner, controller, motor, or hardware. Every dynamic
+robot and sensor marker retains the 0.5 s lifetime and explicit deletion on tag
+loss; the path remains segmented on loss and clock rewind. Using markers rather
+than `map -> base_link` or the current mock URDF preserves this boundary while
+the physical cart dimensions and sensor mounts remain unknown.
+
+**Verification and limitations:** Focused tests passed 8/8; Python lint and
+docstyle passed. Jazzy builds of `lb_localization`, `lb_navigation`, and
+`lb_sim` succeeded, and selected suites reported 120 tests, zero errors, zero
+failures, and one pre-existing skip. A live headless `test1_AT1` replay emitted
+all 11 expected map-frame markers: chassis scale `(0.9, 0.6, 0.25)`, closed
+five-point footprint, colocated sensor bodies at `z=0.4`, and opposed rear and
+forward view arrows. GUI inspection, resource measurements, target Humble
+validation, physical chassis/scoop measurements, camera-mount survey, and a
+production Nav2 footprint remain open.
+
+**Git evidence:** Uncommitted implementation based on `e91be59` (`Phase 3 of
+mapping process: localization from recorded apriltag bags`); record the
+resulting commit after review.
+
+## 2026-10-15 — Guidebook arena scene and assumptions register
+
+**Purpose and scope:** Added persistent RViz context for the arena outline,
+excavation boundary, target berm, provisional starting-zone boundary, and
+configured AprilTags. The column is intentionally omitted because the
+guidebook has no hard pose or dimensions. This is visualization only and does
+not modify occupancy, costmaps, localization, TF, or control.
+
+**Components and interfaces:** `lb_navigation/scripts/arena_scene_markers.py`
+publishes nine static markers as a reliable, transient-local
+`visualization_msgs/msg/MarkerArray` on `/visualization/arena/markers`, with a
+1 Hz republish heartbeat for late RViz discovery and replay clock resets.
+`config/arena_scene.yaml` owns geometry; `launch/arena_scene.launch.py` provides
+a standalone entry point. `map.launch.py` starts the scene by default, while
+`arena_pose_replay.launch.py` starts exactly one scene whether its optional map
+server is enabled or not. Both relevant RViz profiles enable all scene
+namespaces. The assumed Tag 1 marker moved from the expiring robot marker topic
+to this durable static topic; IDs 2 and 3 remain unrendered without poses.
+
+**Parameters and provenance:** Guidebook Section 11.2/Figure 9 provides the
+nominal `6.88 x 5.0 m` outline, `x=2.5 m` excavation boundary, and
+`2.2 x 0.9 m` target berm centered at `(5.38, 0.9) m`. Only the starting
+zone's 2.0 m X extent is labeled; its rendered 2.0 m Y depth is a diagram-based
+estimate and is dashed. The existing 6.85 m occupancy interior remains a
+cell-aligned development approximation, leaving an explicit 0.03 m discrepancy
+until survey. Tag 1 remains the replay-only `[0, 1, 0.75] m`, `0.300 m`, `+X`
+normal assumption.
+
+**Safety, ownership, and failure behavior:** The publisher emits no TF, map,
+costmap, pose, or command. It contains no column, boulders, or craters. Static
+markers persist independently of tag loss; moving robot markers still expire
+and are deleted. Arena markers are prohibited as Nav2 collision geometry.
+Invalid dimensions, out-of-bounds geometry, duplicate tag IDs, malformed tag
+arrays, and nonpositive sizes fail node construction.
+
+**Assumption governance:** Added `docs/assumptions_register.md` as the living
+record of temporary numeric values, provenance, consumers, prohibited uses,
+and required replacement evidence. Initial entries cover map dimensions and
+origin, zones/berm, omitted column, field/replay tags, webcam/ZED mounts,
+synthetic robot/drive geometry, and replay freshness. `docs/tbd_register.md`
+now links broad missing decisions to the numeric assumptions record.
+
+**Verification and limitations:** Focused unit/contract tests passed 16/16.
+Jazzy builds of `lb_localization`, `lb_navigation`, and `lb_sim` succeeded;
+selected suites reported 126 tests, zero errors, zero failures, and one
+pre-existing skip. Syntax, Python lint/docstyle, CMake/XML lint, and diff checks
+passed. An installed standalone runtime published all nine expected map-frame
+markers with the configured dimensions, bounds, tag pose, and no column.
+Graphical RViz confirmation, physical arena and starting-zone survey, tag
+survey, target Humble validation, and resource measurements remain open. See
+[`docs/evidence/phase5_arena_scene_2026-10-15.md`](../docs/evidence/phase5_arena_scene_2026-10-15.md).
+
+**Git evidence:** Uncommitted implementation based on `e91be59` (`Phase 3 of
+mapping process: localization from recorded apriltag bags`); record the
+resulting commit after review.
+
+## 2026-10-15 — Repository-wide assumptions and temporary-decision audit
+
+**Purpose and scope:** Expanded the living assumptions register from the recent
+arena/replay numerical values into a repository-wide audit. The bulleted record
+now captures every identified mock dimension, unverified physical input,
+proposed runtime default, incomplete integration choice, and development-only
+shortcut that could otherwise be mistaken for a permanent requirement.
+
+**Components and files:** Reworked
+[`docs/assumptions_register.md`](../docs/assumptions_register.md) into grouped
+bullets covering platform/power, robot geometry, drive/odometry, arena/map,
+sensors/tags, localization/replay, Nav2/perception, safety, mechanisms,
+mission, operations, and performance. Each entry states its status, current
+value or missing decision, restriction, and evidence needed for closure.
+[`docs/tbd_register.md`](../docs/tbd_register.md) now describes the broader
+scope and remains the dependency-oriented index.
+
+**Architecture and safety:** The audit makes no runtime, ROS-interface, topic,
+service, action, message, parameter, or TF-authority change. It explicitly
+separates confirmed decisions—four-wheel skid steering, REP-103 convention,
+sole EKF TF ownership, dynamic-obstacle costmap handling, and gated synthetic
+fixtures—from temporary physical values. Mock/replay geometry and controller
+limits remain prohibited for physical collision checking, control, or safety.
+
+**Verification and limitations:** The register was cross-checked against the
+canonical specification, TBD register, platform lock, hardware and safety
+documents, mock geometry/controllers, webcam detector/calibration, tag-map and
+localizer/EKF templates, arena map/scene, replay launch, and development log.
+It contains 59 unique active assumption IDs in bulleted form. Focused
+pre-commit checks for end-of-file, whitespace, merge markers, and private-key
+detection passed, and `git diff --check` reported no error. This is a
+documentation audit, not closure evidence: every active item remains open
+until its stated survey, measurement, target-runtime, experimental, or review
+criterion is recorded.
+
+**Git evidence:** Uncommitted documentation update based on `e91be59` (`Phase 3
+of mapping process: localization from recorded apriltag bags`); record the
+resulting commit after review.

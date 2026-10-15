@@ -175,6 +175,14 @@ publishes no TF or robot pose. Do not use RViz alignment alone as a physical
 arena survey, and do not add the center column until its pose and dimensions
 are measured.
 
+The map launch also starts the visualization-only arena scene by default. The
+light-yellow outline uses the Figure 9 nominal `6.88 x 5.0 m` dimensions; a
+blue line marks `x=2.5 m`, a red rectangle marks the target berm, and a dashed
+green rectangle marks the provisional starting zone. Orange AprilTag markers
+show configured assumed/surveyed tag planes and face normals. The central
+column, rocks, and craters are omitted. Disable this display publisher with
+`use_arena_scene:=false`; doing so does not change `/map`.
+
 ## Provisional robot-pose replay in the arena
 
 This profile is a non-actuating development aid for `bags/test1_AT1`. It treats
@@ -191,14 +199,23 @@ ros2 launch lb_sim arena_pose_replay.launch.py \
   playback_rate:=0.25
 ```
 
-The default RViz profile shows the arena map, recorded image, orange assumed
-tag plane, raw camera RGB axes, cyan planar `base_link` arrow, and current
-contiguous planar path. The camera is provisionally colocated in X/Y with
-`base_link`, 0.40 m above it, and rear-facing. Tag 1 is provisionally centered
+The default RViz profile shows the arena map, durable arena scene and assumed
+tag plane, recorded image, raw camera RGB axes, cyan planar `base_link` arrow,
+and current
+contiguous planar path. It also shows a translucent blue 0.90 m x 0.60 m x
+0.25 m synthetic chassis, yellow chassis-only footprint, pink rear webcam,
+and green forward ZED. The two cameras are provisionally colocated in X/Y with
+`base_link`, 0.40 m above it; the webcam points toward robot `-X` and the ZED
+points toward robot `+X`. Their colored arrows show those view directions.
+Because the bodies overlap, use the arrows and colors to distinguish them.
+Tag 1 is provisionally centered
 at `(0.0, 1.0, 0.75)` m and faces arena `+X`. Both transforms are estimates.
 
-When the tag leaves view for more than 0.5 s, the camera axes and robot arrow
-are deleted, the path is cleared, and no dead reckoning occurs. Reacquisition
+The chassis dimensions are reused from the synthetic mock profile and are not
+cart measurements. The footprint excludes the scoop and is not approved as a
+Nav2 collision footprint. When the tag leaves view for more than 0.5 s, all
+dynamic robot/camera markers are deleted, the path is cleared, and no dead
+reckoning occurs. Reacquisition
 starts a new path segment. The bag's `--loop` clock rewind also clears state.
 Inspect interfaces in another sourced terminal if needed:
 

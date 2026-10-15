@@ -4,6 +4,11 @@ This register prevents assumptions from becoming accidental implementation
 decisions. A value may be closed only with evidence, units where applicable,
 and a recorded validation method.
 
+Temporary values, proposed defaults, development-only shortcuts, and unresolved
+implementation decisions are tracked in
+[`assumptions_register.md`](assumptions_register.md), including their current
+use, prohibited uses, and replacement criteria.
+
 | ID | Area | Required decision/value | Needed by | Closure criterion |
 |---|---|---|---|---|
 | PLAT-01 | Runtime | Physical Orin revision, firmware, installed packages, image digest | Phase 1 | Target boot and version capture |
