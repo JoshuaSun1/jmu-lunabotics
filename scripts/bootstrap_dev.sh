@@ -463,7 +463,6 @@ install_repository_environment() {
     build-essential
     cmake
     python3-colcon-common-extensions
-    python3-pre-commit
     python3-rosdep
     python3-vcstool
     v4l-utils
@@ -474,6 +473,7 @@ install_repository_environment() {
   )
 
   if [[ "${PROFILE}" == "development" ]]; then
+    host_packages+=(python3-pre-commit)
     ros_tool_packages+=("ros-${TARGET_ROS_DISTRO}-rviz2")
   fi
 

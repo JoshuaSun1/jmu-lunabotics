@@ -12,6 +12,7 @@ topic leakage into the system design:
 | `/sensors/<camera>/tag_detections` | Camera-specific AprilTag detector | Source-scoped `tag_localizer` subscription |
 | `/tag_detections` | Future normalized/aggregated AprilTag interface | Tag localizer |
 | `/localization/apriltag_pose` | Tag localizer | Global EKF |
+| `/perception/depth_obstacles` | Terrain node | Future Nav2 costmap |
 | `/perception/terrain_hazards` | Terrain node | Nav2 costmap |
 | `/cmd_vel_nav`, `/cmd_vel_teleop`, `/cmd_vel` | Nav2/teleop/mux | Drive controller |
 | `/diagnostics` | Major subsystems | Operator/logger |
@@ -73,7 +74,7 @@ source-scoped names and a unique child frame (for example,
 | Interface | Type | Publisher | Consumer | Boundary |
 |---|---|---|---|---|
 | `/sensors/webcam/tag_detections` | `apriltag_msgs/msg/AprilTagDetectionArray` | Webcam detector | `tag_localizer` | The configured source header must equal `webcam_optical_frame`; actual production use waits for a surveyed webcam extrinsic. |
-| `/sensors/zed/tag_detections` | `apriltag_msgs/msg/AprilTagDetectionArray` | Future ZED detector | `tag_localizer` | Reserved source contract; no ZED pipeline exists yet. Its observation children must use `zed_observation_tag_<id>`. |
+| `/sensors/zed/tag_detections` | `apriltag_msgs/msg/AprilTagDetectionArray` | Future ZED detector | `tag_localizer` | Reserved source contract; no ZED AprilTag pipeline exists yet. Its observation children must use `zed_observation_tag_<id>`. |
 | `/tf` camera observation | `tf2_msgs/msg/TFMessage` | Camera-specific AprilTag detector | `tag_localizer` | Exact-stamp dynamic `<camera>_optical_frame -> <source>_observation_tag_<id>` transform supplies metric camera-to-tag geometry. Timestamp/frame checks reject zero, stale, and mismatched samples; target-runtime cached-TF behavior remains to be validated. |
 | `/tf` camera extrinsic | `tf2_msgs/msg/TFMessage` | Future measured rigid-frame authority | `tag_localizer` | `base_link -> <camera>_optical_frame`; a static sample is accepted only after its source configuration is marked surveyed. No mock URDF extrinsic is valid. |
 | `/localization/apriltag_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | `tag_localizer` | Future global EKF | Fresh fused absolute pose in `map`, using covariance; it is planar yaw with explicitly large unobserved roll/pitch covariance, and the localizer publishes no TF. |
@@ -83,3 +84,18 @@ source-scoped names and a unique child frame (for example,
 fusion. Two cameras seeing tag 1 therefore do not falsely satisfy a
 multi-tag requirement. It never publishes `/tag_detections`, `/odometry/global`,
 `map -> odom`, or `odom -> base_link`.
+
+## ZED Mini terrain hazard interfaces
+
+| Interface | Type | Publisher | Consumer | Boundary |
+|---|---|---|---|---|
+| `/zed/zed_node/depth/depth_registered` | `sensor_msgs/msg/Image` | Stereolabs wrapper | `terrain_hazard_node` | Registered depth in meters by default, with image timestamp and optical frame. |
+| `/zed/zed_node/depth/camera_info` | `sensor_msgs/msg/CameraInfo` | Stereolabs wrapper | `terrain_hazard_node` | Must match image dimensions, timestamp, and optical frame. |
+| `/perception/depth_obstacles` | `sensor_msgs/msg/PointCloud2` | `terrain_hazard_node` | Future local costmap | Measured raised obstacle cells, stamped in `base_link`. |
+| `/perception/terrain_hazards` | `sensor_msgs/msg/PointCloud2` | `terrain_hazard_node` | Future local costmap | Synthetic points near measured unsafe terrain/rims, stamped in `base_link`. |
+| `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | `terrain_hazard_node` | Operator/logger | Depth coverage, unobserved ground cells, hazard counts, latency, and stale/TF/calibration failures. |
+
+The detector is opt-in and requires measured mount and robot clearance settings.
+It does not publish a map, change Nav2, command a stop, or treat an invalid
+depth frame as clear terrain. The future costmap consumer must implement
+clearing and expiry of dynamic observations.

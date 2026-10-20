@@ -1,6 +1,6 @@
 # Testing
 
-## Phase 0 through Phase 4.2 checks
+## Package and target checks
 
 | Check | Command | What it establishes |
 |---|---|---|
@@ -27,6 +27,8 @@
 | Phase 4.1 observation-TF inspection | `ros2 run tf2_ros tf2_echo webcam_optical_frame webcam_observation_tag_0` | Confirms newly stamped dynamic camera-relative observations while the tag is visible; a cached transform after loss is stale and must not be interpreted as a base-relative or map-frame pose. |
 | Phase 4.1 rate/resource baseline | `ros2 topic hz /sensors/webcam/image_raw` and `/sensors/webcam/tag_detections` | Records actual host rates after V4L2 verifies the configured 15 Hz source rate; measure CPU/memory before making target performance claims. |
 | Phase 4.2 localizer core/contract tests | `./scripts/test.sh` | Exercises synthetic tag-map parsing, explicit test-only opt-in, composition, quality/stale-TF contracts, covariance/fusion, duplicate-tag protection, jump gates, and the no-TF-broadcaster boundary. A synthetic node startup is also checked; it does not exercise a running camera/TF graph. |
+| ZED terrain geometry tests | `colcon test --packages-select lb_sensors` | Synthetic flat ground, raised rock, measured crater, unsafe slope, isolated missing depth, invalid calibration, insufficient ground, and stale-frame rejection. |
+| ZED terrain target replay | `ros2 bag play <recorded-zed-bag>` with the measured camera TF and detector enabled | On the Jetson, verify both hazard topics, diagnostic failures for withheld TF/stale images, 150 ms provisional latency, and real rock/drop-off behavior before any costmap use. |
 
 An x86/Jazzy result is a development-host result only. It cannot validate the
 Jetson/JetPack/ZED runtime combination.

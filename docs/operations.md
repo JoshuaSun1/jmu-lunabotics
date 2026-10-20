@@ -61,6 +61,15 @@ physical-robot or ZED readiness. RViz remains opt-in and should run offboard
 rather than on the competition Jetson. See [bootstrap and activation](bootstrap.md)
 for the full boundary.
 
+## ZED Mini robot startup and remote view
+
+Use `ros2 launch lb_launch bringup.launch.py enable_zed:=true` for a manual
+sensor-only robot start, or install the Jetson boot service after the camera
+and wrapper pass a manual run. The ZED SDK runs on the Jetson and RViz 2 on the
+mission control laptop subscribes to the compressed ROS image stream. Setup,
+topic names, depth hazard calibration/activation, network checks, and boot instructions are in
+[the ZED Mini guide](zed_mini.md).
+
 ## Phase 4.1 webcam AprilTag bench
 
 This camera bench is non-actuating. It requires a connected webcam, the

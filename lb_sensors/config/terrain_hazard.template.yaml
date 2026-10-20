@@ -1,0 +1,20 @@
+# Copy to a measured robot configuration before enabling depth perception.
+# These required values intentionally fail validation until measured. Keep
+# measured floating-point entries in decimal form (for example, 20.0 degrees).
+terrain_hazard_node:
+  ros__parameters:
+    mount_calibration_id: ''
+    rock_height_m: -1.0
+    drop_depth_m: -1.0
+    max_slope_deg: -1.0
+    min_forward_m: 0.3
+    max_forward_m: 4.0
+    lateral_limit_m: 1.5
+    cell_size_m: 0.05
+    ground_inlier_tolerance_m: 0.04
+    min_cluster_cells: 3
+    min_ground_cells: 30
+    pixel_stride: 4
+    max_rate_hz: 10.0
+    max_image_age_s: 0.3
+    min_valid_depth_fraction: 0.15

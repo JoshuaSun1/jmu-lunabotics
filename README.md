@@ -2,11 +2,14 @@
 
 ROS 2 software for the JMU NASA Lunabotics robot. This repository is being
 rebuilt around `docs/lunabotics_autonomy_software_spec.md`. Phase 2 provides a
-headless, mock-first description/drive stack; it contains no real motor,
-sensor, localization, Nav2, mission, or physical safety implementation. Phase
-4.1 adds a non-actuating webcam AprilTag-observation bench pipeline, and Phase
-4.2 adds a fail-closed, synthetic-test-covered known-tag localizer. Neither
-establishes a physical robot or global pose.
+headless, mock-first description/drive stack; it contains no real motor, Nav2,
+mission, or physical safety implementation. Phase 4.1 adds a non-actuating
+webcam AprilTag-observation bench pipeline, and Phase 4.2 adds a fail-closed,
+synthetic-test-covered known-tag localizer. A ZED Mini launch profile provides
+Jetson camera/depth topics and optional boot startup. An opt-in terrain hazard
+node detects raised and negative obstacles from depth when measured mount and
+clearance settings are supplied. Neither camera profile establishes a physical
+robot/global pose. See [the ZED Mini guide](docs/zed_mini.md).
 
 ## Current status
 

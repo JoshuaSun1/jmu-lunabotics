@@ -1,7 +1,13 @@
-"""Safe public entry point for the Phase 2 mock bench or Phase 4.1 sensor bench."""
+"""Safe public entry point for the mock bench and isolated camera profiles."""
 
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
+from launch.actions import (
+    DeclareLaunchArgument,
+    GroupAction,
+    IncludeLaunchDescription,
+    LogInfo,
+    OpaqueFunction,
+)
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
@@ -9,7 +15,7 @@ from launch_ros.substitutions import FindPackageShare
 
 
 def generate_launch_description() -> LaunchDescription:
-    """Select mutually exclusive mock-drive and camera-observation bench profiles."""
+    """Keep real sensor launches separate from the synthetic robot model."""
     use_mock_hardware = LaunchConfiguration("use_mock_hardware")
     enable_motors = LaunchConfiguration("enable_motors")
     enable_apriltags = LaunchConfiguration("enable_apriltags")
@@ -19,6 +25,16 @@ def generate_launch_description() -> LaunchDescription:
     webcam_apriltag_launch = PathJoinSubstitution(
         [FindPackageShare("lb_sensors"), "launch", "webcam_apriltag.launch.py"]
     )
+    zed_mini_launch = PathJoinSubstitution(
+        [FindPackageShare("lb_sensors"), "launch", "zed_mini.launch.py"]
+    )
+
+    def validate_depth_profile(context, *args, **kwargs):
+        depth_enabled = LaunchConfiguration("enable_depth_perception").perform(context)
+        zed_enabled = LaunchConfiguration("enable_zed").perform(context)
+        if depth_enabled.lower() == "true" and zed_enabled.lower() != "true":
+            raise RuntimeError("enable_depth_perception requires enable_zed:=true")
+        return []
 
     return LaunchDescription(
         [
@@ -26,9 +42,23 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("use_mock_hardware", default_value="true"),
             DeclareLaunchArgument("enable_motors", default_value="false"),
             DeclareLaunchArgument("enable_zed", default_value="false"),
+            DeclareLaunchArgument("zed_camera_name", default_value="zed"),
+            DeclareLaunchArgument("zed_serial_number", default_value="0"),
+            DeclareLaunchArgument(
+                "zed_params_file",
+                default_value=PathJoinSubstitution(
+                    [FindPackageShare("lb_sensors"), "config", "zed_mini.yaml"]
+                ),
+            ),
             DeclareLaunchArgument("enable_lidar", default_value="false"),
             DeclareLaunchArgument("enable_apriltags", default_value="false"),
             DeclareLaunchArgument("enable_depth_perception", default_value="false"),
+            DeclareLaunchArgument(
+                "terrain_params_file",
+                default_value=PathJoinSubstitution(
+                    [FindPackageShare("lb_sensors"), "config", "terrain_hazard.template.yaml"]
+                ),
+            ),
             DeclareLaunchArgument("enable_nav2", default_value="false"),
             DeclareLaunchArgument("enable_mission", default_value="false"),
             DeclareLaunchArgument("map", default_value=""),
@@ -61,21 +91,37 @@ def generate_launch_description() -> LaunchDescription:
             ),
             DeclareLaunchArgument("mock_communication_loss_after_reads", default_value="-1"),
             DeclareLaunchArgument("mock_command_timeout_s", default_value="0.25"),
-            IncludeLaunchDescription(
-                PythonLaunchDescriptionSource(bench_launch),
-                # The Phase 1/2 bench includes an explicitly synthetic webcam
-                # mount in robot_state_publisher.  Do not join a real camera
-                # observation to that mock base frame.
-                condition=UnlessCondition(enable_apriltags),
-                launch_arguments={
-                    "use_sim_time": LaunchConfiguration("use_sim_time"),
-                    "use_mock_hardware": use_mock_hardware,
-                    "enable_motors": enable_motors,
-                    "geometry_file": LaunchConfiguration("geometry_file"),
-                    "mock_communication_loss_after_reads": LaunchConfiguration(
-                        "mock_communication_loss_after_reads"
+            OpaqueFunction(function=validate_depth_profile),
+            GroupAction(
+                condition=UnlessCondition(LaunchConfiguration("enable_zed")),
+                actions=[
+                    IncludeLaunchDescription(
+                        PythonLaunchDescriptionSource(bench_launch),
+                        # The mock robot includes synthetic sensor mounts. Do not
+                        # attach real camera data to that model.
+                        condition=UnlessCondition(enable_apriltags),
+                        launch_arguments={
+                            "use_sim_time": LaunchConfiguration("use_sim_time"),
+                            "use_mock_hardware": use_mock_hardware,
+                            "enable_motors": enable_motors,
+                            "geometry_file": LaunchConfiguration("geometry_file"),
+                            "mock_communication_loss_after_reads": LaunchConfiguration(
+                                "mock_communication_loss_after_reads"
+                            ),
+                            "mock_command_timeout_s": LaunchConfiguration("mock_command_timeout_s"),
+                        }.items(),
                     ),
-                    "mock_command_timeout_s": LaunchConfiguration("mock_command_timeout_s"),
+                ],
+            ),
+            IncludeLaunchDescription(
+                PythonLaunchDescriptionSource(zed_mini_launch),
+                condition=IfCondition(LaunchConfiguration("enable_zed")),
+                launch_arguments={
+                    "camera_name": LaunchConfiguration("zed_camera_name"),
+                    "serial_number": LaunchConfiguration("zed_serial_number"),
+                    "zed_params_file": LaunchConfiguration("zed_params_file"),
+                    "enable_depth_perception": LaunchConfiguration("enable_depth_perception"),
+                    "terrain_params_file": LaunchConfiguration("terrain_params_file"),
                 }.items(),
             ),
             IncludeLaunchDescription(

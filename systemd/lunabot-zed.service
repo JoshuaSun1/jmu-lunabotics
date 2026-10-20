@@ -1,0 +1,13 @@
+[Unit]
+Description=JMU Lunabot ZED Mini ROS 2 camera
+
+[Service]
+Type=simple
+Environment=ROS_DOMAIN_ID=0
+Environment=ROS_LOCALHOST_ONLY=0
+ExecStart=%h/dev_ws/src/jmu-lunabotics/scripts/start_zed_mini.sh
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=default.target
