@@ -12,6 +12,8 @@ topic leakage into the system design:
 | `/sensors/<camera>/tag_detections` | Camera-specific AprilTag detector | Source-scoped `tag_localizer` subscription |
 | `/tag_detections` | Future normalized/aggregated AprilTag interface | Tag localizer |
 | `/localization/apriltag_pose` | Tag localizer | Global EKF |
+| `/localization/fused_pose` | Initial AprilTag pass-through; future global-fusion adapter | Localization monitor, mission/UI, RViz |
+| `/odometry/global` | Future global EKF | Fused-pose adapter, monitoring |
 | `/perception/terrain_hazards` | Terrain node | Nav2 costmap |
 | `/cmd_vel_nav`, `/cmd_vel_teleop`, `/cmd_vel` | Nav2/teleop/mux | Drive controller |
 | `/diagnostics` | Major subsystems | Operator/logger |
@@ -84,6 +86,24 @@ source-scoped names and a unique child frame (for example,
 fusion. Two cameras seeing tag 1 therefore do not falsely satisfy a
 multi-tag requirement. It never publishes `/tag_detections`, `/odometry/global`,
 `map -> odom`, or `odom -> base_link`.
+
+## Planned fused-pose and Nav2 localization boundary
+
+| Interface | Type | Planned publisher | Consumer | Boundary |
+|---|---|---|---|---|
+| `/localization/apriltag_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | `tag_localizer` | Initial fused-pose pass-through; future global EKF | Absolute `map`-frame measurement and covariance; no TF ownership. |
+| `/localization/fused_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Initial freshness-gated pass-through; future global-fusion adapter | Localization monitor, mission/UI, RViz, tests | Stable application-facing pose. Initially exactly preserves each accepted AprilTag pose/timestamp/covariance and emits nothing between detections; it is not yet true fusion. |
+| `/localization/status` | `diagnostic_msgs/msg/DiagnosticArray` initially | Localization monitor/pass-through | Safety/operator/tests | Reports pose source, accepted/rejected/stale state, freshness, and navigation-inhibit reason. |
+| `/odometry/global` | `nav_msgs/msg/Odometry` | Future global EKF | Fused-pose adapter, monitoring | Full filtered global state after continuous localization exists; it is not fabricated by the AprilTag-only pass-through. |
+| `/navigate_to_pose` | `nav2_msgs/action/NavigateToPose` | `bt_navigator` | Operator/RViz/future mission manager | Planned action; goals and active motion require valid localization and current TF. |
+| `/cmd_vel_nav` | Nav2-compatible stamped twist | Nav2 controller chain | Future command mux/localization gate | Every nonzero command is inhibited when AprilTag localization is absent or invalid until continuous localization exists. |
+
+No publisher or command gate in this section is implemented merely by this
+documentation change. The planned pass-through publishes no TF. Nav2 motion
+also requires a current, sole-owned `map -> odom -> base_link` chain; a fused
+pose topic alone is insufficient. The full contract and staged implementation
+are in
+[`nav2_specification_and_implementation.md`](nav2_specification_and_implementation.md).
 
 ## Development bag-replay visualization interfaces
 

@@ -136,6 +136,28 @@ test-only opt-in and are never included from system bringup. See
 [`phase42_tag_localizer.md`](phase42_tag_localizer.md) for the full TF,
 fusion, failure, and remaining-hardware contract.
 
+## Planned fused-pose and Nav2 boundary
+
+`/localization/fused_pose` is the stable application-facing global robot pose
+and uses `geometry_msgs/msg/PoseWithCovarianceStamped` in `map`. The initial
+development implementation will pass through each accepted
+`/localization/apriltag_pose` sample without changing its timestamp, pose, or
+covariance. It will not interpolate, dead-reckon, refresh stale data, or publish
+TF, and diagnostics will identify the AprilTag-only source.
+
+The future local/global EKF architecture remains authoritative. The local EKF
+owns `odom -> base_link`; the global EKF owns `map -> odom` and publishes the
+full `/odometry/global` state. A future adapter derives
+`/localization/fused_pose` from that filtered state, preserving the
+application-facing topic while the producer changes.
+
+Until continuous localization is validated, loss, rejection, invalidity, or
+staleness of the AprilTag pose locks the Nav2 command path and prevents every
+nonzero `/cmd_vel_nav` from reaching `/cmd_vel`. The fused-pose topic does not
+itself satisfy Nav2's TF requirement: navigation also requires a current,
+sole-owned `map -> odom -> base_link` chain. See
+[`nav2_specification_and_implementation.md`](nav2_specification_and_implementation.md).
+
 ## Static arena map boundary
 
 `lb_navigation` owns the initial static arena image, metadata, map-server

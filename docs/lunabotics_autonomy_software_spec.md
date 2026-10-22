@@ -317,6 +317,27 @@ Recommended output:
 - `/localization/status` using a custom message or `diagnostic_msgs/msg/DiagnosticArray`.
 - `localization_valid` Boolean exposed to the mission manager and safety supervisor.
 
+### 6.6 Stable fused-pose interface
+
+The application-facing global pose shall be published on
+`/localization/fused_pose` as
+`geometry_msgs/msg/PoseWithCovarianceStamped` in `map`. This interface is
+separate from the global EKF's full-state `/odometry/global` output so mission,
+monitoring, RViz, and test consumers do not depend on a particular fusion
+implementation.
+
+Before continuous wheel/IMU localization exists, a development-only adapter may
+publish `/localization/fused_pose` directly from each accepted
+`/localization/apriltag_pose` sample. It shall preserve the input timestamp,
+pose, and covariance; publish no interpolated or refreshed samples between
+detections; publish no TF; and report its AprilTag-only source in diagnostics.
+Until continuous localization is validated, absent, invalid, rejected, or stale
+AprilTag input shall inhibit every nonzero Nav2 command. The exact freshness
+threshold remains a required, validated parameter rather than a hidden default.
+
+The detailed Nav2 boundary and staged implementation are defined in
+[`nav2_specification_and_implementation.md`](nav2_specification_and_implementation.md).
+
 ## 7. Static arena map
 
 ### 7.1 Map artifacts
@@ -693,7 +714,8 @@ The following names are canonical at the application boundary. Vendor topics may
 | `/odometry/local` | `nav_msgs/msg/Odometry` | Local EKF | Global EKF, Nav2 |
 | `/tag_detections` | AprilTag detection array | AprilTag detector | Tag localizer |
 | `/localization/apriltag_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Tag localizer | Global EKF |
-| `/odometry/global` | `nav_msgs/msg/Odometry` | Global EKF | Monitoring/UI |
+| `/localization/fused_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Initial AprilTag pass-through; future global-fusion adapter | Localization monitor, mission/UI, RViz |
+| `/odometry/global` | `nav_msgs/msg/Odometry` | Global EKF | Fused-pose adapter, monitoring |
 | `/perception/depth_obstacles` | `sensor_msgs/msg/PointCloud2` | Terrain node | Nav2 costmap |
 | `/perception/terrain_hazards` | `sensor_msgs/msg/PointCloud2` | Terrain node | Nav2 costmap |
 | `/cmd_vel_nav` | `geometry_msgs/msg/TwistStamped` or stack-required Twist type | Nav2 | Twist mux |

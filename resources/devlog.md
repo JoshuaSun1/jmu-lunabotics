@@ -1117,3 +1117,57 @@ criterion is recorded.
 **Git evidence:** Uncommitted documentation update based on `e91be59` (`Phase 3
 of mapping process: localization from recorded apriltag bags`); record the
 resulting commit after review.
+
+## 2026-10-22 — Nav2 specification and fused-pose contract
+
+**Purpose and scope:** Drafted the dedicated Nav2 specification and staged
+implementation plan before starting runtime work. It covers localization and
+TF prerequisites, the development footprint, lifecycle/configuration layout,
+global and local costmaps, planner/controller selection, NavigateToPose,
+command arbitration, obstacle sources, replanning/recovery, acceptance tests,
+physical-validation gates, and evidence requirements.
+
+**Interfaces and architecture:** Reserved `/localization/fused_pose` as
+`geometry_msgs/msg/PoseWithCovarianceStamped` in `map`. The initial planned
+producer is a freshness-gated direct pass-through of accepted
+`/localization/apriltag_pose` samples that preserves timestamp, pose, and
+covariance, publishes no samples between detections, and owns no TF. Future
+wheel-odometry/ZED-IMU local fusion and the global EKF retain sole
+`odom -> base_link` and `map -> odom` ownership; a later adapter derives the
+same stable fused-pose topic from `/odometry/global`.
+
+**Parameters and assumptions:** The team estimates a maximum `1.10 m`
+front-to-back by `0.60 m` lateral robot envelope. A centered development
+polygon at `[+/-0.55, +/-0.30] m` is permitted only when explicitly selected
+and additionally assumes `base_link` is at the rectangle center. The estimate
+is not measured and excludes mechanism sweeps, protrusions, stopping margin,
+localization uncertainty, and padding. `ASM-NAV-01` now records that boundary;
+new `ASM-LOC-06` and `ASM-NAV-06` record the AprilTag pass-through and
+source-specific command authorization, bringing the active register to 61
+unique IDs.
+
+**Safety and failure behavior:** Until continuous localization is validated,
+missing, rejected, invalid, or stale AprilTag pose input must reject or halt
+navigation and prevent every nonzero `/cmd_vel_nav` from reaching `/cmd_vel`.
+The freshness timeout remains a required `TBD` parameter; the replay
+visualizer's 0.50 s value is not reused silently. Reacquisition does not resume
+cancelled physical motion without a new goal or explicit retry. This gate is
+defense in depth and does not replace the E-stop, hardware disable, watchdog,
+or future safety supervisor.
+
+**Components and files:** Added
+[`docs/nav2_specification_and_implementation.md`](../docs/nav2_specification_and_implementation.md)
+and aligned the canonical specification, architecture, interface contract,
+requirements traceability, and assumptions register. This documentation-only
+change adds no ROS node, publisher, action server, TF broadcaster, costmap,
+planner, controller, velocity command, or dependency.
+
+**Verification and remaining work:** Documentation links, unique assumption
+IDs, whitespace, merge-marker, private-key, and diff checks were run. Runtime
+validation is not applicable yet. Implementation begins with dependency/readiness
+checks, then the fused-pose boundary and fail-closed command gate; physical
+motion remains prohibited pending every gate listed in the Nav2 specification.
+
+**Git evidence:** Uncommitted documentation update based on `5afa511` (`showing
+camera output prescene on the map, and modeling the attributes of the arena`);
+record the resulting commit after review.

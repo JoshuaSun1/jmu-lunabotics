@@ -320,6 +320,16 @@ assumptions**. The broader dependency-oriented list remains in
   degraded speed, multi-tag agreement, and conditions for stopping or
   resuming autonomy have not been experimentally selected.
 
+- **ASM-LOC-06 — Initial fused-pose source.** **Proposed/development only:**
+  the planned `/localization/fused_pose`
+  (`geometry_msgs/msg/PoseWithCovarianceStamped`) initially comes directly
+  from each accepted `/localization/apriltag_pose` sample, preserving its
+  timestamp, pose, and covariance. It performs no filtering, interpolation,
+  propagation, or multi-sensor fusion and publishes nothing between accepted
+  detections. Replace this pass-through with the validated local/global fusion
+  pipeline when wheel odometry and ZED IMU are available; retain the stable
+  application-facing topic.
+
 - **ASM-REPLAY-01 — Bag-replay freshness and history.** **Development only:**
   the replay adapter uses a `0.50 s` stale timeout, `0.05 s` poll period, and
   maximum 500 path poses; the arena replay defaults to `0.25x` playback while
@@ -335,10 +345,15 @@ assumptions**. The broader dependency-oriented list remains in
 
 ### Nav2, costmaps, and terrain perception
 
-- **ASM-NAV-01 — Production footprint.** **Unresolved:** no approved Nav2
-  footprint or robot radius exists. It must account for measured chassis,
-  wheels, bucket/mechanism states, cable/protrusion clearance, localization
-  uncertainty, and operational margin rather than copying the mock rectangle.
+- **ASM-NAV-01 — Estimated Nav2 footprint.** **Proposed/development only:** the
+  robot is estimated to fit within a maximum `1.10 m` front-to-back by `0.60 m`
+  wide rectangle. If a centered development polygon is needed, it uses corners
+  `[+/-0.55, +/-0.30] m` and therefore additionally assumes `base_link` lies at
+  the rectangle center. Neither the dimensions nor origin are measured, and
+  the estimate excludes verified bucket/mechanism swept envelopes, protrusions,
+  stopping margin, localization uncertainty, and padding. It is prohibited
+  from physical navigation until replaced by measured state-dependent
+  footprints relative to the actual `base_link`.
 
 - **ASM-NAV-02 — Costmap defaults.** **Proposed:** `0.05 m/cell`, a local
   rolling window approximately 4–8 m square, update rate 5–10 Hz, publish rate
@@ -375,6 +390,15 @@ assumptions**. The broader dependency-oriented list remains in
   excavation, and berm boundaries currently have no costmap or mission-control
   authority. Decide which become keepouts, preferred regions, goal constraints,
   or mission transition tests only after geometry and rules are confirmed.
+
+- **ASM-NAV-06 — AprilTag-only command authorization.** **Proposed/development
+  only:** until continuous localization exists, Nav2 commands are permitted
+  only while a current, accepted AprilTag pose keeps localization valid. No
+  detection, rejection, invalid frame/timestamp, or staleness inhibits every
+  nonzero Nav2 command and cancels or halts active navigation. The exact
+  freshness threshold remains `TBD`; the replay visualizer's `0.50 s` timeout
+  is not a production default. Replace this source-specific gate with the
+  validated fused-localization health policy once continuous fusion exists.
 
 ### Safety, mechanisms, mission, and operations
 
