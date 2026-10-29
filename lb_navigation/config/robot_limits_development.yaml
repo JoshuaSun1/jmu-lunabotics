@@ -1,0 +1,27 @@
+# Batch 1 development-only geometry and mock motion limits.
+# Physical use is prohibited until measured geometry and safe limits replace it.
+schema_version: 1
+profile: nav2_batch1_development_only
+physical_robot_use: prohibited
+replacement_condition: measured footprint, mechanism envelopes, and motion tests
+base_frame: base_link
+footprint:
+  source: team_estimate_2026-10-26
+  base_link_origin_status: assumed_rectangle_center
+  length_m: 1.10
+  width_m: 0.60
+  padding_m: 0.00
+  polygon_xy_m:
+    - [0.55, 0.30]
+    - [0.55, -0.30]
+    - [-0.55, -0.30]
+    - [-0.55, 0.30]
+motion_limits:
+  source: synthetic_phase2_mock_only
+  physical_robot_use: prohibited
+  max_linear_velocity_mps: 0.50
+  max_linear_acceleration_mps2: 0.50
+  max_linear_jerk_mps3: 1.00
+  max_angular_velocity_radps: 1.00
+  max_angular_acceleration_radps2: 1.00
+  max_angular_jerk_radps3: 2.00

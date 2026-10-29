@@ -1,0 +1,40 @@
+# Batch 1 non-runnable Nav2 scaffold.
+# Stages N4-N6 must replace every TBD and change configuration_status before
+# any Nav2 server consumes this file. No launch currently passes it to Nav2.
+schema_version: 1
+configuration_status: batch1_non_runnable_template
+physical_robot_use: prohibited
+frames:
+  global_frame: map
+  odom_frame: odom
+  robot_base_frame: base_link
+localization:
+  apriltag_pose_topic: /localization/apriltag_pose
+  fused_pose_topic: /localization/fused_pose
+  valid_topic: /localization/valid
+  freshness_timeout_s: 0.50
+command_boundary:
+  nav2_raw_topic: /cmd_vel_nav_raw
+  gated_nav_topic: /cmd_vel_nav
+  final_drive_topic: /cmd_vel
+  final_drive_connection_enabled: false
+footprint:
+  source_file: robot_limits_development.yaml
+  polygon_xy_m:
+    - [0.55, 0.30]
+    - [0.55, -0.30]
+    - [-0.55, -0.30]
+    - [-0.55, 0.30]
+  padding_m: 0.00
+global_costmap:
+  plugins: TBD
+  inflation_radius_m: TBD
+local_costmap:
+  width_m: TBD
+  height_m: TBD
+  plugins: TBD
+planner:
+  plugin: TBD
+controller:
+  plugin: TBD
+behavior_tree: TBD

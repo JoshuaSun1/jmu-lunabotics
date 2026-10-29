@@ -1,0 +1,13 @@
+# Development-only AprilTag-to-fused-pose boundary.
+# The 0.50 s timeout is team-approved for Batch 1 only (2026-10-26).
+# This profile performs no filtering, interpolation, propagation, or TF output.
+fused_pose_passthrough:
+  ros__parameters:
+    use_sim_time: false
+    input_topic: /localization/apriltag_pose
+    output_topic: /localization/fused_pose
+    valid_topic: /localization/valid
+    status_topic: /localization/status
+    expected_frame: map
+    freshness_timeout_s: 0.50
+    poll_period_s: 0.05
