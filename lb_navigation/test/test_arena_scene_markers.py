@@ -1,5 +1,6 @@
 """Unit and configuration tests for static arena scene markers."""
 
+import ast
 import importlib.util
 from pathlib import Path
 
@@ -65,7 +66,12 @@ def test_assumed_tag_normal_points_toward_positive_arena_x():
 def test_scene_is_durable_visualization_only_and_omits_column():
     source = SCRIPT.read_text(encoding="utf-8")
     assert "DurabilityPolicy.TRANSIENT_LOCAL" in source
-    assert "'/visualization/arena/markers'" in source
+    string_literals = {
+        node.value
+        for node in ast.walk(ast.parse(source))
+        if isinstance(node, ast.Constant) and isinstance(node.value, str)
+    }
+    assert "/visualization/arena/markers" in string_literals
     assert "TransformBroadcaster" not in source
     assert "static_transform_publisher" not in source
     assert "column" not in source.lower()

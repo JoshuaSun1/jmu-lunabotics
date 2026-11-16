@@ -1253,3 +1253,23 @@ N5–N8 and RViz visual review remain open. No remote branch was pushed.
 
 Git evidence: this entry is included in the merge commit with parents
 `e6fef8d` and `b213617`; use `git log --merges` for its resulting hash.
+
+## 2026-11-15 — Formatting-independent launch contract tests
+
+Fixed four CTest suites that failed after Black formatting: static map launch,
+arena scene markers, bag replay, and arena pose replay. Five assertions were
+matching exact single quotes or multiline call wrapping, although the required
+packages, topic, launch arguments and parameter values were still present.
+The contracts now inspect Python AST calls, keyword arguments, dictionaries,
+and string literals; they retain the non-actuating boundary checks. Launch
+files and runtime behavior are unchanged.
+
+Reproduced five failing tests before the fix; all 11 focused tests now pass.
+The five affected checks also pass against AST-reserialized source with
+changed quoting/wrapping. Negative checks reject altered required package,
+topic, bag argument and tag default values. After an all-files pre-commit
+pass, the full ROS package suite reports 176 tests, zero errors/failures and
+one existing Xacro-unavailable skip, including a passing N4 runtime test.
+All applicable pre-commit hooks pass. Jetson/physical validation and N5–N8
+remain open. This fixes the formatting-sensitive CI contracts and does not
+supply target-hardware evidence.

@@ -1,5 +1,6 @@
 """Offline contracts for the lifecycle-managed static arena map launch."""
 
+import ast
 from pathlib import Path
 
 import yaml
@@ -28,12 +29,33 @@ def test_map_server_parameters_are_static_map_only():
 
 def test_launch_uses_installed_defaults_and_has_no_localization_or_navigation():
     source = LAUNCH.read_text(encoding="utf-8")
-    assert "package='nav2_map_server'" in source
-    assert "package='nav2_lifecycle_manager'" in source
-    assert "'yaml_filename': str(map_yaml)" in source
-    assert "'node_names': ['map_server']" in source
-    assert "package='rviz2'" in source
-    assert "executable='arena_scene_markers.py'" in source
+    tree = ast.parse(source)
+    node_keywords = [
+        {keyword.arg: keyword.value for keyword in call.keywords}
+        for call in ast.walk(tree)
+        if isinstance(call, ast.Call) and isinstance(call.func, ast.Name) and call.func.id == "Node"
+    ]
+    packages = {ast.literal_eval(keywords["package"]) for keywords in node_keywords}
+    assert packages == {"nav2_map_server", "nav2_lifecycle_manager", "rviz2", "lb_navigation"}
+    assert any(
+        ast.literal_eval(keywords["executable"]) == "arena_scene_markers.py"
+        for keywords in node_keywords
+    )
+    settings = [
+        (key.value, value)
+        for node in ast.walk(tree)
+        if isinstance(node, ast.Dict)
+        for key, value in zip(node.keys, node.values)
+        if isinstance(key, ast.Constant)
+    ]
+    assert any(
+        key == "yaml_filename"
+        and ast.dump(value) == ast.dump(ast.parse("str(map_yaml)", mode="eval").body)
+        for key, value in settings
+    )
+    assert any(
+        key == "node_names" and ast.literal_eval(value) == ["map_server"] for key, value in settings
+    )
     assert "controller_server" not in source
     assert "planner_server" not in source
     assert "robot_localization" not in source
