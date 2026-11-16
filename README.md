@@ -10,6 +10,15 @@ establishes a physical robot or global pose.
 
 ## Current status
 
+Nav2 development stages N0–N3 are implemented; N4 now has headless runtime
+validation of lifecycle activation, grid geometry/inflation, published
+footprints, and command locking after AprilTag loss. There is no planner,
+controller, NavigateToPose server, or final drive connection yet. These are
+AprilTag-only, static-only development profiles, prohibited for physical use.
+See [crash recovery and N4 evidence](docs/resources/evidence/2026-11-15-nav2-crash-recovery.md)
+and the [N4 operator procedure](docs/operations.md#nav2-n4-development-costmaps).
+
+
 Phase 1 adds a parameterized Xacro, four-wheel skid-steer mock frame tree,
 upstream `ros2_control` `GenericSystem`, joint-state broadcaster, and
 `robot_state_publisher`. Phase 2 adds a protocol-neutral drive transport,
@@ -23,8 +32,8 @@ than claims about the physical robot. The exact boundaries are in the
 Phase 4.1 adds a calibrated Logitech webcam pipeline in `lb_sensors`:
 `v4l2-ctl` fail-closed 15 Hz source-rate preflight, `v4l2_camera`, `image_proc`
 rectification, and `apriltag_ros`. It publishes only source-scoped webcam data
-and newly stamped dynamic `webcam_optical_frame -> webcam_observation_tag_0`
-samples while the configured tag is visible. A future consumer must reject a
+and newly stamped dynamic `webcam_optical_frame -> webcam_observation_tag_<id>`
+samples while a configured tag (ID 0–3) is visible. A future consumer must reject a
 cached stale TF sample after tag loss. The phase has no physical base-to-camera
 extrinsic, tag map, localizer, EKF, `map`/`odom` transform, or robot-pose
 output. See the [Phase 4.1 webcam AprilTag note](docs/phase41_webcam_apriltag.md).
@@ -35,7 +44,8 @@ extrinsic into a covariance-bearing `/localization/apriltag_pose` measurement.
 It supports separate webcam/ZED source contracts, deduplicates two views of
 the same tag, and emits diagnostics, but never publishes TF. The planned field
 inventory is `tag36h11` IDs 1–3 at nominal 0.300 m detector-corner edges;
-those markers and their poses are not yet physical/surveyed. The ID-0 0.250 m
+those markers are now registered for webcam detection with user-provided
+0.300 m sizes, but their map poses remain unsurveyed. The ID-0 0.250 m
 tag remains bench-only. The normal launch fails unless its explicit files
 validate as surveyed; an all-synthetic test set additionally requires an
 explicit opt-in. See the [Phase 4.2 localizer note](docs/phase42_tag_localizer.md).
@@ -51,14 +61,15 @@ The intended robot runtime is:
 | ZED Mini software | ZED SDK 5.5.0; ZED ROS 2 Wrapper `v5.5.0` |
 
 The platform versions reflect the reported robot image; target software and camera behavior still need verification. See
-[`docker/versions.env`](docker/versions.env) and
+[`config/platform.env`](config/platform.env) and
 [the platform lock note](docs/resources/software_platform_lock.md).
+The robot uses native provisioning through `scripts/bootstrap_dev.sh`; Docker
+is not part of the deployment architecture.
 
 ## Repository layout
 
 ```text
 .
-├── docker/                 # arm64 Jetson container scaffold and version lock
 ├── docs/                   # architecture, safety, testing, TBDs, and change log
 ├── firmware/               # MCU placeholder; no protocol is assumed
 ├── lb_*/                   # ROS 2 packages, one responsibility per package
@@ -109,7 +120,7 @@ one-time workflow, and the intentional boundaries.
 
 An x86_64 Ubuntu 24.04/Jazzy workstation can build and test the same ROS
 distribution as the robot. It does **not** validate the Jetson, L4T, CUDA,
-ZED SDK, or arm64 container runtime.
+ZED SDK, or arm64 robot runtime.
 
 ```bash
 ./scripts/test.sh

@@ -30,7 +30,6 @@ def test_phase_zero_resources_and_version_lock_exist() -> None:
     """The scaffold retains the specification and its decision inputs."""
     required_paths = (
         "README.md",
-        "docker/versions.env",
         "docs/lunabotics_autonomy_software_spec.md",
         "docs/resources/Master Progressive BOM - MASTER.pdf",
         "docs/resources/software_platform_lock.md",
@@ -43,14 +42,26 @@ def test_phase_zero_resources_and_version_lock_exist() -> None:
 
 
 def test_target_runtime_lock_is_explicit() -> None:
-    """The target lock remains machine-readable and avoids a runtime-image guess."""
-    values = (REPOSITORY_ROOT / "docker" / "versions.env").read_text(encoding="utf-8")
-    assert "TARGET_PLATFORM=linux/arm64" in values
-    assert "ROS_DISTRO=jazzy" in values
-    assert "JETPACK_VERSION=7.2.1" in values
-    assert "L4T_VERSION=39.2.1" in values
-    assert "UBUNTU_VERSION=24.04" in values
-    assert "CUDA_VERSION=13.2.2" in values
-    assert "ZED_SDK_VERSION=5.5.0" in values
-    assert "ZED_ROS2_WRAPPER_VERSION=v5.5.0" in values
-    assert "JETSON_RUNTIME_IMAGE=TBD_AFTER_TARGET_VALIDATION" in values
+    """Native bootstrap and the platform record retain the selected target lock."""
+    bootstrap = (REPOSITORY_ROOT / "scripts" / "bootstrap_dev.sh").read_text(encoding="utf-8")
+    platform_lock = (
+        REPOSITORY_ROOT / "docs" / "resources" / "software_platform_lock.md"
+    ).read_text(encoding="utf-8")
+    assert 'TARGET_ROS_DISTRO="jazzy"' in bootstrap
+    assert 'TARGET_UBUNTU_VERSION="24.04"' in bootstrap
+    assert 'TARGET_L4T_RELEASE="R39 (release), REVISION: 2.1"' in bootstrap
+    assert "JetPack | 7.2.1" in platform_lock
+    assert "ZED SDK | 5.5.0" in platform_lock
+
+    values = (REPOSITORY_ROOT / "config" / "platform.env").read_text(encoding="utf-8")
+    for expected in (
+        "TARGET_PLATFORM=linux/arm64",
+        "ROS_DISTRO=jazzy",
+        "JETPACK_VERSION=7.2.1",
+        "L4T_VERSION=39.2.1",
+        "UBUNTU_VERSION=24.04",
+        "CUDA_VERSION=13.2.2",
+        "ZED_SDK_VERSION=5.5.0",
+        "ZED_ROS2_WRAPPER_VERSION=v5.5.0",
+    ):
+        assert expected in values

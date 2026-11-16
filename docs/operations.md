@@ -11,7 +11,7 @@
 
 ## Safe setup
 
-1. Review `docker/versions.env` and
+1. Review `config/platform.env` and
    `docs/resources/software_platform_lock.md`. The robot runtime is Ubuntu
    24.04 / ROS 2 Jazzy.
 2. Provision each supported device once from the repository root:
@@ -86,6 +86,24 @@ ros2 run tf2_ros tf2_echo webcam_optical_frame webcam_observation_tag_0
 scripts/record_bag.sh --profile webcam_apriltag
 ```
 
+For recording from a fresh terminal after the launch is running, use
+`scripts/start_bag.sh` from the repository root. It activates the built
+workspace and starts the webcam AprilTag profile by default. On the current
+Jazzy workstation, run `scripts/start_bag.sh --ros-distro jazzy`; this explicitly
+opts into non-target development use. Select another group with
+`--profile hardware` (or another recorder profile), and preview with
+`--dry-run`. Preserve the launch terminal's `ROS_DOMAIN_ID` and any custom
+middleware/discovery environment settings. The script does not start nodes or
+install software; unavailable selected topics can appear later and are not
+evidence of successful capture until messages arrive. Press Ctrl+C to finish
+recording. The printed output directory is under the repository's `bags/`;
+inspect it with `ros2 bag info <directory>` and preserve the entire directory.
+
+Add `--name tag_test_01` to save to `bags/tag_test_01` instead of a timestamped
+directory, for example `scripts/start_bag.sh --ros-distro jazzy --name tag_test_01`.
+Names accept letters, digits, underscores, and hyphens; existing outputs are
+rejected. The same flag is available on `scripts/record_bag.sh`.
+
 Do not interpret the observation as a robot or global pose. There is no
 physical `base_link -> webcam_optical_frame` extrinsic, tag map, localizer,
 EKF, `map`/`odom` transform, or motion path in this phase. Record the device
@@ -125,3 +143,132 @@ argument in robot bringup or treat its pose output as a field pose. The node
 publishes `/localization/apriltag_pose` and `/diagnostics` but never publishes
 `map -> odom`. Until Phase 3 local odometry and a validated global EKF exist,
 there is no live global-localization or navigation path.
+
+## Static arena map
+
+Install the dependencies declared by `lb_navigation` through the supported
+bootstrap/rosdep workflow. On the current opt-in Jazzy development host, the
+equivalent packages are `ros-jazzy-nav2-map-server` and
+`ros-jazzy-nav2-lifecycle-manager`; this does not validate the target Jetson
+runtime.
+
+After building and sourcing the workspace, launch the non-actuating map profile:
+
+```bash
+ros2 launch lb_navigation map.launch.py
+```
+
+The default launch uses the installed `maps/arena.yaml`, autostarts the
+`map_server` lifecycle node, and opens the installed top-down RViz profile.
+For a headless check, set `use_rviz:=false`. In another sourced terminal:
+
+```bash
+ros2 lifecycle get /map_server
+ros2 topic echo /map --once --field header
+ros2 topic echo /map --once --field info
+ros2 topic info /map --verbose
+```
+
+Expected state is `active`; the grid frame is `map`, resolution is 0.05 m,
+width/height are 139/102 cells, and origin position is `(-0.05, -0.05)`. The
+outer occupied cell is outside the 6.85 m x 5.00 m free interior. This launch
+publishes no TF or robot pose. Do not use RViz alignment alone as a physical
+arena survey, and do not add the center column until its pose and dimensions
+are measured.
+
+The map launch also starts the visualization-only arena scene by default. The
+light-yellow outline uses the Figure 9 nominal `6.88 x 5.0 m` dimensions; a
+blue line marks `x=2.5 m`, a red rectangle marks the target berm, and a dashed
+green rectangle marks the provisional starting zone. Orange AprilTag markers
+show configured assumed/surveyed tag planes and face normals. The central
+column, rocks, and craters are omitted. Disable this display publisher with
+`use_arena_scene:=false`; doing so does not change `/map`.
+
+## Provisional robot-pose replay in the arena
+
+This profile is a non-actuating development aid for `bags/test1_AT1`. It treats
+the hand-moved recorded webcam as though it were rigidly mounted to the robot,
+so its arrow is useful for checking transform direction, motion shape, loss,
+and reacquisition—not localization accuracy.
+
+Install the map-server dependencies listed above, build, and source the
+workspace. From the repository root, run:
+
+```bash
+ros2 launch lb_sim arena_pose_replay.launch.py \
+  bag_path:=$PWD/bags/test1_AT1 \
+  playback_rate:=0.25
+```
+
+The default RViz profile shows the arena map, durable arena scene and assumed
+tag plane, recorded image, raw camera RGB axes, cyan planar `base_link` arrow,
+and current
+contiguous planar path. It also shows a translucent blue 0.90 m x 0.60 m x
+0.25 m synthetic chassis, yellow chassis-only footprint, pink rear webcam,
+and green forward ZED. The two cameras are provisionally colocated in X/Y with
+`base_link`, 0.40 m above it; the webcam points toward robot `-X` and the ZED
+points toward robot `+X`. Their colored arrows show those view directions.
+Because the bodies overlap, use the arrows and colors to distinguish them.
+Tag 1 is provisionally centered
+at `(0.0, 1.0, 0.75)` m and faces arena `+X`. Both transforms are estimates.
+
+The chassis dimensions are reused from the synthetic mock profile and are not
+cart measurements. The footprint excludes the scoop and is not approved as a
+Nav2 collision footprint. When the tag leaves view for more than 0.5 s, all
+dynamic robot/camera markers are deleted, the path is cleared, and no dead
+reckoning occurs. Reacquisition
+starts a new path segment. The bag's `--loop` clock rewind also clears state.
+Inspect interfaces in another sourced terminal if needed:
+
+```bash
+ros2 topic echo /visualization/replay/webcam_pose_raw --once
+ros2 topic echo /visualization/replay/base_pose_planar --once
+ros2 topic echo /diagnostics
+```
+
+For a headless pose-only check when Nav2 map-server packages are unavailable,
+add `use_rviz:=false use_map_server:=false`. This omits `/map` but still replays
+the pose adapter. Do not feed these visualization topics into Nav2, an EKF, or
+robot control. Replace the tag pose and camera extrinsic only with documented
+survey/calibration values; production localization remains the C++ localizer
+plus the future local/global EKFs.
+
+## Nav2 N4 development costmaps
+
+After the normal build and workspace activation, run:
+
+```bash
+ros2 launch lb_navigation nav2_n4_costmaps.launch.py \
+  enable_costmaps:=true enable_development_tf:=true allow_test_only_tf:=true
+```
+
+Provide current accepted `/localization/apriltag_pose` samples from an explicit
+development source. The visualization-only bag replay adapter does not publish
+this canonical topic. Verify `/localization/valid` is true and the test TF
+chain is current, then start lifecycle nodes from a second sourced terminal:
+
+```bash
+ros2 service call /lifecycle_manager_n4/manage_nodes \
+  nav2_msgs/srv/ManageLifecycleNodes '{command: 0}'
+```
+
+Manual startup avoids racing Python localization startup against the existing
+2.0 s initial TF timeout. With no TF, activation fails closed; restart the
+profile and establish valid input before retrying. `autostart:=true` is only
+appropriate when localization/TF is already ready.
+
+The manager's bond monitoring is disabled for standalone costmaps, which do
+not create bonds. Monitor diagnostics and lifecycle state; this profile has
+no motion authority. Tag loss locks the command gate but may leave costmaps
+active and displaying retained data. N5 must establish monitored navigation
+servers before adding commands to mock drive output.
+
+For the automated headless synthetic-input check:
+
+```bash
+python3 -m pytest -q lb_navigation/test/test_nav2_n4_lifecycle_runtime.py
+```
+
+Run this from the repository root with local DDS networking available.
+RViz is optional (`use_rviz:=false` for headless operation); graphical visual
+acceptance remains pending. Physical operation remains prohibited.

@@ -40,7 +40,7 @@ image_proc/rectify_node
    v
 apriltag_ros
    | tag_detections
-   `-- dynamic webcam_optical_frame -> webcam_observation_tag_0
+   `-- dynamic webcam_optical_frame -> webcam_observation_tag_<id> (IDs 0-3)
 ```
 
 The source-scoped names prevent a later ZED stream from silently colliding
@@ -52,7 +52,7 @@ with webcam data:
 | `/sensors/webcam/camera_info` | `sensor_msgs/msg/CameraInfo` | `v4l2_camera` | Archived, user-confirmed 640 x 480 camera model paired with camera timestamps. |
 | `/sensors/webcam/image_rect` | `sensor_msgs/msg/Image` | `image_proc/rectify_node` | Rectified detector input. |
 | `/sensors/webcam/tag_detections` | `apriltag_msgs/msg/AprilTagDetectionArray` | `apriltag_ros` | Detection family, ID, hamming value, decision margin, image-space centre/corners, and homography. It is not a robot pose message. |
-| `/tf` | `tf2_msgs/msg/TFMessage` | `apriltag_ros` | Newly stamped dynamic `webcam_optical_frame -> webcam_observation_tag_0` samples while tag 0 is observed; future consumers must reject cached stale samples. |
+| `/tf` | `tf2_msgs/msg/TFMessage` | `apriltag_ros` | Newly stamped dynamic `webcam_optical_frame -> webcam_observation_tag_<id>` samples while the corresponding registered tag is observed; future consumers must reject cached stale samples. |
 
 The installed `apriltag_msgs/msg/AprilTagDetectionArray` carries detection
 quality and image-space geometry, not a metric pose field. The configured
@@ -73,8 +73,8 @@ No services or actions are introduced in this phase. No unscoped
 | Calibration metadata name | `uvc_camera_(046d:0825)` | Renamed from the archival `narrow_stereo` label only, to match the confirmed V4L2 camera name. This is not a recalibration. |
 | Acquisition rate | 15 Hz configured and verified by `v4l2-ctl` before `v4l2_camera` starts | Source-rate profile chosen to bound detector input. Launch aborts if V4L2 cannot set/verify a rate within 0.1 Hz of the requested 10–15 Hz value; detector throughput remains separately measured and the specification's 10–15 FPS detector target is not yet validated. |
 | Tag family | `tag36h11` | User-confirmed bench family. `apriltag_ros` receives the family parameter as `36h11` and reports detections as `tag36h11`. |
-| Known bench tag | ID `0` | Current bench setup only; it does not choose the competition tag inventory. |
-| Tag size | 0.250 m | User-confirmed detector-corner edge length, not the outside paper edge. Recheck before competition use. |
+| Registered webcam tags | IDs `0`, `1`, `2`, `3` | ID 0 is bench-only; IDs 1–3 were added from user-provided physical tags on 2026-10-02. Registration does not survey map poses. |
+| Tag sizes | ID 0: 0.250 m; IDs 1–3: 0.300 m each | ID 0 is user-confirmed; new sizes are user-provided and interpreted as detector-corner edges, excluding surrounding paper. Confirm edge convention before metric use. |
 | Hamming acceptance | `max_hamming: 0` | Explicit Phase 4.1 quality baseline. |
 | Pose method | PnP | `apriltag_ros` baseline configuration; metric accuracy is not yet claimed. |
 | Detector tuning | one thread, decimate 2.0, blur 0.0, refine enabled, sharpening 0.25 | Archived baseline settings, not experimentally tuned competition values. |
@@ -147,7 +147,10 @@ not weaken the independent physical E-stop requirement.
 ## Bench procedure
 
 Perform this only with propulsion disabled and a printed `tag36h11` ID 0 tag
-of the user-confirmed 0.250 m detector-corner edge length in view.
+of the user-confirmed 0.250 m detector-corner edge length in view, or IDs 1–3
+with their configured 0.300 m detector-corner edges. Each tag owns a dynamic
+`webcam_optical_frame -> webcam_observation_tag_<id>` observation from the
+webcam detector; no surveyed map transform is added.
 
 1. Build and source the workspace in a ROS environment that has `v4l-utils`,
    `v4l2_camera`, `image_proc`, and `apriltag_ros` installed:
@@ -166,6 +169,17 @@ of the user-confirmed 0.250 m detector-corner edge length in view.
 
    ```bash
    ros2 launch lb_sensors webcam_apriltag.launch.py
+   ```
+
+   To open the rectified camera feed in a desktop window, add
+   `show_live_feed:=true`. The viewer defaults to off for headless operation.
+   It uses the `image_view` package and subscribes to `image_rect` within the
+   configured camera namespace; it does not draw tag-detection overlays.
+   This is a launch-time option: restart the launch to change it. A graphical
+   desktop is required when enabled. The equivalent public command is:
+
+   ```bash
+   ros2 launch lb_launch bringup.launch.py enable_apriltags:=true show_live_feed:=true
    ```
 
    The sensor-only public equivalent is

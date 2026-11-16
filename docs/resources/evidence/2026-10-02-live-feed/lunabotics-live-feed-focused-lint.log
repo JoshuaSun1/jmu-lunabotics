@@ -1,0 +1,9 @@
+fix end of files.........................................................Passed
+trim trailing whitespace.................................................Passed
+check for merge conflicts................................................Passed
+check yaml...........................................(no files to check)Skipped
+check json...........................................(no files to check)Skipped
+detect private key.......................................................Passed
+check that executables have shebangs.................(no files to check)Skipped
+check for added large files..............................................Passed
+black....................................................................

@@ -1,0 +1,18 @@
+-- run_test.py: invoking following command in '/tmp/lb_crash_recovery/build/lb_navigation':
+ - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation/test/test_nav2_n4_lifecycle_runtime.py -o cache_dir=/tmp/lb_crash_recovery/build/lb_navigation/ament_cmake_pytest/nav2_n4_lifecycle_runtime/.cache --junit-xml=/tmp/lb_crash_recovery/build/lb_navigation/test_results/lb_navigation/nav2_n4_lifecycle_runtime.xunit.xml --junit-prefix=lb_navigation
+
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+cachedir: /tmp/lb_crash_recovery/build/lb_navigation/ament_cmake_pytest/nav2_n4_lifecycle_runtime/.cache
+rootdir: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation/test
+plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
+collected 1 item
+
+../../../../home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation/test/test_nav2_n4_lifecycle_runtime.py . [100%]
+
+- generated xml file: /tmp/lb_crash_recovery/build/lb_navigation/test_results/lb_navigation/nav2_n4_lifecycle_runtime.xunit.xml -
+============================== 1 passed in 13.05s ==============================
+
+
+-- run_test.py: return code 0
+-- run_test.py: verify result file '/tmp/lb_crash_recovery/build/lb_navigation/test_results/lb_navigation/nav2_n4_lifecycle_runtime.xunit.xml'

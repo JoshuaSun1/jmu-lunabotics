@@ -1,0 +1,24 @@
+['--name', 'tag_test_01', '--dry-run']: exit 0
+profile: webcam_apriltag
+output: /home/jsun3/dev_ws/src/jmu-lunabotics/bags/tag_test_01
+topics: /sensors/webcam/image_raw /sensors/webcam/camera_info /sensors/webcam/image_rect /sensors/webcam/tag_detections /tf
+
+['--dry-run']: exit 0
+profile: webcam_apriltag
+output: /home/jsun3/dev_ws/src/jmu-lunabotics/bags/webcam_apriltag-20261002T211844Z
+topics: /sensors/webcam/image_raw /sensors/webcam/camera_info /sensors/webcam/image_rect /sensors/webcam/tag_detections /tf
+
+['--name']: exit 2
+Missing value for --name.
+
+['--name', '']: exit 2
+Missing value for --name.
+
+['--name', '../outside', '--dry-run']: exit 2
+Bag name must contain only letters, digits, underscores, or hyphens.
+
+['--name', 'two words', '--dry-run']: exit 2
+Bag name must contain only letters, digits, underscores, or hyphens.
+
+['--name', 'webcam_apriltag-20261002T211033Z', '--dry-run']: exit 2
+Bag output already exists: /home/jsun3/dev_ws/src/jmu-lunabotics/bags/webcam_apriltag-20261002T211033Z. Choose another name.

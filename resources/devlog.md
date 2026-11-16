@@ -3,6 +3,7 @@
 This is the canonical, append-only software development record required for
 competition deliverables. It complements detailed documentation under `docs/`;
 supporting evidence is linked from each entry rather than duplicated here.
+Entries are ordered oldest to newest; add each new record at the bottom.
 
 ## 2026-08-04 — Prototype transition and Phase 0 scaffold
 
@@ -612,6 +613,590 @@ or the later physical safety and drive integration work.
 implementation commit; this append-only record is committed separately for
 traceability.
 
+## 2026-09-29 — Native bootstrap selected; local Docker scaffold removed
+
+**Purpose and decision:** Confirmed that the two-developer project will use
+native host provisioning through `scripts/bootstrap_dev.sh` rather than a
+Docker-based robot runtime. Removed the local Docker/Compose build scaffold and
+its image-oriented version file. The ROS Humble container used by GitHub
+Actions remains CI infrastructure only and is not a deployment requirement.
+
+**Components and files:** Removed `docker/` and `.dockerignore`. Updated the
+README, canonical software specification, platform lock, operations/testing
+guides, requirements traceability, TBD register, Phase 1 note, and scaffold and
+webcam contract tests. `scripts/bootstrap_dev.sh` remains the authoritative
+one-time native provisioning and readiness-check entry point. Package manifests
+remain the source for dependencies resolved by `rosdep`.
+
+**ROS interfaces, TF, parameters, and dependencies:** No ROS node, topic,
+service, action, message type, TF frame, transform owner, runtime parameter, or
+hardware dependency changed. The proposed platform remains JetPack 6.2.2 / L4T
+36.5.0, Ubuntu 22.04, ROS 2 Humble, ZED SDK 5.2.3, and ZED wrapper v5.2.2. Those
+values are manufacturer/version-selection inputs awaiting physical-target
+validation; they are not measured robot parameters.
+
+**Architecture and alternatives:** Native provisioning was selected for its
+lower operational complexity with Jetson GPU, USB, CAN/serial, and camera
+devices. A local Docker runtime was rejected because it was not a team
+requirement and did not itself guarantee exact apt-package reproducibility.
+Clean ROS Humble CI continues to provide an isolated build/test environment.
+
+**Safety and failure behavior:** This change introduces no actuation path and
+does not change the existing fail-closed hardware boundaries. Bootstrap still
+does not flash JetPack, install the ZED SDK, change device permissions, launch
+hardware, or authorize physical motion.
+
+**Verification and remaining work:** Static contracts were updated to validate
+the native bootstrap/platform record and package-manifest sensor dependencies
+without Docker artifacts. The two directly affected pytest files passed 7
+tests; `LUNABOT_ROS_DISTRO=jazzy ./scripts/test.sh --skip-build` then passed 95
+tests with 0 errors, 0 failures, and 1 expected skip. `git diff --check` passed.
+This remains x86/Jazzy structural evidence. Exact Debian/ROS package revisions
+are not yet locked: after validation on Ubuntu 22.04 and the Orin target,
+capture a tracked machine-readable installed-package manifest and make
+bootstrap verify it. Preserve provisioning output and physical-target results
+as evidence.
+
+**Git evidence:** Working-tree change; replace with the resulting Git commit
+when committed.
+
+## 2026-10-02 — Optional live webcam feed
+
+**Purpose and files:** Added a desktop image viewer to
+`lb_sensors/launch/webcam_apriltag.launch.py` and forwarded its option through
+`lb_launch/launch/bringup.launch.py`. Declared `image_view` in
+`lb_sensors/package.xml`; updated the Phase 4.1 bench procedure.
+
+**Interface and decision:** `show_live_feed` is a launch-time boolean, default
+`false` (an operator-selected setting, not a measured or tuned physical value).
+When enabled, `image_view/image_view` runs as `live_feed` inside the configured
+camera namespace and subscribes to `image_rect` (`sensor_msgs/msg/Image`).
+The default topic is `/sensors/webcam/image_rect`. Chose the existing simple
+viewer instead of an rqt plugin or custom overlay implementation. Restart the
+launch to toggle it. Bringup uses the option only with `enable_apriltags:=true`.
+No services, actions, TF frames, transform ownership, or actuation behavior
+changed. Camera source-rate preflight still gates startup; the viewer is off
+for headless use and requires a graphical desktop when enabled. No detection
+overlays are provided.
+
+**Verification and evidence:** Non-target x86/Jazzy build completed all 10
+packages; colcon reported 95 tests, 0 errors, 0 failures, 1 expected skip.
+Both installed launches exposed the new argument via `--show-args`.
+`git diff --check`, Python syntax checks, package XML lint, and individual-file
+Black checks passed. Full pre-commit lint stalled at multi-file Black and was
+interrupted; individual-file Black checks passed without changes. Logs are
+preserved in `docs/resources/evidence/2026-10-02-live-feed/` and workspace
+`build/*/test_results/`. A temporary ROS log directory was used for launch
+argument inspection because the default home log directory was read-only.
+
+**Remaining validation:** Confirm the window displays a live rectified image
+on a desktop, repeat with a custom camera namespace, and confirm default
+headless startup. No live camera/GUI test or target Humble/Jetson test was run;
+CPU, memory, and frame-rate impact have not been measured.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the final change commit after
+commit creation.
+
+## 2026-10-02 — One-command bag recording setup
+
+**Purpose and files:** Added executable `scripts/start_bag.sh` to activate the
+ROS underlay and built workspace overlay before delegating to the existing
+`scripts/record_bag.sh`. Updated `docs/operations.md`. This supports recording
+from a fresh terminal after the system launch is already running.
+
+**Configuration and architecture:** Default profile is `webcam_apriltag`;
+`--profile` selects the existing recorder groups. `--ros-distro` selects the
+underlay, with an explicit non-Humble selection opting into non-target use.
+Without that option, the existing activation policy and environment apply.
+`--dry-run` previews without activation or recording. These are operator
+settings, not measured hardware parameters. Reused the recorder instead of
+duplicating topic lists, storage policy, or signal handling. Output remains
+under repository `bags/`, ignored by Git; Ctrl+C reaches rosbag directly through
+the exec chain and finalizes recording. Existing ROS_DOMAIN_ID and middleware
+settings are inherited and must match the launch.
+
+**Interfaces, dependencies, and failure behavior:** No topic, service, action,
+message type, TF frame, or transform owner changed. The default group records
+webcam raw/rectified `sensor_msgs/msg/Image`, `sensor_msgs/msg/CameraInfo`,
+`apriltag_msgs/msg/AprilTagDetectionArray`, and `/tf` (`tf2_msgs/msg/TFMessage`).
+Dependencies are Bash, installed ROS/rosbag2, and the built workspace overlay.
+No build, installation, motor enable, or robot launch occurs. Invalid arguments
+fail with exit 2; activation errors stop recording. Missing topic publishers
+are not startup errors: rosbag waits for discovery. Default camera topic names
+still require the default camera namespace; custom namespaces need a separate
+recording command. Storage and CPU usage have not been measured.
+
+**Verification and evidence:** Bash syntax and seven CLI checks passed,
+covering help, default/hardware previews, missing values, invalid options and
+profiles, and execution from outside the repository. Relevant pre-commit hooks
+and `git diff --check` passed; formatter hooks for Python/C++ were skipped
+because this change adds only Bash and Markdown. Evidence is preserved under
+`docs/resources/evidence/2026-10-02-bag-start/`. No live recording was started
+as part of verification. Remaining work: record a live webcam run, stop with
+Ctrl+C, and confirm message counts and duration with `ros2 bag info`.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
+committed.
+
+## 2026-10-02 — Register webcam tags 1–3
+
+**Purpose and files:** Expanded `lb_sensors/config/webcam_apriltag.yaml` to
+detect `tag36h11` IDs 0–3. ID 0 retains 0.250 m; IDs 1, 2, and 3 each use
+0.300 m user-provided edge lengths. Updated the existing detector contract,
+README, Phase 4.1 interface/procedure note, and Phase 4.2 inventory status.
+
+**Interfaces, provenance, and architecture:** Sizes are user-provided, not
+independently measured or experimentally tuned. The new sizes are interpreted
+as detector-corner edges, excluding paper; confirm that convention physically.
+`apriltag_ros` owns newly stamped dynamic transforms from `webcam_optical_frame`
+to `webcam_observation_tag_0`, `_1`, `_2`, and `_3` when each tag is visible.
+Detection topic/type remains `/sensors/webcam/tag_detections`,
+`apriltag_msgs/msg/AprilTagDetectionArray`; transforms use `/tf`,
+`tf2_msgs/msg/TFMessage`. No services/actions or new dependencies were added.
+Per-ID sizes were chosen to preserve ID 0's existing geometry. Detector family,
+default size, quality gates, and tuning remain unchanged. No surveyed map poses
+were invented; localizer templates remain unverified and fail closed.
+
+**Safety, verification, and remaining work:** Camera-only registration adds no
+actuation path. Cached transforms after tag loss remain subject to freshness
+checks. Five relevant existing tests, YAML validation, and relevant lint passed;
+the installed symlinked YAML was parsed to confirm all four ID/size/frame
+mappings. Evidence is under `docs/resources/evidence/2026-10-02-tags/`.
+Restart the detector to load the configuration, then record each tag's ID and
+camera-relative transform and validate scale against measured distance. No
+physical detection/accuracy test or compute/resource measurement was performed.
+Mounting/extrinsic calibration and map survey remain required for localization.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
+committed.
+
+## 2026-10-02 — Custom bag names
+
+**Change and purpose:** Added `--name NAME` to `scripts/start_bag.sh`, forwarded
+as a quoted argument to `scripts/record_bag.sh`, which owns output-path
+selection. Updated `docs/operations.md` and both help texts. Operator-selected
+names save to repository `bags/NAME`; omission retains profile/UTC-timestamp
+naming. Names accept ASCII letters, digits, underscores, and hyphens. Missing,
+empty, or invalid names and existing output paths (including symlinks) are
+rejected with exit 2; recordings are not overwritten. Reused the recorder's
+path logic rather than renaming bags after capture.
+
+**Interfaces and dependencies:** No ROS topics/types, services/actions, TF
+frames/owners, hardware dependencies, or motor behavior changed. The name is a
+CLI setting, not a measured physical parameter. Bash/ROS/rosbag2 dependencies,
+recording profiles, and Ctrl+C finalization remain as previously documented.
+
+**Verification:** Bash syntax, seven CLI checks, relevant pre-commit hooks,
+and `git diff --check` passed. Checks cover explicit output naming, default
+preview, missing/empty names, path traversal, whitespace, and rejection of the
+existing webcam bag. No bags were created. Evidence is preserved under
+`docs/resources/evidence/2026-10-02-bag-name/`. Live recording under a custom
+name remains to be verified; resource usage was not measured.
+
+**Git evidence:** Uncommitted change based on
+`1db17cb32cbe4cb5cad2f737ad0f603dd7273e9a`; record the resulting commit when
+committed.
+## 2026-10-03 — Freshness-gated tag replay and initial arena raster
+
+**Purpose and scope:** Added the first non-actuating development increment for
+the visualization and static-map work packages. The explicit Jazzy
+`bags/test1_AT1` recording can now be replayed with `/clock`, visualized as a
+fresh camera-relative tag pose and bounded contiguous path, and inspected in a
+reusable RViz profile. Added an initial arena occupancy artifact but deliberately
+did not configure `map_server`, Nav2, costmaps, localization TF, or motion.
+
+**Components and interfaces:** `lb_localization` owns
+`scripts/tag_replay_visualizer.py`, which consumes the recorded
+`webcam_optical_frame -> webcam_observation_tag_1` TF and publishes
+`/visualization/webcam/tag_1_pose` (`geometry_msgs/msg/PoseStamped`),
+`/visualization/webcam/tag_1_path` (`nav_msgs/msg/Path`), and replay state on
+`/diagnostics` (`diagnostic_msgs/msg/DiagnosticArray`). It broadcasts no TF.
+`lb_sim/launch/bag_replay.launch.py` requires an explicit rosbag directory and
+starts playback, the visualizer, and optional RViz without starting the live
+camera/detector or any actuator. `lb_navigation` owns the map/YAML, RViz
+profile, install rules, and map contract. Detailed evidence is in
+[`docs/evidence/phase5_replay_map_artifact_2026-10-03.md`](../docs/evidence/phase5_replay_map_artifact_2026-10-03.md).
+
+**Frames, parameters, and provenance:** The observation remains camera-relative
+and is not a robot/map pose. The configurable 0.5 s stale timeout and 500-pose
+bound are initial development values, not measured competition tuning. Loss
+clears the active segment, reacquisition starts another, and a backward `/clock`
+jump clears replay state. The agreed REP-103 map origin is the starting-zone
+corner; +X runs 6.85 m away from the starting zone, +Y runs 5.00 m across the
+arena, and zero yaw faces +X. The 6.85 m length is team-selected; 5.00 m comes
+from the guidebook. The development assumption places tag 1 at
+`(0.0, 1.0, 0.75)` m with its face normal toward +X, but no tag quaternion or
+surveyed runtime map was created. The physical webcam extrinsic remains TBD.
+
+**Map and safety behavior:** `arena.pgm` uses 0.05 m/cell, a 137 x 100 free
+interior, and one occupied cell outside every edge, producing 139 x 102 cells
+with YAML origin `[-0.05, -0.05, 0.0]`. The center column is omitted pending a
+survey; changing obstacles are intentionally excluded. The replay path never
+interpolates through a stale interval, commands no hardware, and publishes no
+`map -> odom` or `odom -> base_link` transform.
+
+**Verification and remaining work:** The focused tests passed 8/8. A Jazzy
+selected build completed and selected package testing reported 106 tests, zero
+errors/failures, and one existing conditional skip. New Python files passed
+`ament_flake8`. The headless launch resolved and opened `test1_AT1` and started
+the installed node, but restricted-sandbox socket denial prevented DDS graph
+validation; graphical RViz, maneuver metrics, dropout durations, CPU/memory,
+and Humble validation remain operator work. The next increment is map-server
+configuration and physical/map-origin verification, after review of this map.
+
+**Git evidence:** Replay visualization and initial arena artifacts are recorded
+in `69b0505` (`In the middle of stage 2 of map implementation`).
+
+## 2026-10-11 — Lifecycle-managed static arena map configuration
+
+**Purpose and scope:** Completed the repository portion of the static-map
+server increment. `lb_navigation` now installs map-server parameters, an
+explicit lifecycle launch, and a map-focused RViz profile around the existing
+arena raster. This increment deliberately adds no robot pose, `map -> odom`,
+`odom -> base_link`, localization node, costmap, planner, controller, behavior
+tree, sensor pipeline, or motion output.
+
+**Components, interfaces, and ownership:**
+`lb_navigation/config/map_server.yaml` configures upstream
+`nav2_map_server/map_server` and an autostarting
+`nav2_lifecycle_manager/lifecycle_manager` named `lifecycle_manager_map`; its
+managed-node list contains only `map_server`.
+`lb_navigation/launch/map.launch.py` requires valid map, parameter, and RViz
+files and supplies installed defaults. `lb_navigation/rviz/arena_map.rviz`
+uses fixed frame `map`, a top-down view, and transient-local/reliable `/map`
+QoS. Expected `/map` type is `nav_msgs/msg/OccupancyGrid` with
+`header.frame_id=map`; upstream standard load-map and lifecycle services are
+the only new service interfaces. Map server publishes no TF, so the global EKF
+remains the sole future `map -> odom` owner.
+
+**Parameters and provenance:** Map resolution remains 0.05 m/cell. The 139 x
+102 raster contains a 137 x 100 free interior representing the team-selected
+6.85 m length and guidebook-derived 5.00 m width, surrounded by one occupied
+cell outside the usable interior. YAML image origin remains
+`[-0.05, -0.05, 0.0]`. `autostart=true` and `use_sim_time=false` are software
+profile defaults. The center column pose/dimensions, keepouts, and physical
+control-point survey remain TBD; none was inferred from the illustration.
+
+**Dependencies, failure behavior, and safety:** Added declared runtime
+dependencies on `nav2_map_server`, `nav2_lifecycle_manager`, launch support,
+and RViz, plus bootstrap readiness checks for both Nav2 components. Missing
+map/parameter/RViz files fail before nodes start. A missing upstream package
+fails launch explicitly. The launch is non-actuating and cannot command robot
+hardware. An attempted minimal Jazzy package install made no changes because
+the host requires an interactive sudo password; no credential workaround was
+attempted.
+
+**Verification and evidence:** Focused tests passed 6/6. The Jazzy
+`lb_navigation` build completed and installed all artifacts; installed launch
+argument resolution passed. Package testing reported 8 tests, zero errors,
+failures, or skips. New Python files passed `ament_flake8` and `ament_pep257`.
+Runtime launch reached the expected explicit blocker:
+`package 'nav2_map_server' not found`. Detailed evidence and operator lifecycle,
+topic, metadata, and RViz checks are recorded in
+[`docs/evidence/phase5_map_server_2026-10-11.md`](../docs/evidence/phase5_map_server_2026-10-11.md).
+Runtime Jazzy and target Humble checks, GUI confirmation, measured resource use,
+and physical arena alignment remain open.
+
+**Git evidence:** Map-server code, tests, parameters, launch, and RViz artifacts
+are recorded in `69b0505` (`In the middle of stage 2 of map implementation`).
+The 2026-10-11 documentation/readiness updates remain uncommitted.
+
+## 2026-10-12 — Provisional map-frame robot-pose bag replay
+
+**Purpose and scope:** Added the third development increment for the agreed
+work packages: `bags/test1_AT1` can now drive a raw six-degree-of-freedom webcam
+pose and a planar `base_link` proxy over the static arena map. This is an
+assumption-labeled visualization aid while wheel odometry and the ZED IMU do not
+exist; it is not production localization and cannot command the robot.
+
+**Components and files:** `lb_localization/scripts/tag_replay_robot_pose.py`
+owns rigid-transform composition, freshness checks, bounded path segmentation,
+expiring/deleted visualization markers, and diagnostics. The explicit
+`lb_sim/launch/arena_pose_replay.launch.py` replays one bag with `/clock`,
+optionally includes the lifecycle-managed static map, and optionally starts
+`lb_navigation/rviz/arena_pose_replay.rviz`. Unit and launch-contract tests,
+operator procedures, interface/calibration/architecture records, and detailed
+evidence were added. See
+[`docs/evidence/phase5_tag_pose_replay_2026-10-12.md`](../docs/evidence/phase5_tag_pose_replay_2026-10-12.md).
+
+**Interfaces and TF ownership:** The node publishes raw camera
+`/visualization/replay/webcam_pose_raw` (`PoseStamped`), planar robot
+`/visualization/replay/base_pose_planar` (`PoseStamped`), bounded current
+`/visualization/replay/base_path_planar` (`Path`), expiring
+`/visualization/replay/markers` (`MarkerArray`), and replay state on
+`/diagnostics` (`DiagnosticArray`). It consumes the recorded
+`webcam_optical_frame -> webcam_observation_tag_1` TF but broadcasts no TF and
+does not publish `/localization/apriltag_pose`. Future EKFs retain sole
+`map -> odom` and `odom -> base_link` authority.
+
+**Parameters and provenance:** Tag 1 remains estimated at
+`[0.0, 1.0, 0.75]` m. Its face normal is user-specified as arena `+X`; the
+recorded `apriltag_ros` PnP TF establishes emitted upright tag axes with `+z`
+out of the printed face, yielding map RPY `[+pi/2, 0, +pi/2]` rad. The webcam
+is temporarily estimated at `[0.0, 0.0, 0.40]` m from `base_link` with rear
+optical RPY `[-pi/2, 0, +pi/2]`. The 0.40 m height is user-selected; X/Y
+coincidence and rotation are engineering assumptions. Neither transform is
+surveyed or copied into production configuration. The 0.5 s stale timeout and
+500-pose path bound are development defaults, not experimentally tuned
+competition values.
+
+**Failure, safety, and alternatives:** A stale/missing observation deletes the
+camera/base markers and clears the path; reacquisition starts a new segment.
+Backward replay time also clears state. No odometric interpolation or dead
+reckoning is attempted. Raw and planar pose topics both remain available, while
+RViz uses finite-lifetime markers because a normal pose display retains its last
+sample. Publishing `map -> base_link` TF was rejected because it would bypass
+the specified local/global EKF ownership. The initial raw-library tag-axis
+interpretation was also rejected: live replay placed the camera at negative X
+with yaw near pi. The recorded PnP TF showed that its emitted tag `+z` points
+outward, so the final tag roll is `+pi/2`. The launch starts no detector,
+controller, planner, command topic, or hardware.
+
+**Dependencies, verification, and limitations:** Added the declared
+`visualization_msgs` dependency and declared `lb_sim`'s existing
+`ament_index_python` runtime import; existing geometry, navigation, diagnostics,
+TF, launch, rosbag, RViz, and optional Nav2 map-server dependencies are reused.
+Focused math/state/launch checks passed 12/12. Jazzy builds of
+`lb_localization`, `lb_navigation`, and `lb_sim` passed; their suites reported
+41 tests with zero errors, failures, or skips. New Python lint/docstyle and
+diff checks passed. A headless actual-bag run published the full graph and a
+corrected planar map sample `(1.815, 0.782, 0.0)` m with yaw about 0.084 rad;
+live loss at 0.52 s cleared the path, loop rewind reported `CLOCK_RESET`, and
+shutdown was clean. Combined `/map` and GUI validation remain pending the
+missing Nav2 map-server packages; graphical RViz inspection, resource
+measurements, Humble target validation, physical tag/map survey, and camera
+extrinsic measurement also remain open. The hand-moved camera bag cannot
+validate chassis dynamics or localization accuracy, and the adapter performs
+no quality gating, covariance estimation, multi-tag fusion, or propagation
+through tag loss.
+
+**Git evidence:** Uncommitted implementation based on `553ecb8` (`Phase 2
+complete`); record the resulting commit after review.
+
+## 2026-10-15 — Prompt 4 synthetic robot and camera visualization
+
+**Purpose and scope:** Extended the development-only arena replay so the
+provisional planar pose is visibly represented by a chassis, chassis-only
+footprint, rear webcam, and forward ZED instead of only an arrow. This supports
+RViz interpretation of `test1_AT1`; it is not a physical model, production
+localization, or Nav2 collision geometry.
+
+**Components and interfaces:** `lb_localization/scripts/tag_replay_robot_pose.py`
+now adds chassis, footprint, sensor-body, and view-direction namespaces to
+`/visualization/replay/markers` (`visualization_msgs/msg/MarkerArray`).
+`lb_sim/launch/arena_pose_replay.launch.py` exposes chassis and ZED assumptions,
+and `lb_navigation/rviz/arena_pose_replay.rviz` enables every namespace. Unit
+and launch-contract tests plus architecture, interface, calibration,
+operations, testing, traceability, and evidence records were updated. See
+[`docs/evidence/phase5_robot_marker_2026-10-15.md`](../docs/evidence/phase5_robot_marker_2026-10-15.md).
+
+**Parameters and provenance:** The `0.90 x 0.60 x 0.25 m` chassis is reused
+from the explicitly synthetic mock profile. The footprint is the chassis
+rectangle only and excludes the scoop. Webcam and ZED are both temporarily at
+`[0, 0, 0.40] m`; webcam optical RPY `[-pi/2, 0, +pi/2]` points toward robot
+`-X`, while ZED optical RPY `[-pi/2, 0, -pi/2]` points toward `+X`. Camera
+dimensions are synthetic display sizes. None are measured, manufacturer
+provided, or experimentally tuned.
+
+**TF ownership, safety, and failure behavior:** The display still publishes no
+TF and cannot usurp the future EKF-owned `map -> odom` or `odom -> base_link`
+transforms. It starts no planner, controller, motor, or hardware. Every dynamic
+robot and sensor marker retains the 0.5 s lifetime and explicit deletion on tag
+loss; the path remains segmented on loss and clock rewind. Using markers rather
+than `map -> base_link` or the current mock URDF preserves this boundary while
+the physical cart dimensions and sensor mounts remain unknown.
+
+**Verification and limitations:** Focused tests passed 8/8; Python lint and
+docstyle passed. Jazzy builds of `lb_localization`, `lb_navigation`, and
+`lb_sim` succeeded, and selected suites reported 120 tests, zero errors, zero
+failures, and one pre-existing skip. A live headless `test1_AT1` replay emitted
+all 11 expected map-frame markers: chassis scale `(0.9, 0.6, 0.25)`, closed
+five-point footprint, colocated sensor bodies at `z=0.4`, and opposed rear and
+forward view arrows. GUI inspection, resource measurements, target Humble
+validation, physical chassis/scoop measurements, camera-mount survey, and a
+production Nav2 footprint remain open.
+
+**Git evidence:** Uncommitted implementation based on `e91be59` (`Phase 3 of
+mapping process: localization from recorded apriltag bags`); record the
+resulting commit after review.
+
+## 2026-10-15 — Guidebook arena scene and assumptions register
+
+**Purpose and scope:** Added persistent RViz context for the arena outline,
+excavation boundary, target berm, provisional starting-zone boundary, and
+configured AprilTags. The column is intentionally omitted because the
+guidebook has no hard pose or dimensions. This is visualization only and does
+not modify occupancy, costmaps, localization, TF, or control.
+
+**Components and interfaces:** `lb_navigation/scripts/arena_scene_markers.py`
+publishes nine static markers as a reliable, transient-local
+`visualization_msgs/msg/MarkerArray` on `/visualization/arena/markers`, with a
+1 Hz republish heartbeat for late RViz discovery and replay clock resets.
+`config/arena_scene.yaml` owns geometry; `launch/arena_scene.launch.py` provides
+a standalone entry point. `map.launch.py` starts the scene by default, while
+`arena_pose_replay.launch.py` starts exactly one scene whether its optional map
+server is enabled or not. Both relevant RViz profiles enable all scene
+namespaces. The assumed Tag 1 marker moved from the expiring robot marker topic
+to this durable static topic; IDs 2 and 3 remain unrendered without poses.
+
+**Parameters and provenance:** Guidebook Section 11.2/Figure 9 provides the
+nominal `6.88 x 5.0 m` outline, `x=2.5 m` excavation boundary, and
+`2.2 x 0.9 m` target berm centered at `(5.38, 0.9) m`. Only the starting
+zone's 2.0 m X extent is labeled; its rendered 2.0 m Y depth is a diagram-based
+estimate and is dashed. The existing 6.85 m occupancy interior remains a
+cell-aligned development approximation, leaving an explicit 0.03 m discrepancy
+until survey. Tag 1 remains the replay-only `[0, 1, 0.75] m`, `0.300 m`, `+X`
+normal assumption.
+
+**Safety, ownership, and failure behavior:** The publisher emits no TF, map,
+costmap, pose, or command. It contains no column, boulders, or craters. Static
+markers persist independently of tag loss; moving robot markers still expire
+and are deleted. Arena markers are prohibited as Nav2 collision geometry.
+Invalid dimensions, out-of-bounds geometry, duplicate tag IDs, malformed tag
+arrays, and nonpositive sizes fail node construction.
+
+**Assumption governance:** Added `docs/assumptions_register.md` as the living
+record of temporary numeric values, provenance, consumers, prohibited uses,
+and required replacement evidence. Initial entries cover map dimensions and
+origin, zones/berm, omitted column, field/replay tags, webcam/ZED mounts,
+synthetic robot/drive geometry, and replay freshness. `docs/tbd_register.md`
+now links broad missing decisions to the numeric assumptions record.
+
+**Verification and limitations:** Focused unit/contract tests passed 16/16.
+Jazzy builds of `lb_localization`, `lb_navigation`, and `lb_sim` succeeded;
+selected suites reported 126 tests, zero errors, zero failures, and one
+pre-existing skip. Syntax, Python lint/docstyle, CMake/XML lint, and diff checks
+passed. An installed standalone runtime published all nine expected map-frame
+markers with the configured dimensions, bounds, tag pose, and no column.
+Graphical RViz confirmation, physical arena and starting-zone survey, tag
+survey, target Humble validation, and resource measurements remain open. See
+[`docs/evidence/phase5_arena_scene_2026-10-15.md`](../docs/evidence/phase5_arena_scene_2026-10-15.md).
+
+**Git evidence:** Uncommitted implementation based on `e91be59` (`Phase 3 of
+mapping process: localization from recorded apriltag bags`); record the
+resulting commit after review.
+
+## 2026-10-15 — Repository-wide assumptions and temporary-decision audit
+
+**Purpose and scope:** Expanded the living assumptions register from the recent
+arena/replay numerical values into a repository-wide audit. The bulleted record
+now captures every identified mock dimension, unverified physical input,
+proposed runtime default, incomplete integration choice, and development-only
+shortcut that could otherwise be mistaken for a permanent requirement.
+
+**Components and files:** Reworked
+[`docs/assumptions_register.md`](../docs/assumptions_register.md) into grouped
+bullets covering platform/power, robot geometry, drive/odometry, arena/map,
+sensors/tags, localization/replay, Nav2/perception, safety, mechanisms,
+mission, operations, and performance. Each entry states its status, current
+value or missing decision, restriction, and evidence needed for closure.
+[`docs/tbd_register.md`](../docs/tbd_register.md) now describes the broader
+scope and remains the dependency-oriented index.
+
+**Architecture and safety:** The audit makes no runtime, ROS-interface, topic,
+service, action, message, parameter, or TF-authority change. It explicitly
+separates confirmed decisions—four-wheel skid steering, REP-103 convention,
+sole EKF TF ownership, dynamic-obstacle costmap handling, and gated synthetic
+fixtures—from temporary physical values. Mock/replay geometry and controller
+limits remain prohibited for physical collision checking, control, or safety.
+
+**Verification and limitations:** The register was cross-checked against the
+canonical specification, TBD register, platform lock, hardware and safety
+documents, mock geometry/controllers, webcam detector/calibration, tag-map and
+localizer/EKF templates, arena map/scene, replay launch, and development log.
+It contains 59 unique active assumption IDs in bulleted form. Focused
+pre-commit checks for end-of-file, whitespace, merge markers, and private-key
+detection passed, and `git diff --check` reported no error. This is a
+documentation audit, not closure evidence: every active item remains open
+until its stated survey, measurement, target-runtime, experimental, or review
+criterion is recorded.
+
+**Git evidence:** Uncommitted documentation update based on `e91be59` (`Phase 3
+of mapping process: localization from recorded apriltag bags`); record the
+resulting commit after review.
+
+## 2026-10-22 — Nav2 specification and fused-pose contract
+
+**Purpose and scope:** Drafted the dedicated Nav2 specification and staged
+implementation plan before starting runtime work. It covers localization and
+TF prerequisites, the development footprint, lifecycle/configuration layout,
+global and local costmaps, planner/controller selection, NavigateToPose,
+command arbitration, obstacle sources, replanning/recovery, acceptance tests,
+physical-validation gates, and evidence requirements.
+
+**Interfaces and architecture:** Reserved `/localization/fused_pose` as
+`geometry_msgs/msg/PoseWithCovarianceStamped` in `map`. The initial planned
+producer is a freshness-gated direct pass-through of accepted
+`/localization/apriltag_pose` samples that preserves timestamp, pose, and
+covariance, publishes no samples between detections, and owns no TF. Future
+wheel-odometry/ZED-IMU local fusion and the global EKF retain sole
+`odom -> base_link` and `map -> odom` ownership; a later adapter derives the
+same stable fused-pose topic from `/odometry/global`.
+
+**Parameters and assumptions:** The team estimates a maximum `1.10 m`
+front-to-back by `0.60 m` lateral robot envelope. A centered development
+polygon at `[+/-0.55, +/-0.30] m` is permitted only when explicitly selected
+and additionally assumes `base_link` is at the rectangle center. The estimate
+is not measured and excludes mechanism sweeps, protrusions, stopping margin,
+localization uncertainty, and padding. `ASM-NAV-01` now records that boundary;
+new `ASM-LOC-06` and `ASM-NAV-06` record the AprilTag pass-through and
+source-specific command authorization, bringing the active register to 61
+unique IDs.
+
+**Safety and failure behavior:** Until continuous localization is validated,
+missing, rejected, invalid, or stale AprilTag pose input must reject or halt
+navigation and prevent every nonzero `/cmd_vel_nav` from reaching `/cmd_vel`.
+The freshness timeout remains a required `TBD` parameter; the replay
+visualizer's 0.50 s value is not reused silently. Reacquisition does not resume
+cancelled physical motion without a new goal or explicit retry. This gate is
+defense in depth and does not replace the E-stop, hardware disable, watchdog,
+or future safety supervisor.
+
+**Components and files:** Added
+[`docs/nav2_specification_and_implementation.md`](../docs/nav2_specification_and_implementation.md)
+and aligned the canonical specification, architecture, interface contract,
+requirements traceability, and assumptions register. This documentation-only
+change adds no ROS node, publisher, action server, TF broadcaster, costmap,
+planner, controller, velocity command, or dependency.
+
+**Verification and remaining work:** Documentation links, unique assumption
+IDs, whitespace, merge-marker, private-key, and diff checks were run. Runtime
+validation is not applicable yet. Implementation begins with dependency/readiness
+checks, then the fused-pose boundary and fail-closed command gate; physical
+motion remains prohibited pending every gate listed in the Nav2 specification.
+
+**Git evidence:** Uncommitted documentation update based on `5afa511` (`showing
+camera output prescene on the map, and modeling the attributes of the arena`);
+record the resulting commit after review.
+
+## 2026-11-15 — Nav2 crash recovery and N4 headless runtime validation
+
+Recovered build/install/test integration omitted from `0605ea4`: install the
+localization and safety scripts/configuration, register N0–N4 tests, declare
+runtime/test dependencies and check standalone costmap readiness. A clean
+separate build completed eight packages, and the normal four affected packages
+were rebuilt. Final affected-package tests reported 127 tests with zero
+errors, failures or skips, including live N4 DDS/lifecycle validation.
+
+Live testing exposed noninteger YAML dimension types and unsupported standalone
+costmap lifecycle bonds. Dimensions are integer meters; N4 disables bonds and
+defaults to manual startup after current development TF. No motion authority
+was added. The test checks active nodes, grid geometry, inflation/raw cell
+costs, both footprints, command permission while valid, and zero commands on
+pose loss. Main status/interface/testing/operator/traceability documents now
+record the executable development boundary.
+
+Geometry/timing remain assumptions; bond monitoring is not implemented for
+standalone N4 and must be addressed with N5 server integration. RViz graphical
+review, N5–N8, Humble/Jetson, continuous localization and all physical-validation
+gates remain open. See [recovery evidence](../docs/resources/evidence/2026-11-15-nav2-crash-recovery.md).
+
+Git evidence: uncommitted follow-up based on `0605ea4`; record the resulting
+commit after review.
+
 ## 2026-10-13 — JetPack 7.2.1 and Jazzy robot baseline
 
 **Purpose and decision:** The team reported that the Orin Nano robot runs
@@ -641,3 +1226,50 @@ multi-file invocation stalled in this sandbox.
 timing, TF ownership, and resource use on the JetPack 7.2.1 Orin Nano. Rebuild
 and test the workspace on arm64. Confirm physical calibration, sensor mounts,
 motor protocol, and safety behavior before any real robot use.
+
+## 2026-11-15 — Merge latest main into the N4 development branch
+
+Resolved the interrupted merge of `b213617` (`origin/main`) into `e6fef8d`
+on `sun-nav2-1-N4-main-merge`. A fetch confirmed that `b213617` was still the
+latest main commit. The GitHub connector returned no open PR; this was a
+local conflicted merge.
+
+Preserved N0–N4 implementation, recovery evidence, replay/map features and
+native provisioning. Incorporated main's Jazzy/Ubuntu 24.04 baseline, CI and
+Jazzy ros2_control API/controller changes. Kept Docker removed, moved the
+selected machine-readable versions to `config/platform.env`, and aligned
+platform contracts, active assumptions, Nav2 mux expectations and bag startup.
+Both branches' development-log entries were retained.
+
+Validation: all ten packages built, and the full test suite reported
+176 tests, zero errors/failures, and one skip (xacro unavailable). The N4
+cross-process lifecycle/costmap/footprint/localization-loss test passed.
+Focused merge contracts passed 22 tests. Changed Python files pass Black;
+shell syntax, conflict-marker, documentation-link and whitespace checks pass.
+The hardware plugin and mock launch runtime remain conditional on host
+ros2_control/Xacro dependencies; no target/physical validation is claimed.
+Platform patches remain reported values requiring Jetson confirmation.
+N5–N8 and RViz visual review remain open. No remote branch was pushed.
+
+Git evidence: this entry is included in the merge commit with parents
+`e6fef8d` and `b213617`; use `git log --merges` for its resulting hash.
+
+## 2026-11-15 — Formatting-independent launch contract tests
+
+Fixed four CTest suites that failed after Black formatting: static map launch,
+arena scene markers, bag replay, and arena pose replay. Five assertions were
+matching exact single quotes or multiline call wrapping, although the required
+packages, topic, launch arguments and parameter values were still present.
+The contracts now inspect Python AST calls, keyword arguments, dictionaries,
+and string literals; they retain the non-actuating boundary checks. Launch
+files and runtime behavior are unchanged.
+
+Reproduced five failing tests before the fix; all 11 focused tests now pass.
+The five affected checks also pass against AST-reserialized source with
+changed quoting/wrapping. Negative checks reject altered required package,
+topic, bag argument and tag default values. After an all-files pre-commit
+pass, the full ROS package suite reports 176 tests, zero errors/failures and
+one existing Xacro-unavailable skip, including a passing N4 runtime test.
+All applicable pre-commit hooks pass. Jetson/physical validation and N5–N8
+remain open. This fixes the formatting-sensitive CI contracts and does not
+supply target-hardware evidence.

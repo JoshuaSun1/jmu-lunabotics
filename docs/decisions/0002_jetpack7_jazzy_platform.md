@@ -21,9 +21,9 @@ verification on the Jetson.
 
 ## Consequences
 
-- Bootstrap, build, test, activation, container scaffold, and CI use Jazzy.
-- The generic Ubuntu 24.04 container checks ROS package builds but does not
-  supply JetPack, CUDA, or the ZED SDK.
+- Bootstrap, build, test, activation, and CI use Jazzy.
+- Native provisioning is retained; `config/platform.env` records the selected versions.
+- Ubuntu 24.04 x86 development checks do not validate JetPack, CUDA, or the ZED SDK.
 - A previous Humble build or overlay must be rebuilt under Jazzy.
 - The current software contains no ZED launch path and no physical drive path.
 

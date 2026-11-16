@@ -3,7 +3,7 @@
 | Specification requirement | Evidence | Status |
 |---|---|---|
 | Repository structure and package ownership | Root `lb_*` package layout and `architecture.md` | Implemented |
-| Version lock | `docker/versions.env`, platform-lock resource | Proposed; physical validation pending |
+| Native runtime version lock | Platform-lock resource and bootstrap target checks | Platform versions proposed; exact installed Debian/ROS manifest pending physical validation |
 | Formatting/lint/test configuration | `.pre-commit-config.yaml`, scripts, package tests | Implemented; restricted-sandbox Black limitation recorded in devlog |
 | Phase 1 parameterized Xacro | `lb_model/urdf/lb_mock.urdf.xacro`, `lb_model/config/mock_geometry.yaml`, model contract test | Implemented as synthetic mock only |
 | Phase 1 sensor and mechanism frames | Xacro links, `docs/phase1_mock_model.md`, mock TF test | Implemented; physical mounts and linkage TBD |
@@ -21,8 +21,14 @@
 | Phase 4.2 tag-map schema and planned field inventory | `lb_localization/config/tag_map.template.yaml`, `docs/phase42_tag_localizer.md` | Implemented as an unverified template for `tag36h11` IDs 1–3, nominal 0.300 m; no field poses/survey or physical claim |
 | Phase 4.2 known-tag localizer core | `lb_localization/src/tag_localizer_core.cpp`, `tag_localizer_node.cpp`, unit/contract tests | Implemented and structurally tested with synthetic fixtures; publishes only map-frame absolute pose and diagnostics, never TF; physical use and the specification's localization-validity monitoring remain pending `CAM-01`, `TAG-01`, and `LOC-01` |
 | Global EKF correction and `map -> odom` authority | `lb_localization/config/ekf_global.template.yaml` | Pending Phase 3 `/odometry/local`, measured tuning, `robot_localization`, and target runtime TF-authority evidence; template is not launched |
-| Container builds on target architecture | `docker/` Phase 1 dependency set | Pending physical arm64 validation |
-| `colcon build` / `colcon test` | Build/test scripts and package tests | Jazzy x86_64 container: 10 packages built, 100 tests passed; arm64 target pending |
+| Recorded AprilTag observation visualization | `lb_localization/scripts/tag_replay_visualizer.py`, `lb_sim/launch/bag_replay.launch.py`, `lb_navigation/rviz/apriltag_replay.rviz`, focused tests | Implemented for bounded, freshness-gated camera-relative pose/path replay; graphical Jazzy smoke test remains pending outside the restricted sandbox |
+| Development-only map-frame robot-pose replay | `tag_replay_robot_pose.py`, `arena_pose_replay.launch.py`, `arena_pose_replay.rviz`, unit/contract tests | Implemented with explicit estimated tag/extrinsic parameters, raw 6-DoF camera pose, planar `base_link` proxy, and loss/reacquisition segmentation; not production localization, no TF, covariance, odometry propagation, or control use |
+| Development-only robot visualization | `tag_replay_robot_pose.py`, `arena_pose_replay.rviz`, marker geometry tests | Synthetic chassis and chassis-only footprint plus colocated rear-webcam/forward-ZED proxies follow the provisional planar pose; mock dimensions and camera mounts are explicitly unmeasured, expire on tag loss, publish no TF, and are prohibited as Nav2 collision geometry |
+| Initial static arena artifact and map-server configuration | `lb_navigation/maps/arena.pgm`, `arena.yaml`, `config/map_server.yaml`, `launch/map.launch.py`, RViz profile, generator and contract tests | Repository implementation complete for a 6.85 m x 5.00 m free interior with one 0.05 m occupied perimeter cell; runtime smoke is pending installation of the declared Nav2 packages, while the center column, keepouts, and physical survey remain pending |
+| Guidebook arena-scene visualization | `arena_scene_markers.py`, `arena_scene.yaml`, `arena_scene.launch.py`, RViz profiles, tests, assumptions register | Implements a durable 6.88 x 5.0 m guidebook outline, excavation division, berm target, dashed provisional starting zone, and assumed Tag 1 marker; intentionally no column, TF, occupancy, costmap, or control authority |
+| Nav2 development N0–N4 | Fused-pose/command-gate/TF bridge scripts, N4 launch/config/RViz and registered tests | Clean build and headless N4 lifecycle, grid, footprint, raw cost and localization-loss command tests pass on Jazzy/x86; RViz visual inspection, planning/control N5–N8 and physical validation remain pending. See [recovery evidence](resources/evidence/2026-11-15-nav2-crash-recovery.md) |
+| Native target provisions on target architecture | `bootstrap_dev.sh --install --profile jetson` | Pending physical arm64 validation |
+| `colcon build` / `colcon test` | Build/test scripts and package tests | Jazzy x86_64 validation recorded in recovery evidence; arm64 target validation pending |
 
 The Phase 4.1 detector baseline and Phase 4.2 synthetic localizer are narrower
 than completed field localization. Requirements outside the completed

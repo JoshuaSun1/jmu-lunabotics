@@ -109,3 +109,12 @@ def test_bootstrap_makes_target_specific_omissions_explicit() -> None:
 
     assert "jetpack" in source
     assert "zed" in source
+
+
+def test_bootstrap_checks_declared_static_map_runtime_dependencies() -> None:
+    """Readiness reports the static map and standalone costmap dependencies."""
+    source = _bootstrap_source()
+
+    assert "nav2_costmap_2d" in source
+    assert "nav2_map_server" in source
+    assert "nav2_lifecycle_manager" in source

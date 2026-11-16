@@ -19,11 +19,11 @@
 | ROS 2 | Jazzy Jalisco | Native Ubuntu 24.04 pairing with arm64 binary packages. |
 | ZED SDK | 5.5.0 | Reported 5.5 installation; Stereolabs publishes a JetPack 7.2 / CUDA 13.2 build. Verify installed patch version. |
 | ZED ROS 2 wrapper | `v5.5.0` Git tag | Matching wrapper release with Jazzy support. Record the resolved commit if added to the workspace. |
-| Container architecture | `linux/arm64` | Required on the Jetson. |
+| Target architecture | `linux/arm64` | Required on the Jetson. |
 
 The ZED SDK 5.5 release page labels the JetPack 7.2 build as L4T 39.2. Confirm
 that the installed SDK package works with the robot's 39.2.1 patch release.
-`docker/versions.env` describes a software baseline, not proof that the CUDA,
+`config/platform.env` describes a software baseline, not proof that the CUDA,
 SDK, or wrapper patches were installed and tested on this robot.
 
 ## Sensor integration
@@ -37,7 +37,7 @@ SDK, or wrapper patches were installed and tested on this robot.
 1. Capture `cat /etc/nv_tegra_release`, `dpkg-query -W nvidia-jetpack`, `nvcc --version`, the ZED SDK version, and installed ROS package versions. The bootstrap `--profile jetson` check verifies the OS, architecture, L4T, and model only.
 2. Install or build the `v5.5.0` wrapper against the installed ZED SDK and Jazzy, and record its commit SHA. Do not reuse a previous Humble workspace overlay; rebuild the workspace under Jazzy.
 3. Verify ZED Mini RGB, depth, IMU timestamps, TF ownership, and CPU/GPU/memory use at the intended operating rate.
-4. Record exact installed package versions and any validated container image digest. The generic Ubuntu build container does not contain JetPack or the ZED SDK.
+4. Record exact installed package versions in a tracked native-runtime manifest. Development-host tests do not validate JetPack or the ZED SDK.
 5. Test the complete stack on the physical robot before treating it as competition-ready.
 
 ## Other hardware/software dependencies still TBD

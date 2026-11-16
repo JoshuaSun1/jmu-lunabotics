@@ -94,8 +94,8 @@ Do not select the ROS distribution independently of the Jetson and ZED software 
 
 Selected baseline: JetPack 7.2.1 / L4T 39.2.1, Ubuntu 24.04, ROS 2 Jazzy,
 CUDA 13.2.2, and ZED SDK 5.5.0. Pin the wrapper release in
-`docker/versions.env` and validate the full combination on the Orin Nano with
-the ZED Mini. The generic build container is not a Jetson runtime image.
+`config/platform.env` and validate the full combination on the Orin Nano with
+the ZED Mini. Native provisioning remains the deployment workflow; target validation is still required.
 
 A legacy Jetson Nano 4 GB is outside the performance assumptions of this document. The expected target is a Jetson Orin Nano 8 GB.
 
@@ -314,6 +314,27 @@ Recommended output:
 
 - `/localization/status` using a custom message or `diagnostic_msgs/msg/DiagnosticArray`.
 - `localization_valid` Boolean exposed to the mission manager and safety supervisor.
+
+### 6.6 Stable fused-pose interface
+
+The application-facing global pose shall be published on
+`/localization/fused_pose` as
+`geometry_msgs/msg/PoseWithCovarianceStamped` in `map`. This interface is
+separate from the global EKF's full-state `/odometry/global` output so mission,
+monitoring, RViz, and test consumers do not depend on a particular fusion
+implementation.
+
+Before continuous wheel/IMU localization exists, a development-only adapter may
+publish `/localization/fused_pose` directly from each accepted
+`/localization/apriltag_pose` sample. It shall preserve the input timestamp,
+pose, and covariance; publish no interpolated or refreshed samples between
+detections; publish no TF; and report its AprilTag-only source in diagnostics.
+Until continuous localization is validated, absent, invalid, rejected, or stale
+AprilTag input shall inhibit every nonzero Nav2 command. The exact freshness
+threshold remains a required, validated parameter rather than a hidden default.
+
+The detailed Nav2 boundary and staged implementation are defined in
+[`nav2_specification_and_implementation.md`](nav2_specification_and_implementation.md).
 
 ## 7. Static arena map
 
@@ -691,7 +712,8 @@ The following names are canonical at the application boundary. Vendor topics may
 | `/odometry/local` | `nav_msgs/msg/Odometry` | Local EKF | Global EKF, Nav2 |
 | `/tag_detections` | AprilTag detection array | AprilTag detector | Tag localizer |
 | `/localization/apriltag_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Tag localizer | Global EKF |
-| `/odometry/global` | `nav_msgs/msg/Odometry` | Global EKF | Monitoring/UI |
+| `/localization/fused_pose` | `geometry_msgs/msg/PoseWithCovarianceStamped` | Initial AprilTag pass-through; future global-fusion adapter | Localization monitor, mission/UI, RViz |
+| `/odometry/global` | `nav_msgs/msg/Odometry` | Global EKF | Fused-pose adapter, monitoring |
 | `/perception/depth_obstacles` | `sensor_msgs/msg/PointCloud2` | Terrain node | Nav2 costmap |
 | `/perception/terrain_hazards` | `sensor_msgs/msg/PointCloud2` | Terrain node | Nav2 costmap |
 | `/cmd_vel_nav` | `geometry_msgs/msg/TwistStamped` or stack-required Twist type | Nav2 | Twist mux |
@@ -736,11 +758,6 @@ lunabot_autonomy/
 ├── LICENSE
 ├── .gitignore
 ├── .pre-commit-config.yaml
-├── docker/
-│   ├── Dockerfile.jetson
-│   ├── docker-compose.yml
-│   ├── versions.env
-│   └── README.md
 ├── docs/
 │   ├── architecture.md
 │   ├── calibration.md
@@ -1026,14 +1043,14 @@ Codex shall implement small, reviewable phases. It shall not attempt the entire 
 Deliverables:
 
 - Repository structure.
-- ROS distribution and container version lock.
+- ROS distribution and native-runtime version lock.
 - Formatting/lint/test configuration.
 - Empty packages with documented ownership.
 - Top-level README and build scripts.
 
 Exit criteria:
 
-- Container builds on target architecture.
+- Bootstrap provisions and verifies the target architecture.
 - `colcon build` and `colcon test` pass.
 
 ### Phase 1 - Description, TF, and mock robot
@@ -1195,7 +1212,7 @@ When implementing from this specification:
 
 ```text
 Read docs/lunabotics_autonomy_software_spec.md. Implement Phase 0 only.
-Create the repository and ROS 2 package scaffold, container/version placeholders,
+Create the repository and ROS 2 package scaffold, native version placeholders,
 build/test scripts, and documentation skeleton. Do not implement hardware logic.
 Mark unresolved platform and hardware values as explicit TBDs. Run available build,
 test, and lint commands and report the results.
@@ -1224,7 +1241,7 @@ The architecture was checked against official or primary project documentation a
 2. Nav2 Costmap 2D, Map Server, Obstacle Layer, Voxel Layer, and Behavior Tree documentation.
 3. `robot_localization` state-estimation documentation and Nav2 odometry setup guide.
 4. `ros2_control` Jazzy documentation and `diff_drive_controller` user documentation.
-5. Stereolabs ZED ROS 2 integration and container guidance.
+5. Stereolabs ZED ROS 2 integration and native Jetson guidance.
 6. `christianrauch/apriltag_ros` ROS 2 repository and AprilRobotics AprilTag reference implementation.
 7. `twist_mux` ROS 2 package documentation.
 

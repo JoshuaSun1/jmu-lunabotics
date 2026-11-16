@@ -1,0 +1,19 @@
+# N3 test-only bridge for the AprilTag-only localization profile.
+# It is intentionally non-runnable until launch overrides allow_test_only_tf.
+# map and odom are temporarily coincident; odom -> base_link copies the fused pose.
+# Source timestamps are preserved and no transform is propagated or refreshed.
+apriltag_development_tf_bridge:
+  ros__parameters:
+    use_sim_time: false
+    allow_test_only_tf: false
+    production_ekfs_enabled: false
+    localization_profile: apriltag_development_only
+    physical_robot_use: prohibited
+    fused_pose_topic: /localization/fused_pose
+    valid_topic: /localization/valid
+    status_topic: /diagnostics
+    map_frame: map
+    odom_frame: odom
+    base_frame: base_link
+    freshness_timeout_s: 0.50
+    poll_period_s: 0.05

@@ -1,0 +1,13 @@
+# Development-only gate. It has no /cmd_vel or physical motor connection.
+# /cmd_vel_nav_raw is the future Nav2 output; /cmd_vel_nav is the gated output.
+navigation_command_gate:
+  ros__parameters:
+    use_sim_time: false
+    raw_cmd_topic: /cmd_vel_nav_raw
+    gated_cmd_topic: /cmd_vel_nav
+    fused_pose_topic: /localization/fused_pose
+    valid_topic: /localization/valid
+    diagnostics_topic: /diagnostics
+    expected_frame: map
+    freshness_timeout_s: 0.50
+    check_period_s: 0.05

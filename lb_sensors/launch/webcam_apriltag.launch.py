@@ -10,6 +10,7 @@ from pathlib import Path
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, LogInfo, OpaqueFunction
+from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
 
@@ -162,6 +163,15 @@ def _launch_setup(context, *args, **kwargs):
                 ("detections", "tag_detections"),
             ],
         ),
+        Node(
+            package="image_view",
+            executable="image_view",
+            namespace=namespace,
+            name="live_feed",
+            output="screen",
+            condition=IfCondition(LaunchConfiguration("show_live_feed")),
+            remappings=[("image", "image_rect")],
+        ),
     ]
 
 
@@ -178,6 +188,11 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument("camera_name", default_value="uvc_camera_(046d:0825)"),
             DeclareLaunchArgument("camera_frame", default_value="webcam_optical_frame"),
             DeclareLaunchArgument("camera_fps", default_value="15.0"),
+            DeclareLaunchArgument(
+                "show_live_feed",
+                default_value="false",
+                description="Open a rectified camera image window; requires a graphical desktop.",
+            ),
             DeclareLaunchArgument(
                 "calibration_file",
                 default_value=str(package_share / "config" / "webcam_calibration.yaml"),

@@ -12,7 +12,6 @@
 | Scaffold contract | `scripts/test.sh` | Package manifests and required Phase 0 files are present. |
 | ROS package build | `scripts/build.sh` | The empty package scaffold configures and builds. |
 | Style and hygiene | `scripts/lint.sh` | Pre-commit hooks and local syntax checks pass. |
-| Target container | `docker compose --env-file docker/versions.env -f docker/docker-compose.yml build` | Must be run natively on the arm64 Jetson. |
 | Xacro contract | `scripts/test.sh` | Expands the synthetic model when `xacro` is installed; checks the nonphysical profile and required frame names. |
 | Mock launch | `scripts/test.sh` in Jazzy CI/container | Starts `GenericSystem`, confirms an active `joint_state_broadcaster`, required TFs, single publishers, and no `map`/`odom`. Passed in the x86_64 generic container on 2026-10-13. |
 | Live TF authority | `scripts/check_tf_authority.py --runtime` | Checks a separately launched `lb_sim mock_robot.launch.py` graph without commanding hardware. |
@@ -27,6 +26,11 @@
 | Phase 4.1 observation-TF inspection | `ros2 run tf2_ros tf2_echo webcam_optical_frame webcam_observation_tag_0` | Confirms newly stamped dynamic camera-relative observations while the tag is visible; a cached transform after loss is stale and must not be interpreted as a base-relative or map-frame pose. |
 | Phase 4.1 rate/resource baseline | `ros2 topic hz /sensors/webcam/image_raw` and `/sensors/webcam/tag_detections` | Records actual host rates after V4L2 verifies the configured 15 Hz source rate; measure CPU/memory before making target performance claims. |
 | Phase 4.2 localizer core/contract tests | `./scripts/test.sh` | Exercises synthetic tag-map parsing, explicit test-only opt-in, composition, quality/stale-TF contracts, covariance/fusion, duplicate-tag protection, jump gates, and the no-TF-broadcaster boundary. A synthetic node startup is also checked; it does not exercise a running camera/TF graph. |
+| Tag-1 bag replay | `ros2 launch lb_sim bag_replay.launch.py bag_path:=$PWD/bags/test1_AT1 playback_rate:=0.25` | Replays the explicit Jazzy MCAP with `/clock`, opens the camera-relative RViz profile, bounds the current path, clears it on stale observations, and starts a new segment after reacquisition. It starts no camera, detector, map server, Nav2, or hardware. |
+| Provisional arena-pose replay | `ros2 launch lb_sim arena_pose_replay.launch.py bag_path:=$PWD/bags/test1_AT1 playback_rate:=0.25` | Shows a raw 6-DoF camera pose, planar robot proxy, synthetic chassis/footprint, colocated rear webcam, and forward ZED over the static arena. Verify both view arrows, marker disappearance during tag loss, separate path after reacquisition, and movement direction. Geometry is estimated and output is visualization-only. |
+| Arena raster contract | `colcon test --packages-select lb_navigation` | Verifies the 139 x 102 raster, 137 x 100 free interior, occupied one-cell perimeter, 0.05 m resolution, `[-0.05, -0.05, 0.0]` image origin, and omission of the unsurveyed center column. |
+| Static map lifecycle smoke | `ros2 launch lb_navigation map.launch.py use_rviz:=false`, then inspect `/map_server` and `/map` | Requires `nav2_map_server` and `nav2_lifecycle_manager`. Verifies active lifecycle state, transient-local `/map`, `frame_id=map`, 0.05 m resolution, 139 x 102 dimensions, and the configured origin. It does not establish a robot pose or TF. |
+| Static arena-scene smoke | `ros2 launch lb_navigation arena_scene.launch.py`, then `ros2 topic echo /visualization/arena/markers --once` | Verifies a transient-local, visualization-only scene containing the arena outline, excavation boundary, dashed provisional starting zone, berm target, and only configured tags. Confirm no column marker or TF publisher exists. |
 
 An x86/Jazzy result is a development-host result only. It cannot validate the
 Jetson/JetPack/ZED runtime combination.
@@ -70,3 +74,17 @@ runtime TF-authority integration tests for the local and global EKFs.
 Use `scripts/record_bag.sh --profile webcam_apriltag` to capture the
 source-scoped raw/rectified images, camera information, detections, and `/tf`
 for a Phase 4.1 bench run.
+
+## Nav2 crash recovery and N4 runtime checks
+
+CMake now registers all saved N0–N4 contracts and ROS runtime tests. Run the
+normal build/test workflow after sourcing ROS and the workspace. The N4 test
+requires `nav2_costmap_2d`, `nav2_map_server`, `nav2_lifecycle_manager`, and
+`nav2_msgs`, plus local DDS communication between processes. A sandbox that
+blocks UDP cannot validate this test; run it with local networking permitted.
+
+The test supplies a bounded synthetic pose stream, explicitly starts lifecycle
+nodes after TF is ready, checks grids, inflation, footprints and raw cell
+costs, then stops pose input and verifies gated commands become zero.
+It performs lifecycle shutdown before terminating the launch process group.
+No hardware is started. See [commands and results](resources/evidence/2026-11-15-nav2-crash-recovery.md).

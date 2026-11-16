@@ -135,3 +135,90 @@ excluded. Synthetic fixture maps/extrinsics may run only with an explicit
 test-only opt-in and are never included from system bringup. See
 [`phase42_tag_localizer.md`](phase42_tag_localizer.md) for the full TF,
 fusion, failure, and remaining-hardware contract.
+
+## Fused-pose and Nav2 development boundary
+
+`/localization/fused_pose` is the stable application-facing global robot pose
+and uses `geometry_msgs/msg/PoseWithCovarianceStamped` in `map`. The initial
+development implementation passes through each accepted
+`/localization/apriltag_pose` sample without changing its timestamp, pose, or
+covariance. It does not interpolate, dead-reckon, refresh stale data, or publish
+TF, and diagnostics will identify the AprilTag-only source.
+
+The future local/global EKF architecture remains authoritative. The local EKF
+owns `odom -> base_link`; the global EKF owns `map -> odom` and publishes the
+full `/odometry/global` state. A future adapter derives
+`/localization/fused_pose` from that filtered state, preserving the
+application-facing topic while the producer changes.
+
+Until continuous localization is validated, loss, rejection, invalidity, or
+staleness of the AprilTag pose locks the Nav2 command path and prevents every
+nonzero `/cmd_vel_nav` from reaching `/cmd_vel`. The fused-pose topic does not
+itself satisfy Nav2's TF requirement: navigation also requires a current,
+sole-owned `map -> odom -> base_link` chain. See
+[`nav2_specification_and_implementation.md`](nav2_specification_and_implementation.md).
+
+## Static arena map boundary
+
+`lb_navigation` owns the initial static arena image, metadata, map-server
+parameters, lifecycle launch, and map-focused RViz profile. The lifecycle
+manager autostarts only `map_server`; no planner, controller, behavior tree,
+costmap, localization node, hardware process, or robot-pose publisher is part
+of this boundary. `map_server` publishes `/map` as
+`nav_msgs/msg/OccupancyGrid` with `header.frame_id=map`; it does not publish a
+transform. The future global EKF remains the only `map -> odom` authority.
+
+The current artifact represents a team-selected 6.85 m x 5.00 m free interior
+at 0.05 m/cell. Its one-cell occupied boundary lies outside the usable interior,
+and the YAML image origin is `[-0.05, -0.05, 0.0]`. The center support column,
+keepouts, and surveyed arena verification remain TBD rather than being inferred
+from the guidebook illustration.
+
+`lb_navigation/scripts/arena_scene_markers.py` is a separate, durable RViz
+scene publisher. It renders the Guidebook Figure 9 nominal 6.88 m x 5.00 m
+outline, `x=2.50 m` excavation boundary, target berm, a dashed provisional
+starting zone, and configured surveyed-or-assumed AprilTags on
+`/visualization/arena/markers`. It intentionally renders no central column.
+The scene publishes no TF and is not an occupancy or costmap input. The 6.88 m
+visual outline and existing 6.85 m cell-aligned development raster retain an
+explicit 0.03 m mismatch until an arena survey selects the authoritative map.
+
+## Development-only map-frame pose replay
+
+`lb_sim/launch/arena_pose_replay.launch.py` combines the static map, the
+recorded `test1_AT1` observation stream, and a visualization-only pose adapter.
+`lb_localization/scripts/tag_replay_robot_pose.py` composes the estimated
+`map -> tag_1` pose with the inverse recorded
+`webcam_optical_frame -> webcam_observation_tag_1` transform to obtain a raw
+six-degree-of-freedom map-frame camera pose. It then removes a provisional
+`base_link -> webcam_optical_frame` rigid transform and projects the result to
+an XY/yaw `base_link` proxy.
+
+The same `MarkerArray` now renders that proxy as a translucent synthetic
+0.90 m x 0.60 m x 0.25 m chassis, a rectangular chassis footprint, and two
+provisional camera bodies. Both cameras are colocated at `[0, 0, 0.40]` m:
+the webcam optical axis points toward robot `-X` and the ZED optical axis
+points toward robot `+X`. Distinct colors and view-direction arrows make the
+overlapping camera assumptions visible. These are development markers, not a
+URDF `RobotModel`, measured collision geometry, or a production footprint.
+
+This adapter deliberately does not broadcast TF or publish the canonical
+`/localization/apriltag_pose`. It cannot own `map -> odom` or
+`odom -> base_link`, and it does not start an EKF, planner, controller, or
+hardware. Its finite-lifetime markers and current path disappear on stale tag
+data; no motion is inferred through an observation gap. This is a development
+visualization bridge until wheel odometry, ZED IMU, surveyed tag poses, and a
+measured camera mount support the production localization architecture.
+
+## Recovered N0–N4 implementation
+
+The executable development chain is AprilTag pose -> fused-pose pass-through
+-> validity/command gate, with a separately opted-in test TF bridge.
+`nav2_n4_costmaps.launch.py` adds the map server and standalone global/local
+static-plus-inflation costmaps. Costmaps default to manual lifecycle startup;
+operators provide current TF before requesting startup. Standalone costmaps do
+not establish lifecycle bonds, so N4's manager disables bond monitoring.
+This is not a safety monitor or motion authorization; N5 must restore suitable
+monitoring when integrating planner/controller servers. Localization loss may
+leave costmaps active with retained data, but independently locks commands.
+See [recovery evidence](resources/evidence/2026-11-15-nav2-crash-recovery.md).
