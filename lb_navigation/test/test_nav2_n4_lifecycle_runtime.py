@@ -151,9 +151,7 @@ def test_n4_nodes_activate_and_publish_expected_costmap_geometry() -> None:
                 assert _call(probe, client, GetState.Request()).current_state.id == ACTIVE_STATE
             _spin_until(
                 probe,
-                lambda: bool(global_costmaps)
-                and bool(local_costmaps)
-                and all(footprints.values()),
+                lambda: bool(global_costmaps) and bool(local_costmaps) and all(footprints.values()),
             )
 
             global_map = global_costmaps[-1]
@@ -169,8 +167,12 @@ def test_n4_nodes_activate_and_publish_expected_costmap_geometry() -> None:
             for samples in footprints.values():
                 points = samples[-1].polygon.points
                 assert len(points) == 4
-                assert sorted(point.x for point in points) == pytest.approx([0.45, 0.45, 1.55, 1.55])
-                assert sorted(point.y for point in points) == pytest.approx([0.70, 0.70, 1.30, 1.30])
+                assert sorted(point.x for point in points) == pytest.approx(
+                    [0.45, 0.45, 1.55, 1.55]
+                )
+                assert sorted(point.y for point in points) == pytest.approx(
+                    [0.70, 0.70, 1.30, 1.30]
+                )
 
             # Query the live raw grid: perimeter is lethal, adjacent cells are
             # inflated, and the central arena is free.
@@ -202,8 +204,7 @@ def test_n4_nodes_activate_and_publish_expected_costmap_geometry() -> None:
             output.seek(0)
             pytest.fail(
                 f"TF samples: {len(transforms)}, validity: {[v.data for v in validity[-5:]]}\n"
-                f"TF subscribers: {probe.get_subscriptions_info_by_topic('/tf')}\n"
-                + output.read()
+                f"TF subscribers: {probe.get_subscriptions_info_by_topic('/tf')}\n" + output.read()
             )
         finally:
             if manager.service_is_ready():

@@ -105,7 +105,7 @@ test 1
 1: [ RUN      ] TagMapTest.RejectsDuplicateRecordsAndTheBenchOnlyId
 1: [       OK ] TagMapTest.RejectsDuplicateRecordsAndTheBenchOnlyId (8 ms)
 1: [----------] 3 tests from TagMapTest (43 ms total)
-1: 
+1:
 1: [----------] 5 tests from TagLocalizerMathTest
 1: [ RUN      ] TagLocalizerMathTest.RecoversBasePoseFromKnownTagAndCameraExtrinsic
 1: [       OK ] TagLocalizerMathTest.RecoversBasePoseFromKnownTagAndCameraExtrinsic (0 ms)
@@ -118,7 +118,7 @@ test 1
 1: [ RUN      ] TagLocalizerMathTest.CovarianceGrowsForPoorerObservations
 1: [       OK ] TagLocalizerMathTest.CovarianceGrowsForPoorerObservations (0 ms)
 1: [----------] 5 tests from TagLocalizerMathTest (0 ms total)
-1: 
+1:
 1: [----------] 3 tests from TagLocalizerFusionTest
 1: [ RUN      ] TagLocalizerFusionTest.UsesInverseCovarianceWeightsAndIsOrderIndependent
 1: [       OK ] TagLocalizerFusionTest.UsesInverseCovarianceWeightsAndIsOrderIndependent (0 ms)
@@ -127,7 +127,7 @@ test 1
 1: [ RUN      ] TagLocalizerFusionTest.RejectsIntertagDisagreementAndImplausibleJumps
 1: [       OK ] TagLocalizerFusionTest.RejectsIntertagDisagreementAndImplausibleJumps (0 ms)
 1: [----------] 3 tests from TagLocalizerFusionTest (0 ms total)
-1: 
+1:
 1: [----------] Global test environment tear-down
 1: [==========] 11 tests from 3 test suites ran. (47 ms total)
 1: [  PASSED  ] 11 tests.
@@ -141,7 +141,7 @@ test 2
 2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml" "--package-name" "lb_localization" "--output-file" "/home/jsun3/dev_ws/build/lb_localization/ament_cmake_pytest/phase42_localizer_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization/test/test_phase42_localizer_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_localization/ament_cmake_pytest/phase42_localizer_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml" "--junit-prefix=lb_localization"
 2: Working Directory: /home/jsun3/dev_ws/build/lb_localization
 2: Test timeout computed to be: 60
-1: 
+1:
 1: No problems found
 1: -- run_test.py: return code 0
 1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/lint_cmake.xunit.xml'
@@ -162,9 +162,9 @@ test 2
 1: rootdir: /home/jsun3/dev_ws
 1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 1: collected 3 items
-1: 
+1:
 1: ../../src/jmu-lunabotics/lb_model/test/test_model_contract.py ..s        [100%]
-1: 
+1:
 1: - generated xml file: /home/jsun3/dev_ws/build/lb_model/test_results/lb_model/model_contract.xunit.xml -
 1: ========================= 2 passed, 1 skipped in 0.10s =========================
 1: -- run_test.py: return code 0
@@ -179,7 +179,7 @@ test 2
 2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_model':
 2:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_model/test_results/lb_model/lint_cmake.xunit.xml
 2: File 'package.xml' is valid
-2: 
+2:
 2: No problems found
 2: -- run_test.py: return code 0
 2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_interfaces/test_results/lb_interfaces/xmllint.xunit.xml'
@@ -201,13 +201,13 @@ Starting >>> lb_navigation
 2: rootdir: /home/jsun3/dev_ws
 2: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 2: collected 4 items
-2: 
+2:
 2: ../../src/jmu-lunabotics/lb_localization/test/test_phase42_localizer_contract.py . [ 25%]
 2: ...                                                                      [100%]
-2: 
+2:
 2: - generated xml file: /home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml -
 2: ============================== 4 passed in 0.08s ===============================
-2: 
+2:
 2: No problems found
 2: -- run_test.py: return code 0
 2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/phase42_localizer_contract.xunit.xml'
@@ -254,10 +254,10 @@ test 1
 1: rootdir: /home/jsun3/dev_ws
 1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 1: collected 4 items
-1: 
+1:
 1: ../../src/jmu-lunabotics/lb_sensors/test/test_phase41_webcam_contract.py . [ 25%]
 1: ...                                                                      [100%]
-1: 
+1:
 1: - generated xml file: /home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/phase41_webcam_contract.xunit.xml -
 1: ============================== 4 passed in 0.09s ===============================
 3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization':
@@ -268,7 +268,7 @@ test 1
 3:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_model/test_results/lb_model/xmllint.xunit.xml
 1: -- run_test.py: return code 0
 1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/phase41_webcam_contract.xunit.xml'
-3: 
+3:
 3: No problems found
 1/3 Test #1: phase41_webcam_contract ..........   Passed    3.21 sec
 test 2
@@ -288,10 +288,10 @@ test 4
 4: Test timeout computed to be: 60
 4: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_localization':
 4:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_localization/test_results/lb_localization/xmllint.xunit.xml
-1: 
+1:
 1: No problems found
 3: File 'package.xml' is valid
-3: 
+3:
 3: No problems found
 1: -- run_test.py: return code 0
 1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_navigation/test_results/lb_navigation/lint_cmake.xunit.xml'
@@ -303,7 +303,7 @@ test 2
 2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation
 2: Test timeout computed to be: 60
 4: File 'package.xml' is valid
-4: 
+4:
 4: No problems found
 3: -- run_test.py: return code 0
 3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_model/test_results/lb_model/xmllint.xunit.xml'
@@ -389,7 +389,7 @@ test 2
 2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml" "--package-name" "lb_hardware" "--output-file" "/home/jsun3/dev_ws/build/lb_hardware/ament_cmake_pytest/phase2_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware/test/test_phase2_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_hardware/ament_cmake_pytest/phase2_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml" "--junit-prefix=lb_hardware"
 2: Working Directory: /home/jsun3/dev_ws/build/lb_hardware
 2: Test timeout computed to be: 60
-2: 
+2:
 2: No problems found
 2: -- run_test.py: return code 0
 2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/lint_cmake.xunit.xml'
@@ -403,7 +403,7 @@ test 3
 2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_hardware':
 2:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware/test/test_phase2_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_hardware/ament_cmake_pytest/phase2_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml --junit-prefix=lb_hardware
 2: File 'package.xml' is valid
-2: 
+2:
 2: No problems found
 1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_safety':
 1:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/lint_cmake.xunit.xml
@@ -444,7 +444,7 @@ test 1
 1: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml" "--package-name" "lb_sim" "--output-file" "/home/jsun3/dev_ws/build/lb_sim/ament_cmake_pytest/mock_launch_contract.txt" "--command" "/usr/bin/python3" "-u" "-m" "pytest" "/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim/test/test_mock_launch_contract.py" "-o" "cache_dir=/home/jsun3/dev_ws/build/lb_sim/ament_cmake_pytest/mock_launch_contract/.cache" "--junit-xml=/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml" "--junit-prefix=lb_sim"
 1: Working Directory: /home/jsun3/dev_ws/build/lb_sim
 1: Test timeout computed to be: 60
-1: 
+1:
 1: No problems found
 1: -- run_test.py: return code 0
 1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/lint_cmake.xunit.xml'
@@ -458,7 +458,7 @@ test 2
 1: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/build/lb_sim':
 1:  - /usr/bin/python3 -u -m pytest /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim/test/test_mock_launch_contract.py -o cache_dir=/home/jsun3/dev_ws/build/lb_sim/ament_cmake_pytest/mock_launch_contract/.cache --junit-xml=/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml --junit-prefix=lb_sim
 3: File 'package.xml' is valid
-3: 
+3:
 3: No problems found
 3: -- run_test.py: return code 0
 3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sensors/test_results/lb_sensors/xmllint.xunit.xml'
@@ -483,7 +483,7 @@ Starting >>> lb_state_manager
 2: rootdir: /home/jsun3/dev_ws
 2: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 2: collected 4 items
-2: 
+2:
 UpdateCTestConfiguration  from :/home/jsun3/dev_ws/build/lb_state_manager/CTestConfiguration.ini
 Parse Config file:/home/jsun3/dev_ws/build/lb_state_manager/CTestConfiguration.ini
    Site: jmu-lunabotics
@@ -506,7 +506,7 @@ test 1
 1: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_state_manager
 1: Test timeout computed to be: 60
 2: ../../src/jmu-lunabotics/lb_hardware/test/test_phase2_contract.py ....   [100%]
-2: 
+2:
 2: - generated xml file: /home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/phase2_contract.xunit.xml -
 2: ============================== 4 passed in 0.05s ===============================
 2: -- run_test.py: return code 0
@@ -523,7 +523,7 @@ test 3
 3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_hardware':
 3:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/lint_cmake.xunit.xml
 2: File 'package.xml' is valid
-2: 
+2:
 2: No problems found
 2: -- run_test.py: return code 0
 2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_safety/test_results/lb_safety/xmllint.xunit.xml'
@@ -538,7 +538,7 @@ xmllint       =   1.01 sec*proc (1 test)
 
 Total Test time (real) =   1.75 sec
 Finished <<< lb_safety [1.90s]
-1: 
+1:
 1: No problems found
 1: -- run_test.py: return code 0
 1: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/lint_cmake.xunit.xml'
@@ -549,7 +549,7 @@ test 2
 2: Test command: /usr/bin/python3 "-u" "/opt/ros/jazzy/share/ament_cmake_test/cmake/run_test.py" "/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/xmllint.xunit.xml" "--package-name" "lb_state_manager" "--output-file" "/home/jsun3/dev_ws/build/lb_state_manager/ament_xmllint/xmllint.txt" "--command" "/opt/ros/jazzy/bin/ament_xmllint" "--xunit-file" "/home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/xmllint.xunit.xml"
 2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_state_manager
 2: Test timeout computed to be: 60
-3: 
+3:
 3: No problems found
 3: -- run_test.py: return code 0
 3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/lint_cmake.xunit.xml'
@@ -566,11 +566,11 @@ test 4
 1: rootdir: /home/jsun3/dev_ws
 1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 1: collected 2 items
-1: 
+1:
 2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_state_manager':
 2:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_state_manager/test_results/lb_state_manager/xmllint.xunit.xml
 1: ../../src/jmu-lunabotics/lb_sim/test/test_mock_launch_contract.py ..     [100%]
-1: 
+1:
 1: - generated xml file: /home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/mock_launch_contract.xunit.xml -
 1: ============================== 2 passed in 0.08s ===============================
 1: -- run_test.py: return code 0
@@ -583,7 +583,7 @@ test 2
 2: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim
 2: Test timeout computed to be: 60
 2: File 'package.xml' is valid
-2: 
+2:
 2: No problems found
 2: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim':
 2:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/lint_cmake.xunit.xml
@@ -602,7 +602,7 @@ xmllint       =   0.58 sec*proc (1 test)
 
 Total Test time (real) =   1.25 sec
 Finished <<< lb_state_manager [1.53s]
-2: 
+2:
 2: No problems found
 2: -- run_test.py: return code 0
 2: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/lint_cmake.xunit.xml'
@@ -614,9 +614,9 @@ test 3
 3: Working Directory: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim
 3: Test timeout computed to be: 60
 4: File 'lb_hardware_plugins.xml' is valid
-4: 
+4:
 4: File 'package.xml' is valid
-4: 
+4:
 4: No problems found
 4: -- run_test.py: return code 0
 4: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_hardware/test_results/lb_hardware/xmllint.xunit.xml'
@@ -635,7 +635,7 @@ Finished <<< lb_hardware [2.95s]
 3: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_sim':
 3:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/xmllint.xunit.xml
 3: File 'package.xml' is valid
-3: 
+3:
 3: No problems found
 3: -- run_test.py: return code 0
 3: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_sim/test_results/lb_sim/xmllint.xunit.xml'
@@ -681,9 +681,9 @@ test 1
 1: rootdir: /home/jsun3/dev_ws
 1: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 1: collected 3 items
-1: 
+1:
 1: ../../src/jmu-lunabotics/lb_launch/test/test_scaffold.py ...             [100%]
-1: 
+1:
 1: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/test_scaffold.xunit.xml -
 1: ============================== 3 passed in 0.04s ===============================
 1: -- run_test.py: return code 0
@@ -703,9 +703,9 @@ test 2
 2: rootdir: /home/jsun3/dev_ws
 2: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 2: collected 1 item
-2: 
+2:
 2: ../../src/jmu-lunabotics/lb_launch/test/test_phase1_launch_contract.py . [100%]
-2: 
+2:
 2: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase1_launch_contract.xunit.xml -
 2: ============================== 1 passed in 0.03s ===============================
 2: -- run_test.py: return code 0
@@ -725,10 +725,10 @@ test 3
 3: rootdir: /home/jsun3/dev_ws
 3: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 3: collected 2 items
-3: 
+3:
 3: ../../src/jmu-lunabotics/lb_launch/test/test_phase2_launch_contract.py . [ 50%]
 3: .                                                                        [100%]
-3: 
+3:
 3: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase2_launch_contract.xunit.xml -
 3: ============================== 2 passed in 0.03s ===============================
 3: -- run_test.py: return code 0
@@ -748,9 +748,9 @@ test 4
 4: rootdir: /home/jsun3/dev_ws
 4: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 4: collected 1 item
-4: 
+4:
 4: ../../src/jmu-lunabotics/lb_launch/test/test_phase41_launch_contract.py . [100%]
-4: 
+4:
 4: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/phase41_launch_contract.xunit.xml -
 4: ============================== 1 passed in 0.03s ===============================
 4: -- run_test.py: return code 0
@@ -770,10 +770,10 @@ test 5
 5: rootdir: /home/jsun3/dev_ws
 5: plugins: ament-pep257-0.17.4, ament-lint-0.17.4, launch-testing-ros-0.26.11, ament-flake8-0.17.4, ament-xmllint-0.17.4, ament-copyright-0.17.4, launch-testing-3.4.10, colcon-core-0.20.1, cov-4.1.0
 5: collected 7 items
-5: 
+5:
 5: ../../src/jmu-lunabotics/lb_launch/test/test_bootstrap_contract.py ..... [ 71%]
 5: ..                                                                       [100%]
-5: 
+5:
 5: - generated xml file: /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/bootstrap_contract.xunit.xml -
 5: ============================== 7 passed in 0.07s ===============================
 5: -- run_test.py: return code 0
@@ -787,7 +787,7 @@ test 6
 6: Test timeout computed to be: 60
 6: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch':
 6:  - /opt/ros/jazzy/bin/ament_lint_cmake --xunit-file /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/lint_cmake.xunit.xml
-6: 
+6:
 6: No problems found
 6: -- run_test.py: return code 0
 6: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/lint_cmake.xunit.xml'
@@ -801,7 +801,7 @@ test 7
 7: -- run_test.py: invoking following command in '/home/jsun3/dev_ws/src/jmu-lunabotics/lb_launch':
 7:  - /opt/ros/jazzy/bin/ament_xmllint --xunit-file /home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/xmllint.xunit.xml
 7: File 'package.xml' is valid
-7: 
+7:
 7: No problems found
 7: -- run_test.py: return code 0
 7: -- run_test.py: verify result file '/home/jsun3/dev_ws/build/lb_launch/test_results/lb_launch/xmllint.xunit.xml'

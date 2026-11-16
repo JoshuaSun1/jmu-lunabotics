@@ -29,20 +29,20 @@ def pixels() -> bytes:
 
 def main() -> None:
     if not isclose(INTERIOR_COLUMNS * RESOLUTION_M, INTERIOR_LENGTH_M):
-        raise RuntimeError('arena length is not an exact number of cells')
+        raise RuntimeError("arena length is not an exact number of cells")
     if not isclose(INTERIOR_ROWS * RESOLUTION_M, INTERIOR_WIDTH_M):
-        raise RuntimeError('arena width is not an exact number of cells')
+        raise RuntimeError("arena width is not an exact number of cells")
     repository_root = Path(__file__).resolve().parents[1]
-    output = repository_root / 'lb_navigation' / 'maps' / 'arena.pgm'
+    output = repository_root / "lb_navigation" / "maps" / "arena.pgm"
     output.parent.mkdir(parents=True, exist_ok=True)
     header = (
-        'P5\n'
-        '# 6.85 m x 5.00 m free interior; 0.05 m occupied perimeter; column TBD\n'
-        f'{IMAGE_COLUMNS} {IMAGE_ROWS}\n255\n'
-    ).encode('ascii')
+        "P5\n"
+        "# 6.85 m x 5.00 m free interior; 0.05 m occupied perimeter; column TBD\n"
+        f"{IMAGE_COLUMNS} {IMAGE_ROWS}\n255\n"
+    ).encode("ascii")
     output.write_bytes(header + pixels())
     print(output)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

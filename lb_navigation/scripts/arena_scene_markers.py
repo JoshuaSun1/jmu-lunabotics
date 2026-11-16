@@ -29,23 +29,19 @@ class ArenaGeometry:
         """Reject invalid or out-of-arena scene geometry."""
         values = tuple(self.__dict__.values())
         if not all(math.isfinite(value) and value > 0.0 for value in values):
-            raise ValueError('arena scene dimensions must be finite and positive')
+            raise ValueError("arena scene dimensions must be finite and positive")
         if self.excavation_boundary_x_m >= self.length_m:
-            raise ValueError('excavation boundary must be inside the arena')
+            raise ValueError("excavation boundary must be inside the arena")
         if self.starting_zone_length_m > self.length_m:
-            raise ValueError('starting zone length exceeds arena length')
+            raise ValueError("starting zone length exceeds arena length")
         if self.starting_zone_depth_m > self.width_m:
-            raise ValueError('starting zone depth exceeds arena width')
+            raise ValueError("starting zone depth exceeds arena width")
         half_berm_length = 0.5 * self.berm_length_m
         half_berm_width = 0.5 * self.berm_width_m
-        if not half_berm_length <= self.berm_center_x_m <= (
-            self.length_m - half_berm_length
-        ):
-            raise ValueError('berm target exceeds arena length')
-        if not half_berm_width <= self.berm_center_y_m <= (
-            self.width_m - half_berm_width
-        ):
-            raise ValueError('berm target exceeds arena width')
+        if not half_berm_length <= self.berm_center_x_m <= (self.length_m - half_berm_length):
+            raise ValueError("berm target exceeds arena length")
+        if not half_berm_width <= self.berm_center_y_m <= (self.width_m - half_berm_width):
+            raise ValueError("berm target exceeds arena width")
 
 
 def rectangle_points(
@@ -75,7 +71,7 @@ def dashed_rectangle_points(
 ) -> list[Point]:
     """Return LINE_LIST points for a dashed rectangular outline."""
     if dash_m <= 0.0:
-        raise ValueError('dash length must be positive')
+        raise ValueError("dash length must be positive")
     corners = rectangle_points(minimum_x, minimum_y, length_m, width_m, z_m)
     points = []
     for start, end in zip(corners, corners[1:]):
@@ -136,41 +132,35 @@ class ArenaSceneMarkers(Node):
     """Publish durable guidebook and provisional arena visualization markers."""
 
     def __init__(self) -> None:
-        super().__init__('arena_scene_markers')
-        self.declare_parameter('map_frame', 'map')
-        self.declare_parameter('marker_topic', '/visualization/arena/markers')
-        self.declare_parameter('republish_period_s', 1.0)
-        self.declare_parameter('arena_length_m', 6.88)
-        self.declare_parameter('arena_width_m', 5.0)
-        self.declare_parameter('excavation_boundary_x_m', 2.5)
-        self.declare_parameter('starting_zone_length_m', 2.0)
-        self.declare_parameter('starting_zone_depth_m', 2.0)
-        self.declare_parameter('berm_center_x_m', 5.38)
-        self.declare_parameter('berm_center_y_m', 0.9)
-        self.declare_parameter('berm_length_m', 2.2)
-        self.declare_parameter('berm_width_m', 0.9)
-        self.declare_parameter('tag_ids', [1])
-        self.declare_parameter('tag_sizes_m', [0.30])
-        self.declare_parameter('tag_positions_m', [0.0, 1.0, 0.75])
-        self.declare_parameter(
-            'tag_rpy_rad', [math.pi / 2.0, 0.0, math.pi / 2.0]
-        )
+        super().__init__("arena_scene_markers")
+        self.declare_parameter("map_frame", "map")
+        self.declare_parameter("marker_topic", "/visualization/arena/markers")
+        self.declare_parameter("republish_period_s", 1.0)
+        self.declare_parameter("arena_length_m", 6.88)
+        self.declare_parameter("arena_width_m", 5.0)
+        self.declare_parameter("excavation_boundary_x_m", 2.5)
+        self.declare_parameter("starting_zone_length_m", 2.0)
+        self.declare_parameter("starting_zone_depth_m", 2.0)
+        self.declare_parameter("berm_center_x_m", 5.38)
+        self.declare_parameter("berm_center_y_m", 0.9)
+        self.declare_parameter("berm_length_m", 2.2)
+        self.declare_parameter("berm_width_m", 0.9)
+        self.declare_parameter("tag_ids", [1])
+        self.declare_parameter("tag_sizes_m", [0.30])
+        self.declare_parameter("tag_positions_m", [0.0, 1.0, 0.75])
+        self.declare_parameter("tag_rpy_rad", [math.pi / 2.0, 0.0, math.pi / 2.0])
 
-        self.map_frame = str(self.get_parameter('map_frame').value)
+        self.map_frame = str(self.get_parameter("map_frame").value)
         self.geometry = ArenaGeometry(
-            length_m=self._float_parameter('arena_length_m'),
-            width_m=self._float_parameter('arena_width_m'),
-            excavation_boundary_x_m=self._float_parameter(
-                'excavation_boundary_x_m'
-            ),
-            starting_zone_length_m=self._float_parameter(
-                'starting_zone_length_m'
-            ),
-            starting_zone_depth_m=self._float_parameter('starting_zone_depth_m'),
-            berm_center_x_m=self._float_parameter('berm_center_x_m'),
-            berm_center_y_m=self._float_parameter('berm_center_y_m'),
-            berm_length_m=self._float_parameter('berm_length_m'),
-            berm_width_m=self._float_parameter('berm_width_m'),
+            length_m=self._float_parameter("arena_length_m"),
+            width_m=self._float_parameter("arena_width_m"),
+            excavation_boundary_x_m=self._float_parameter("excavation_boundary_x_m"),
+            starting_zone_length_m=self._float_parameter("starting_zone_length_m"),
+            starting_zone_depth_m=self._float_parameter("starting_zone_depth_m"),
+            berm_center_x_m=self._float_parameter("berm_center_x_m"),
+            berm_center_y_m=self._float_parameter("berm_center_y_m"),
+            berm_length_m=self._float_parameter("berm_length_m"),
+            berm_width_m=self._float_parameter("berm_width_m"),
         )
         self.geometry.validate()
         self.tags = self._tag_parameters()
@@ -181,51 +171,47 @@ class ArenaSceneMarkers(Node):
             reliability=ReliabilityPolicy.RELIABLE,
         )
         self.publisher = self.create_publisher(
-            MarkerArray, str(self.get_parameter('marker_topic').value), qos
+            MarkerArray, str(self.get_parameter("marker_topic").value), qos
         )
         self.publish_scene()
-        republish_period_s = self._float_parameter('republish_period_s')
+        republish_period_s = self._float_parameter("republish_period_s")
         if republish_period_s <= 0.0:
-            raise ValueError('republish_period_s must be positive')
+            raise ValueError("republish_period_s must be positive")
         self.timer = self.create_timer(republish_period_s, self.publish_scene)
         self.get_logger().warning(
-            'Arena scene is visualization-only: the 2.0 m starting-zone depth '
-            'and tag poses are provisional; markers are not Nav2 obstacles.'
+            "Arena scene is visualization-only: the 2.0 m starting-zone depth "
+            "and tag poses are provisional; markers are not Nav2 obstacles."
         )
 
     def _float_parameter(self, name: str) -> float:
         value = float(self.get_parameter(name).value)
         if not math.isfinite(value):
-            raise ValueError(f'{name} must be finite')
+            raise ValueError(f"{name} must be finite")
         return value
 
     def _tag_parameters(self):
-        tag_ids = [int(value) for value in self.get_parameter('tag_ids').value]
-        sizes = [float(value) for value in self.get_parameter('tag_sizes_m').value]
-        positions = [
-            float(value) for value in self.get_parameter('tag_positions_m').value
-        ]
-        rotations = [
-            float(value) for value in self.get_parameter('tag_rpy_rad').value
-        ]
+        tag_ids = [int(value) for value in self.get_parameter("tag_ids").value]
+        sizes = [float(value) for value in self.get_parameter("tag_sizes_m").value]
+        positions = [float(value) for value in self.get_parameter("tag_positions_m").value]
+        rotations = [float(value) for value in self.get_parameter("tag_rpy_rad").value]
         if len(set(tag_ids)) != len(tag_ids):
-            raise ValueError('tag_ids must be unique')
+            raise ValueError("tag_ids must be unique")
         if len(sizes) != len(tag_ids):
-            raise ValueError('tag_sizes_m must contain one value per tag')
+            raise ValueError("tag_sizes_m must contain one value per tag")
         if len(positions) != 3 * len(tag_ids):
-            raise ValueError('tag_positions_m must contain XYZ triples')
+            raise ValueError("tag_positions_m must contain XYZ triples")
         if len(rotations) != 3 * len(tag_ids):
-            raise ValueError('tag_rpy_rad must contain RPY triples')
+            raise ValueError("tag_rpy_rad must contain RPY triples")
         if not all(math.isfinite(value) for value in positions + rotations):
-            raise ValueError('tag poses must be finite')
+            raise ValueError("tag poses must be finite")
         if not all(math.isfinite(value) and value > 0.0 for value in sizes):
-            raise ValueError('tag sizes must be finite and positive')
+            raise ValueError("tag sizes must be finite and positive")
         return [
             (
                 tag_id,
                 sizes[index],
-                tuple(positions[3 * index: 3 * index + 3]),
-                tuple(rotations[3 * index: 3 * index + 3]),
+                tuple(positions[3 * index : 3 * index + 3]),
+                tuple(rotations[3 * index : 3 * index + 3]),
             )
             for index, tag_id in enumerate(tag_ids)
         ]
@@ -260,7 +246,7 @@ class ArenaSceneMarkers(Node):
 
     def _scene_geometry_markers(self) -> list[Marker]:
         geometry = self.geometry
-        floor = self._marker('arena_floor', 1, Marker.CUBE)
+        floor = self._marker("arena_floor", 1, Marker.CUBE)
         floor.pose.position.x = 0.5 * geometry.length_m
         floor.pose.position.y = 0.5 * geometry.width_m
         floor.pose.position.z = -0.015
@@ -273,7 +259,7 @@ class ArenaSceneMarkers(Node):
         floor.color.a = 0.10
 
         arena_outline = self._outline_marker(
-            'arena_outline',
+            "arena_outline",
             2,
             rectangle_points(0.0, 0.0, geometry.length_m, geometry.width_m, 0.02),
             (1.0, 0.88, 0.45, 1.0),
@@ -281,7 +267,7 @@ class ArenaSceneMarkers(Node):
         )
 
         excavation = self._outline_marker(
-            'zone_boundaries',
+            "zone_boundaries",
             3,
             [
                 Point(x=geometry.excavation_boundary_x_m, y=0.0, z=0.025),
@@ -296,7 +282,7 @@ class ArenaSceneMarkers(Node):
         )
 
         starting = self._outline_marker(
-            'provisional_starting_zone',
+            "provisional_starting_zone",
             4,
             dashed_rectangle_points(
                 0.0,
@@ -313,7 +299,7 @@ class ArenaSceneMarkers(Node):
         berm_minimum_x = geometry.berm_center_x_m - 0.5 * geometry.berm_length_m
         berm_minimum_y = geometry.berm_center_y_m - 0.5 * geometry.berm_width_m
         berm = self._outline_marker(
-            'target_berm',
+            "target_berm",
             5,
             rectangle_points(
                 berm_minimum_x,
@@ -325,7 +311,7 @@ class ArenaSceneMarkers(Node):
             (1.0, 0.15, 0.10, 1.0),
             0.055,
         )
-        berm_center = self._marker('target_berm', 6, Marker.SPHERE)
+        berm_center = self._marker("target_berm", 6, Marker.SPHERE)
         berm_center.pose.position.x = geometry.berm_center_x_m
         berm_center.pose.position.y = geometry.berm_center_y_m
         berm_center.pose.position.z = 0.045
@@ -342,7 +328,7 @@ class ArenaSceneMarkers(Node):
         markers = []
         for index, (tag_id, size_m, position, rpy) in enumerate(self.tags):
             quaternion = quaternion_from_rpy(*rpy)
-            tag = self._marker('assumed_apriltags', 100 + 3 * index, Marker.CUBE)
+            tag = self._marker("assumed_apriltags", 100 + 3 * index, Marker.CUBE)
             tag.pose.position.x, tag.pose.position.y, tag.pose.position.z = position
             (
                 tag.pose.orientation.x,
@@ -359,9 +345,7 @@ class ArenaSceneMarkers(Node):
             tag.color.a = 0.9
 
             normal = rotate_vector(quaternion, (0.0, 0.0, 1.0))
-            arrow = self._marker(
-                'assumed_apriltag_normals', 101 + 3 * index, Marker.ARROW
-            )
+            arrow = self._marker("assumed_apriltag_normals", 101 + 3 * index, Marker.ARROW)
             arrow.points = [
                 Point(x=position[0], y=position[1], z=position[2]),
                 Point(
@@ -379,7 +363,7 @@ class ArenaSceneMarkers(Node):
             arrow.color.a = 1.0
 
             label = self._marker(
-                'assumed_apriltag_labels', 102 + 3 * index, Marker.TEXT_VIEW_FACING
+                "assumed_apriltag_labels", 102 + 3 * index, Marker.TEXT_VIEW_FACING
             )
             label.pose.position.x = position[0]
             label.pose.position.y = position[1]
@@ -389,7 +373,7 @@ class ArenaSceneMarkers(Node):
             label.color.g = 0.75
             label.color.b = 0.15
             label.color.a = 1.0
-            label.text = f'AprilTag {tag_id} (assumed)'
+            label.text = f"AprilTag {tag_id} (assumed)"
             markers.extend([tag, arrow, label])
         return markers
 
@@ -412,5 +396,5 @@ def main(args=None) -> None:
             rclpy.shutdown()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

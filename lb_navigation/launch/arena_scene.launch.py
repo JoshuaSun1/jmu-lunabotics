@@ -11,24 +11,24 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 
 def generate_launch_description():
-    package_share = Path(get_package_share_directory('lb_navigation'))
+    package_share = Path(get_package_share_directory("lb_navigation"))
     return LaunchDescription(
         [
             DeclareLaunchArgument(
-                'params_file',
-                default_value=str(package_share / 'config' / 'arena_scene.yaml'),
+                "params_file",
+                default_value=str(package_share / "config" / "arena_scene.yaml"),
             ),
-            DeclareLaunchArgument('use_sim_time', default_value='false'),
+            DeclareLaunchArgument("use_sim_time", default_value="false"),
             Node(
-                package='lb_navigation',
-                executable='arena_scene_markers.py',
-                name='arena_scene_markers',
-                output='screen',
+                package="lb_navigation",
+                executable="arena_scene_markers.py",
+                name="arena_scene_markers",
+                output="screen",
                 parameters=[
-                    LaunchConfiguration('params_file'),
+                    LaunchConfiguration("params_file"),
                     {
-                        'use_sim_time': ParameterValue(
-                            LaunchConfiguration('use_sim_time'), value_type=bool
+                        "use_sim_time": ParameterValue(
+                            LaunchConfiguration("use_sim_time"), value_type=bool
                         )
                     },
                 ],
