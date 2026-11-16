@@ -27,19 +27,20 @@ assumptions**. The broader dependency-oriented list remains in
 
 ### Platform, compute, and power
 
-- **ASM-PLAT-01 — Proposed robot software platform.** **Proposed:** Jetson Orin
-  Nano 8 GB, JetPack 6.2.2, L4T 36.5.0, Ubuntu 22.04, kernel 5.15, CUDA 12.6,
-  ROS 2 Humble, ZED SDK 5.2.3, ZED ROS 2 wrapper tag `v5.2.2`, and `aarch64`
+- **ASM-PLAT-01 — Selected robot software platform.** **Reported baseline:** Jetson Orin
+  Nano 8 GB, JetPack 7.2.1, L4T 39.2.1, Ubuntu 24.04, kernel 6.8, CUDA 13.2.2,
+  ROS 2 Jazzy, ZED SDK 5.5.0, ZED ROS 2 wrapper tag `v5.5.0`, and `aarch64`
   are the current compatibility baseline. They are not a validated installed
-  manifest. Close this after flashing the physical Jetson, pinning the wrapper
+  manifest. ADR 0002 supersedes the earlier JetPack 6/Humble proposal.
+  Close this after verifying the physical Jetson, pinning the wrapper
   commit, capturing every installed version/image digest, and completing a
   target-runtime test. Source: [`software_platform_lock.md`](resources/software_platform_lock.md).
 
 - **ASM-PLAT-02 — Development-host evidence.** **Development only:** successful
   x86_64/ROS 2 Jazzy builds and tests are structural development evidence, not
-  proof that arm64/ROS 2 Humble, JetPack, the ZED SDK, DDS, or timing behavior
+  proof that arm64/ROS 2 Jazzy, JetPack, the ZED SDK, DDS, or timing behavior
   works on the target. Close this gap with reproducible arm64 CI and physical
-  Jetson/Humble results.
+  Jetson/Jazzy results.
 
 - **ASM-POWER-01 — Jetson robot power.** **Unresolved:** the proposed 19 V
   barrel-jack supply path still lacks a verified connector size, polarity,

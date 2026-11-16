@@ -79,7 +79,7 @@ public:
 
     tf_buffer_ = std::make_unique<tf2_ros::Buffer>(get_clock());
     // A dedicated listener thread is required for nonzero tf2 lookup timeouts
-    // to work on both the locked Humble target and the Jazzy development host.
+    // to work with the locked Jazzy target.
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_, this, true);
     pose_publisher_ = create_publisher<geometry_msgs::msg::PoseWithCovarianceStamped>(
         pose_topic, rclcpp::QoS(10).reliable());

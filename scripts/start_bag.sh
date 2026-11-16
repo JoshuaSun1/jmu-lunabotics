@@ -13,8 +13,8 @@ Usage: scripts/start_bag.sh [--profile PROFILE] [--ros-distro DISTRO] [--name NA
 
 Start your launch first, then run this script in another terminal. It sources
 the ROS underlay and built workspace overlay and starts recording immediately.
-The default profile is webcam_apriltag; the default ROS distribution is Humble
-(or LUNABOT_ROS_DISTRO). Explicit --ros-distro jazzy opts into non-target use.
+The default profile is webcam_apriltag; the default ROS distribution is Jazzy
+(or LUNABOT_ROS_DISTRO). A different --ros-distro explicitly opts into non-target use.
 
 Profiles: localization, perception, navigation, hardware, mission, webcam_apriltag
 
@@ -47,7 +47,7 @@ while [[ "$#" -gt 0 ]]; do
       else
         export LUNABOT_ROS_DISTRO="$2"
         # Naming a non-target distro explicitly is the operator's opt-in.
-        if [[ "$2" != "humble" ]]; then
+        if [[ "$2" != "jazzy" ]]; then
           export LUNABOT_ALLOW_NON_TARGET_ACTIVATION=1
         fi
       fi

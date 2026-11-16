@@ -217,7 +217,7 @@ webcam detector; no surveyed map transform is added.
 Phase 4.1 includes offline launch/configuration contracts and a development
 host webcam bench procedure. Its validation evidence is maintained in
 [`evidence/phase41_validation_2026-08-17.md`](evidence/phase41_validation_2026-08-17.md).
-It is not a validation of the locked Humble/Jetson/Orin runtime, the ZED, a
+It is not a validation of the locked Jazzy/Jetson/Orin runtime, the ZED, a
 physical robot mount, metric pose accuracy, global localization, or autonomous
 safety behavior.
 

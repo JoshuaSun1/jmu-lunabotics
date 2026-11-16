@@ -70,6 +70,8 @@ def generate_launch_description() -> LaunchDescription:
             "/controller_manager",
             "--controller-manager-timeout",
             "20",
+            "--param-file",
+            controllers_file,
         ],
     )
     drive_controller_spawner = Node(
@@ -83,6 +85,12 @@ def generate_launch_description() -> LaunchDescription:
             "/controller_manager",
             "--controller-manager-timeout",
             "20",
+            "--param-file",
+            controllers_file,
+            "--controller-ros-args",
+            "-r /drive_controller/cmd_vel:=/cmd_vel",
+            "--controller-ros-args",
+            "-r /drive_controller/odom:=/odom/wheel",
         ],
     )
 
@@ -129,14 +137,8 @@ def generate_launch_description() -> LaunchDescription:
                 name="controller_manager",
                 output="screen",
                 parameters=[
-                    {"robot_description": robot_description, "use_sim_time": use_sim_time},
+                    {"use_sim_time": use_sim_time},
                     controllers_file,
-                ],
-                # These target the controller's native ~/cmd_vel and ~/odom names.
-                # Runtime verification is retained because Humble loads controllers in-process.
-                remappings=[
-                    ("/drive_controller/cmd_vel", "/cmd_vel"),
-                    ("/drive_controller/odom", "/odom/wheel"),
                 ],
             ),
             joint_state_broadcaster_spawner,

@@ -2,21 +2,20 @@
 
 The bootstrap workflow separates **one-time host provisioning** from
 **per-terminal activation**. It supports the locked robot software baseline:
-ROS 2 Humble on Ubuntu 22.04 (Jammy). It is not an image-flashing or
+ROS 2 Jazzy on Ubuntu 24.04 (Noble). It is not an image-flashing or
 hardware-validation tool.
 
 ## Supported profiles
 
 | Profile | Intended device | Use only when | Purpose |
 |---|---|---|---|
-| `development` | A Jammy development computer | The host is running Ubuntu 22.04 and will be used for ROS development, mock, or webcam-AprilTag work | Installs the supported ROS/development dependencies declared by this repository and prepares the workspace. |
-| `jetson` | The selected Jetson Orin Nano | JetPack 6.2.2 / L4T 36.5 has already been manually installed and verified on the arm64 target | Installs the ROS workspace dependencies for the target after its platform preflight. |
+| `development` | A Noble development computer | The host is running Ubuntu 24.04 and will be used for ROS development, mock, or webcam-AprilTag work | Installs the supported ROS/development dependencies declared by this repository and prepares the workspace. |
+| `jetson` | The selected Jetson Orin Nano | JetPack 7.2.1 / L4T 39.2.1 has already been installed and verified on the arm64 target | Installs the ROS workspace dependencies for the target after its platform preflight. |
 
-An x86_64 Ubuntu 24.04/Jazzy machine is useful for structural development
-checks only. It is not a substitute for the Jammy/Humble provisioning path or
-for the arm64 Jetson runtime.
+An x86_64 Ubuntu 24.04/Jazzy machine can build and test the target ROS
+distribution. It cannot validate the arm64 Jetson, CUDA, or ZED runtime.
 
-The Jetson profile checks Ubuntu 22.04, arm64, L4T 36.5, and an Orin Nano model
+The Jetson profile checks Ubuntu 24.04, arm64, L4T 39.2.1, and an Orin Nano model
 string. Confirm the physical 8 GB SKU separately: the device-tree model does
 not encode memory capacity.
 
@@ -38,7 +37,7 @@ the host. It needs an internet connection for Ubuntu/ROS packages and `sudo`
 permission on the device.
 
 ```bash
-# Ubuntu 22.04 (Jammy) development host
+# Ubuntu 24.04 (Noble) development host
 ./scripts/bootstrap_dev.sh --install --profile development
 
 # Verified Jetson Orin Nano running the locked JetPack / L4T image
@@ -72,7 +71,7 @@ below afterward.
 
 If a ROS apt source is already configured for a different Ubuntu codename, the
 installer stops before installing ROS packages. Repair or remove that stale
-source deliberately; it does not mix Jammy and non-Jammy ROS repositories.
+source deliberately; it does not mix Noble and other ROS repositories.
 
 ## Every new terminal
 
@@ -88,17 +87,11 @@ This sources the locked ROS distribution and the enclosing workspace overlay
 for the current shell only. It deliberately does not edit `.bashrc`, another
 shell profile, or global system startup files.
 
-The helper rejects a non-Humble underlay by default. An existing Jazzy host may
-be used only for a clearly labelled structural-only or local bench check by
-making both overrides explicit before sourcing it:
-
-```bash
-export LUNABOT_ROS_DISTRO=jazzy
-export LUNABOT_ALLOW_NON_TARGET_ACTIVATION=1
-source scripts/activate.sh
-```
-
-That opt-in does not alter the target lock or provide Jetson/ZED validation.
+The helper uses Jazzy by default. A separately installed ROS distribution can
+be used for a structural-only development check with
+`LUNABOT_ROS_DISTRO=<distro>` and
+`LUNABOT_ALLOW_NON_TARGET_ACTIVATION=1`. That opt-in does not alter the target
+lock or provide Jetson/ZED validation.
 
 ## Intentional boundaries
 

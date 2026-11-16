@@ -102,10 +102,20 @@ class TestMockRobotRuntime(unittest.TestCase):
         client = self.node.create_client(ListControllers, "/controller_manager/list_controllers")
         self.wait_until(client.service_is_ready, "controller manager list service")
         future = client.call_async(ListControllers.Request())
-        rclpy.spin_until_future_complete(self.node, future, timeout_sec=20.0)
-        self.assertIsNotNone(future.result())
-        states = {controller.name: controller.state for controller in future.result().controller}
-        self.assertEqual(states.get("joint_state_broadcaster"), "active")
+
+        def broadcaster_active() -> bool:
+            nonlocal future
+            if not future.done():
+                return False
+            result = future.result()
+            self.assertIsNotNone(result)
+            states = {controller.name: controller.state for controller in result.controller}
+            if states.get("joint_state_broadcaster") == "active":
+                return True
+            future = client.call_async(ListControllers.Request())
+            return False
+
+        self.wait_until(broadcaster_active, "active joint_state_broadcaster")
 
         self.wait_until(lambda: bool(self.joint_states), "/joint_states")
         self.assertTrue(WHEEL_JOINTS <= set(self.joint_states[-1].name))

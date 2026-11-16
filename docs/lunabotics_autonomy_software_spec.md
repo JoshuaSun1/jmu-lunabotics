@@ -92,12 +92,10 @@ The runtime image shall use a Stereolabs/NVIDIA-validated combination of:
 
 Do not select the ROS distribution independently of the Jetson and ZED software matrix.
 
-Preferred policy:
-
-1. Use ROS 2 Humble on Ubuntu 22.04 when that is the validated JetPack/ZED combination for the actual Orin Nano image.
-2. Use ROS 2 Jazzy on Ubuntu 24.04 only when the selected JetPack and ZED SDK combination is validated on the target hardware.
-3. Record the validated platform versions and exact installed Debian/ROS package versions in tracked native-runtime documentation and a machine-readable manifest.
-4. Do not implement against ROS Rolling or Kilted unless the team explicitly approves the compatibility risk.
+Selected baseline: JetPack 7.2.1 / L4T 39.2.1, Ubuntu 24.04, ROS 2 Jazzy,
+CUDA 13.2.2, and ZED SDK 5.5.0. Pin the wrapper release in
+`config/platform.env` and validate the full combination on the Orin Nano with
+the ZED Mini. Native provisioning remains the deployment workflow; target validation is still required.
 
 A legacy Jetson Nano 4 GB is outside the performance assumptions of this document. The expected target is a Jetson Orin Nano 8 GB.
 

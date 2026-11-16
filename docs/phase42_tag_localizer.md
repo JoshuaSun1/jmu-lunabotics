@@ -123,7 +123,7 @@ while roll and pitch are set to zero with the required,
 explicitly-configured `unobserved_roll_pitch_variance_rad2` covariance. This
 prevents an accidental claim that roll or pitch was estimated. The runtime
 uses a dedicated TF listener thread so its configured nonzero lookup timeout is
-valid on both ROS 2 Humble and Jazzy.
+valid on ROS 2 Jazzy.
 
 The node rejects unknown field tags (including bench ID 0), bad hamming or
 decision margin, small tags, excessive range/view angle, stale/future data,
@@ -159,6 +159,6 @@ for the development-host result. Required physical follow-up remains:
 - Measure and record each rigid camera extrinsic and select exactly one TF
   authority per camera frame.
 - Revalidate the webcam calibration and integrate/profile the ZED on the
-  locked Jetson/Humble image.
+  locked Jetson/Jazzy image.
 - Tune gates and covariance from recordings, then validate the Phase 3 local
   EKF and the future global-EKF `map -> odom` authority with runtime TF tests.

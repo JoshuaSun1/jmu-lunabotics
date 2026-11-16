@@ -20,7 +20,7 @@ drive_controller:
     right_wheel_names:
       - front_right_wheel_joint
       - rear_right_wheel_joint
-    wheels_per_side: 2  # Mock model exposes two independently commanded joints per side.
+    # Jazzy derives the wheel count from the two joint names on each side.
 
     # Synthetic Phase 1 geometry only: radius 0.12 m; left/right mock centers +/-0.34 m.
     wheel_radius: 0.12  # m, synthetic_mock_only; DRIVE-02 must replace this.
@@ -40,28 +40,21 @@ drive_controller:
     pose_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # Mock only; LOC-01 TBD.
     twist_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]  # Mock only; LOC-01 TBD.
 
-    # Native input is TwistStamped on ~/cmd_vel; bench launch remaps it to /cmd_vel.
-    use_stamped_vel: true
+    # Jazzy's native input is TwistStamped on ~/cmd_vel; bench launch remaps it to /cmd_vel.
     cmd_vel_timeout: 0.25  # s, mock-only stale-command exercise; SAFE-01 TBD.
     publish_limited_velocity: true
     velocity_rolling_window_size: 1  # Mock feedback should be directly observable in tests.
 
     # Synthetic mock limits only; they are not physical drive or safety limits.
-    linear.x.has_velocity_limits: true
     linear.x.max_velocity: 0.50  # m/s, synthetic_mock_only.
     linear.x.min_velocity: -0.50  # m/s, synthetic_mock_only.
-    linear.x.has_acceleration_limits: true
     linear.x.max_acceleration: 0.50  # m/s^2, synthetic_mock_only.
-    linear.x.min_acceleration: -0.50  # m/s^2, synthetic_mock_only.
-    linear.x.has_jerk_limits: true
+    linear.x.max_deceleration: -0.50  # m/s^2, synthetic_mock_only.
     linear.x.max_jerk: 1.00  # m/s^3, synthetic_mock_only.
     linear.x.min_jerk: -1.00  # m/s^3, synthetic_mock_only.
-    angular.z.has_velocity_limits: true
     angular.z.max_velocity: 1.00  # rad/s, synthetic_mock_only.
     angular.z.min_velocity: -1.00  # rad/s, synthetic_mock_only.
-    angular.z.has_acceleration_limits: true
     angular.z.max_acceleration: 1.00  # rad/s^2, synthetic_mock_only.
-    angular.z.min_acceleration: -1.00  # rad/s^2, synthetic_mock_only.
-    angular.z.has_jerk_limits: true
+    angular.z.max_deceleration: -1.00  # rad/s^2, synthetic_mock_only.
     angular.z.max_jerk: 2.00  # rad/s^3, synthetic_mock_only.
     angular.z.min_jerk: -2.00  # rad/s^3, synthetic_mock_only.

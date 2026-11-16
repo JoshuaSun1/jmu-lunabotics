@@ -185,7 +185,7 @@ safety supervisor -------------------------------------+        v
 | `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | Major components | Operator/logger | Includes Nav2 lifecycle, TF, costmap, pose-source, and command-gate state. |
 
 The concrete command-gate topic or `twist_mux` lock interface shall be selected
-with the installed Humble-compatible mux implementation. It must be reliable,
+with the installed Jazzy-compatible mux implementation. It must be reliable,
 fail locked on publisher/node loss, and covered by an integration test. A topic
 name shall not be invented before that component is selected.
 
@@ -374,7 +374,7 @@ unsafe profile combination shall fail before navigation activation.
 
 ### Stage N0 — Readiness and dependency audit
 
-- Verify installed Humble/Jazzy Nav2 component names and message compatibility.
+- Verify installed Jazzy Nav2 component names and message compatibility.
 - Record required packages and bootstrap checks.
 - Create non-runnable or fail-closed parameter/launch scaffolding.
 - Verify map-server reuse and lifecycle ownership.

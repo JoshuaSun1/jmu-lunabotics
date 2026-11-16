@@ -42,15 +42,26 @@ def test_phase_zero_resources_and_version_lock_exist() -> None:
 
 
 def test_target_runtime_lock_is_explicit() -> None:
-    """Native bootstrap and the platform record retain the proposed target lock."""
-    bootstrap = (REPOSITORY_ROOT / "scripts" / "bootstrap_dev.sh").read_text(
-        encoding="utf-8"
-    )
+    """Native bootstrap and the platform record retain the selected target lock."""
+    bootstrap = (REPOSITORY_ROOT / "scripts" / "bootstrap_dev.sh").read_text(encoding="utf-8")
     platform_lock = (
         REPOSITORY_ROOT / "docs" / "resources" / "software_platform_lock.md"
     ).read_text(encoding="utf-8")
-    assert 'TARGET_ROS_DISTRO="humble"' in bootstrap
-    assert 'TARGET_UBUNTU_VERSION="22.04"' in bootstrap
-    assert 'TARGET_L4T_RELEASE="R36 (release), REVISION: 5.0"' in bootstrap
-    assert "JetPack | 6.2.2" in platform_lock
-    assert "ZED SDK | 5.2.3" in platform_lock
+    assert 'TARGET_ROS_DISTRO="jazzy"' in bootstrap
+    assert 'TARGET_UBUNTU_VERSION="24.04"' in bootstrap
+    assert 'TARGET_L4T_RELEASE="R39 (release), REVISION: 2.1"' in bootstrap
+    assert "JetPack | 7.2.1" in platform_lock
+    assert "ZED SDK | 5.5.0" in platform_lock
+
+    values = (REPOSITORY_ROOT / "config" / "platform.env").read_text(encoding="utf-8")
+    for expected in (
+        "TARGET_PLATFORM=linux/arm64",
+        "ROS_DISTRO=jazzy",
+        "JETPACK_VERSION=7.2.1",
+        "L4T_VERSION=39.2.1",
+        "UBUNTU_VERSION=24.04",
+        "CUDA_VERSION=13.2.2",
+        "ZED_SDK_VERSION=5.5.0",
+        "ZED_ROS2_WRAPPER_VERSION=v5.5.0",
+    ):
+        assert expected in values

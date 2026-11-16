@@ -4,19 +4,20 @@
 
 - **Development host:** may run static checks and mock/simulation work. It does
   not validate the Jetson runtime lock.
-- **Jetson bench:** requires the locked JetPack/L4T, Humble, ZED SDK, and
+- **Jetson bench:** requires the locked JetPack/L4T, Jazzy, ZED SDK, and
   wrapper versions to be verified on the physical target before sensor work.
 - **Competition:** headless runtime; motors disabled by default and RViz run
   offboard where possible.
 
 ## Safe setup
 
-1. Review `docs/resources/software_platform_lock.md`. The robot runtime is Ubuntu
-   22.04 / ROS 2 Humble, not the development workstation's Jazzy override.
+1. Review `config/platform.env` and
+   `docs/resources/software_platform_lock.md`. The robot runtime is Ubuntu
+   24.04 / ROS 2 Jazzy.
 2. Provision each supported device once from the repository root:
 
    ```bash
-   # Ubuntu 22.04 (Jammy) development host
+   # Ubuntu 24.04 (Noble) development host
    ./scripts/bootstrap_dev.sh --install --profile development
 
    # Only after the locked JetPack / L4T image is manually verified on Orin
@@ -148,7 +149,7 @@ there is no live global-localization or navigation path.
 Install the dependencies declared by `lb_navigation` through the supported
 bootstrap/rosdep workflow. On the current opt-in Jazzy development host, the
 equivalent packages are `ros-jazzy-nav2-map-server` and
-`ros-jazzy-nav2-lifecycle-manager`; this does not validate the target Humble
+`ros-jazzy-nav2-lifecycle-manager`; this does not validate the target Jetson
 runtime.
 
 After building and sourcing the workspace, launch the non-actuating map profile:

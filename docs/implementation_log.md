@@ -59,3 +59,16 @@ closed, and remaining blockers.
 - Required physical work remains the tag/map survey, camera extrinsics,
   calibration and detector-TF timestamp validation, ZED integration, gate and
   covariance tuning, Phase 3 local odometry, and global-EKF TF-authority test.
+
+## 2026-10-13 — JetPack 7.2.1 / Jazzy migration
+
+- The team reported JetPack 7.2.1, Ubuntu 24.04, CUDA 13, and ZED SDK 5.5 on
+  the robot. ADR 0002 selects Jazzy, L4T 39.2.1, CUDA 13.2.2, SDK 5.5.0,
+  and wrapper `v5.5.0` as the repository baseline, pending patch verification.
+- Updated ROS defaults, target preflight, container scaffold, CI, version
+  contract tests, and live operating documentation.
+- Physical camera, CUDA, and Jetson runtime validation remains open.
+- The generic Ubuntu 24.04/Jazzy x86_64 Docker image built all 10 packages;
+  its full package suite passed 100 tests with no failures or skips. A mock
+  bench launch loaded the plugin and activated both controllers. The native
+  workstation lacked required ROS packages; the container supplied them.

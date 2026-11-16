@@ -5,7 +5,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPOSITORY_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 WORKSPACE_ROOT="${LUNABOT_WORKSPACE_ROOT:-$(cd "${REPOSITORY_ROOT}/../.." && pwd)}"
-ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-humble}"
+ROS_DISTRO_TO_USE="${LUNABOT_ROS_DISTRO:-jazzy}"
 CLEAN="false"
 
 usage() {
@@ -15,7 +15,7 @@ Usage: scripts/build.sh [--clean]
 Builds this repository's packages into the enclosing ROS workspace's build/,
 install/, and log/ directories. By default, that workspace is two directories
 above this repository; set LUNABOT_WORKSPACE_ROOT to override it for CI.
-The runtime target is Humble; LUNABOT_ROS_DISTRO may be set only for a clearly
+The runtime target is Jazzy; LUNABOT_ROS_DISTRO may be set only for a clearly
 labelled non-target structural check on another ROS distribution.
 EOF
 }
@@ -53,7 +53,7 @@ if [[ ! -f "/opt/ros/${ROS_DISTRO_TO_USE}/setup.bash" ]]; then
   exit 1
 fi
 
-if [[ "${ROS_DISTRO_TO_USE}" != "humble" ]]; then
+if [[ "${ROS_DISTRO_TO_USE}" != "jazzy" ]]; then
   echo "warning: ${ROS_DISTRO_TO_USE} is a non-target structural-check override" >&2
 fi
 

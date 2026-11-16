@@ -12,7 +12,7 @@ any physical safety mechanism.
 | Transport contract | `lb_hardware/include/lb_hardware/drive_transport.hpp` | Protocol-neutral boundary between ROS control and a future MCU. |
 | Mock transport | `mock_drive_transport.*` | In-memory four-wheel state/command simulation and deterministic fault injection. |
 | Real transport skeleton | `real_drive_transport.*` | Explicitly unavailable placeholder; opens no CAN, serial, USB, or controller device. |
-| Hardware plugin | `LunabotDriveHardware` | Humble `hardware_interface::SystemInterface` plugin exported as `lb_hardware/LunabotDriveHardware`. |
+| Hardware plugin | `LunabotDriveHardware` | Jazzy `hardware_interface::SystemInterface` plugin exported as `lb_hardware/LunabotDriveHardware`. |
 | Mock controller profile | `config/mock_drive_controllers.yaml` | Four-wheel `diff_drive_controller` configuration using synthetic geometry. |
 | Hardware launch | `launch/hardware.launch.py` | Starts robot-state publisher, controller manager, joint-state broadcaster, and drive controller. |
 | Bench entry point | `lb_launch/launch/bench_test.launch.py` | Safe public launch wrapper for the mock profile. |
@@ -60,26 +60,31 @@ explicit `enable_on_activate` setting. On a failed state read, write, or
 non-finite command, it zeros interfaces, calls `stop()` and `set_enabled(false)`,
 and returns a ROS-control error. This is software fail-closed behavior only;
 it is not a physical E-stop or a substitute for an MCU heartbeat.
+Jazzy creates the declared command and state interfaces from the Xacro;
+the plugin accesses them by joint/interface name.
 
 ## Controller and ROS contract
 
 The mock controller groups `front_left_wheel_joint` and
 `rear_left_wheel_joint` on the left, and their right counterparts on the
-right. It is configured with `position_feedback: true`, `open_loop: false`, and
+right. Jazzy derives the wheel count from the joint-name arrays. It is
+configured with `position_feedback: true`, `open_loop: false`, and
 `enable_odom_tf: false`. Thus, `diff_drive_controller` may produce mock wheel
 odometry but it must never publish `odom -> base_link`; that remains reserved
 for the Phase 3 local EKF.
 
 | Interface | Type | Phase 2 producer/consumer | Status |
 |---|---|---|---|
-| `/cmd_vel` | `geometry_msgs/msg/TwistStamped` | Bench remap to `drive_controller` native `~/cmd_vel` | Declared; Humble runtime remap validation pending. |
+| `/cmd_vel` | `geometry_msgs/msg/TwistStamped` | Bench remap to `drive_controller` native `~/cmd_vel` | Declared; Jazzy runtime remap validation pending. |
 | `/joint_states` | `sensor_msgs/msg/JointState` | `joint_state_broadcaster` to `robot_state_publisher` | Mock-capable. |
 | `/odom/wheel` | `nav_msgs/msg/Odometry` | Bench remap of controller native `~/odom` | Declared mock output; runtime validation pending. |
 | `/tf`, `/tf_static` | `tf2_msgs/msg/TFMessage` | `robot_state_publisher` for the `base_link` subtree | Existing Phase 1 ownership unchanged. |
 
-Humble's controller uses stamped commands at `~/cmd_vel`; the launch declares
-remaps from `/drive_controller/cmd_vel` to `/cmd_vel` and from
-`/drive_controller/odom` to `/odom/wheel`. Because Humble loads controllers
+Jazzy's controller requires stamped commands at `~/cmd_vel`; the drive
+spawner remaps `/drive_controller/cmd_vel` to `/cmd_vel` and
+`/drive_controller/odom` to `/odom/wheel`. The launch passes controller
+parameters through each spawner and publishes the URDF through
+`robot_state_publisher` for the controller manager. Because Jazzy loads controllers
 in the controller-manager process, those remaps require target runtime
 verification before they are treated as proven application-boundary behavior.
 
@@ -104,7 +109,7 @@ physical robot.
 
 ## Safe mock bench use
 
-After building in a Humble environment with ros2_control installed, start the
+After building in a Jazzy environment with ros2_control installed, start the
 disabled mock bench with:
 
 ```bash
