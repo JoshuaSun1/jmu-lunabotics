@@ -3,6 +3,8 @@ project(lb_sim)
 
 find_package(ament_cmake REQUIRED)
 
+install(PROGRAMS scripts/navigation_mock_world.py DESTINATION lib/${PROJECT_NAME})
+
 install(
   DIRECTORY config launch
   DESTINATION share/${PROJECT_NAME}
@@ -15,7 +17,10 @@ if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   find_package(launch_testing_ament_cmake QUIET)
   find_package(controller_manager_msgs QUIET)
+  ament_add_pytest_test(navigation_mock_launch test/test_navigation_mock_launch.py)
+  ament_add_pytest_test(navigation_mock_world test/test_navigation_mock_world.py)
   ament_lint_auto_find_test_dependencies()
+  ament_add_pytest_test(navigation_mock_runtime test/test_navigation_mock_runtime.py TIMEOUT 420)
   ament_add_pytest_test(mock_launch_contract test/test_mock_launch_contract.py)
   ament_add_pytest_test(bag_replay_contract test/test_bag_replay_contract.py)
   ament_add_pytest_test(

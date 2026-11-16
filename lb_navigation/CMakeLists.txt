@@ -8,7 +8,7 @@ install(PROGRAMS
   DESTINATION lib/${PROJECT_NAME})
 
 install(
-  DIRECTORY config launch maps rviz
+  DIRECTORY config launch maps rviz behavior_trees
   DESTINATION share/${PROJECT_NAME}
   PATTERN "__pycache__" EXCLUDE
   PATTERN "*.pyc" EXCLUDE)
@@ -16,6 +16,7 @@ install(
 if(BUILD_TESTING)
   find_package(ament_cmake_pytest REQUIRED)
   find_package(ament_lint_auto REQUIRED)
+  ament_add_pytest_test(navigation_mock_config test/test_navigation_mock_config.py)
   ament_lint_auto_find_test_dependencies()
   ament_add_pytest_test(nav2_batch1_contract test/test_nav2_batch1_contract.py)
   ament_add_pytest_test(nav2_n3_contract test/test_nav2_n3_contract.py)

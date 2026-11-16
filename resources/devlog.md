@@ -1273,3 +1273,40 @@ one existing Xacro-unavailable skip, including a passing N4 runtime test.
 All applicable pre-commit hooks pass. Jetson/physical validation and N5–N8
 remain open. This fixes the formatting-sensitive CI contracts and does not
 supply target-hardware evidence.
+
+## 2026-11-16 — N5–N8 mock navigation
+
+Implemented the authorized mock scope on `nav2-mock-n5-n8`, based on `b58bce9`:
+actual Jazzy Nav2 servers and bounded wait/clear BT, in-memory drive transport,
+odometry-driven synthetic pose/scans/hazards, a guarded public action, steady
+watchdog and final command supervision. Normal physical bringup is unchanged;
+all motion-producing mock launch paths require explicit opt-ins and reject
+real hardware/physical enable. The N3 TF bridge remains test-only.
+
+Installed dependency discovery required forced CMake reconfiguration to build
+the previously omitted hardware plugin. Ten packages build successfully. After
+formatting, the complete suite reports 217 tests with no errors, failures or
+skips, including conditional Xacro/control launch tests and full N5–N8 runtime
+acceptance. The final 60-second repeat-navigation period completed six goals
+and logged one localization-freshness safety stop; stop/readiness/new-goal
+checks passed. Planner loss, controller stall, stale sources, blocked paths,
+unreachable goals, no progress, recovery exhaustion and dynamic replanning are
+covered. All applicable pre-commit hooks pass.
+
+Selected PoseProgressChecker after the XY-only checker misclassified heading
+alignment as no progress. Tightened command shutdown at action completion,
+command/action epoch isolation and early cancellation handling. Three existing
+Python nodes now avoid double shutdown on ROS signal exit. New mock assumptions
+ASM-LOC-07/ASM-NAV-07 and operator/interface/architecture/testing/traceability
+records describe provenance and replacement points. Software behavior remains
+mock-only; no physical calibration or safety gate was closed.
+
+Measured desktop aggregate RSS peaked near 867 MiB; approximate live-process
+CPU averaged 1.54 cores. Timestamp-preserving command queues exhibited scheduling
+age outliers; source-freshness stops remain visible rather than being hidden by
+looser limits. RViz graphical review, sustained target profiling, measured
+stopping/clearance and all physical sensor/fusion/drive/safety gates remain open.
+See [commands, results and retained artifacts](../docs/resources/evidence/2026-11-16-nav2-mock-n5-n8.md).
+
+Git evidence: implementation commit follows this entry on `nav2-mock-n5-n8`;
+base `b58bce9`. No remote push or pull request is part of this change.

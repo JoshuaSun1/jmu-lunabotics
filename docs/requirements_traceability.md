@@ -35,3 +35,10 @@ than completed field localization. Requirements outside the completed
 mock-drive, camera-observation, and software-only localizer boundaries remain
 deliberately unimplemented. See [`../resources/devlog.md`](../resources/devlog.md)
 for validation evidence as it becomes available.
+
+| Requirement | Implementation / evidence | Remaining boundary |
+|---|---|---|
+| N5 planner/controller and bounded mock command chain | `navigation_mock.launch.py`, `nav2_mock_development.yaml`, supervisor, full runtime acceptance | Hardware command arbitration/enable and measured limits remain open |
+| N6 NavigateToPose / operator workflow | Guarded public action, RViz profile, CLI procedures, two-goal runtime test | Graphical RViz review and target behavior remain open |
+| N7 synthetic observations | Odometry-driven scans/terrain points, marking/clearing/replanning and stale-source tests | Physical LiDAR/ZED calibration, drop-off semantics and latency remain open |
+| N8 mock failures and resource evidence | No-progress/unreachable/recovery/controller-stall/node-loss scenarios and optional repeat-navigation measurements | Field endurance, braking, physical recovery clearance and Jetson performance remain open |

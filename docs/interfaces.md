@@ -164,3 +164,23 @@ profile uses expiring/deleted markers for the visible current pose.
 
 No `/navigate_to_pose` action is implemented yet. See
 [recovery evidence](resources/evidence/2026-11-15-nav2-crash-recovery.md).
+
+## N5–N8 executable mock-only interfaces
+
+| Interface | Type | Owner / consumer |
+|---|---|---|
+| `/navigate_to_pose` | `nav2_msgs/action/NavigateToPose` | Supervisor public action; rejects unavailable/concurrent/invalid/custom-BT goals |
+| `/navigation/internal/navigate_to_pose` | Same action | Internal bt_navigator; the final gate still requires an admitted public goal |
+| `/cmd_vel_nav_controller` | `geometry_msgs/msg/TwistStamped` | Controller -> velocity smoother |
+| `/cmd_vel_nav_raw` -> `/cmd_vel_nav` | Same | Smoother -> existing localization gate -> supervisor |
+| `/cmd_vel` | Same | Supervisor only -> in-memory drive controller |
+| `/odometry/local` | `nav_msgs/msg/Odometry` | Synthetic world, offset mock wheel odometry; not an EKF |
+| `/sim/scan` | `sensor_msgs/msg/LaserScan` | Synthetic world -> costmaps and source monitor; sensor-data QoS |
+| `/sim/hazards` | `sensor_msgs/msg/PointCloud2` | Synthetic world -> hazard layers and source monitor; sensor-data QoS |
+| `/navigation/ready` | `std_msgs/msg/Bool` | Supervisor readiness; reliable/transient-local, not physical enable |
+| `/plan` | `nav_msgs/msg/Path` | Planner -> navigator/RViz/evidence |
+| `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | Supervisor reasons, command authorization and explicit mock identity |
+
+Fault-injection services, parameter provenance, lifecycle operations and guarded
+resumption behavior are specified in [the mock workflow](nav2_mock.md). The
+production EKF/interface ownership rules remain unchanged.

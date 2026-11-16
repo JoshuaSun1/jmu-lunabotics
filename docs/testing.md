@@ -88,3 +88,19 @@ nodes after TF is ready, checks grids, inflation, footprints and raw cell
 costs, then stops pose input and verifies gated commands become zero.
 It performs lifecycle shutdown before terminating the launch process group.
 No hardware is started. See [commands and results](resources/evidence/2026-11-15-nav2-crash-recovery.md).
+
+## N5–N8 acceptance
+
+`lb_sim/test/test_navigation_mock_runtime.py` launches actual Nav2 and Phase 2
+mock drive nodes, then checks two completed goals, guarded admission,
+cancellation/no automatic resumption, dynamic replanning, synthetic marking and
+clearing, stale sources, unreachable goals, no-progress recovery exhaustion,
+controller stalls and planner loss. Optional repeat navigation records short
+soak resource evidence. Run formatting before this suite to avoid repeating the
+prior formatting/contract mismatch. See [commands and evidence semantics](nav2_mock.md).
+
+Pure tests cover command bounds, invalid/stale input, the steady watchdog under
+stopped ROS time, raycast geometry, shared mock limits and bounded recovery.
+Tests skip with named dependencies on unprovisioned hosts; a skip is not stage
+acceptance. After installing previously absent control dependencies, force
+CMake reconfiguration so conditional hardware/plugin and launch tests register.

@@ -272,3 +272,11 @@ python3 -m pytest -q lb_navigation/test/test_nav2_n4_lifecycle_runtime.py
 Run this from the repository root with local DDS networking available.
 RViz is optional (`use_rviz:=false` for headless operation); graphical visual
 acceptance remains pending. Physical operation remains prohibited.
+
+## N5–N8 end-to-end mock navigation
+
+Use the [mock navigation procedure](nav2_mock.md) for explicit opt-ins,
+lifecycle startup, RViz/CLI goals, diagnostics and synthetic fault injection.
+The safe default starts no processes. Never run it alongside physical bringup,
+another final command publisher or production EKFs. It does not implement a
+hardware enable path. Normal `bringup.launch.py` is unchanged.

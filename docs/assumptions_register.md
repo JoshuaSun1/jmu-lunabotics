@@ -322,7 +322,7 @@ assumptions**. The broader dependency-oriented list remains in
   resuming autonomy have not been experimentally selected.
 
 - **ASM-LOC-06 — Initial fused-pose source.** **Proposed/development only:**
-  the planned `/localization/fused_pose`
+  the implemented development `/localization/fused_pose`
   (`geometry_msgs/msg/PoseWithCovarianceStamped`) initially comes directly
   from each accepted `/localization/apriltag_pose` sample, preserving its
   timestamp, pose, and covariance. It performs no filtering, interpolation,
@@ -364,17 +364,20 @@ assumptions**. The broader dependency-oriented list remains in
   transform tolerances, persistence, inflation, and keepout settings from
   final geometry, sensor range, compute, and field tests.
 
-- **ASM-NAV-03 — Obstacle sources.** **Unresolved:** global/local costmaps do
-  not yet have validated LiDAR, ZED depth, or terrain-hazard sources. Topic
-  names, message types at each adapter, marking/clearing behavior, observation
-  height/range, raytrace range, persistence, QoS, expected update rate, and
-  stale-source response require implementation and testing.
+- **ASM-NAV-03 — Obstacle sources.** **Physical inputs unresolved:** N7 now
+  supplies tested synthetic `/sim/scan` and `/sim/hazards` contracts, including
+  marking, explicit clearing and stale-source response. These generator
+  settings are not validated LiDAR/ZED hardware settings. Physical topics,
+  adapters, height/range, persistence, QoS and drop-off handling still require
+  measured sensor and field evidence.
 
-- **ASM-NAV-04 — Planner, controller, and recoveries.** **Unresolved:** the
-  Nav2 planner, controller, goal/progress checkers, behavior tree, replanning
-  frequency, recovery behaviors, goal tolerances, speed profiles, and failure
-  escalation have not been selected or tuned. No current RViz goal implies a
-  safe autonomous motion path.
+- **ASM-NAV-04 — Planner, controller, and recoveries.** **Development choices
+  implemented; physical tuning unresolved:** the mock profile selects NavFn,
+  Regulated Pure Pursuit, PoseProgressChecker, SimpleGoalChecker and a 1 Hz
+  replan/two-retry wait/clear tree. See [mock parameter provenance](nav2_mock.md).
+  No mock result or RViz goal approves physical autonomous motion; controller
+  stability, clearances, stopping margins and failure escalation must be
+  validated with measured inputs on the target.
 
 - **ASM-PER-01 — ZED terrain-hazard processing.** **Unresolved:** forward ROI,
   crop/downsample rates, ground model, obstacle height/size/slope thresholds,
@@ -478,3 +481,19 @@ It is prohibited for authorizing physical motion; N5 must establish monitoring
 for the planner/controller command path. Existing 0.50 s freshness, 2.0 s
 initial TF timeout, footprint and inflation assumptions remain untuned.
 Runtime evidence does not close their physical-validation requirements.
+
+### N5–N8 mock-only additions — 2026-11-16
+
+- **ASM-LOC-07 — Odometry-driven synthetic absolute pose.** The mock world
+  offsets wheel odometry by initial (1.5, 1.5) m and emits synthetic absolute
+  pose with original wheel timestamps and fixture covariance 0.001 for x/y/yaw.
+  This is not a camera accuracy model, EKF or production localization. Replace
+  it and the N3 bridge with validated local/global fusion before physical use.
+- **ASM-NAV-07 — Mock Nav2 policy and perception.** New rates, timeouts,
+  checker tolerances, controller lookahead, raycast and hazard settings are
+  synthetic, untuned development policy, enumerated in
+  [the mock profile](nav2_mock.md) and its YAML. Existing footprint/limits retain
+  their provenance. The bounded wait/clear BT and mock safety supervisor do not
+  establish physical recovery clearance, stopping distance or hardware safety.
+  Close only with calibrated physical sources, measured tuning, target-runtime
+  performance and the main specification's physical acceptance gates.

@@ -248,6 +248,14 @@ run_check() {
     tf2_ros
     yaml_cpp_vendor
     rosbag2
+    nav2_planner
+    nav2_navfn_planner
+    nav2_controller
+    nav2_regulated_pure_pursuit_controller
+    nav2_behaviors
+    nav2_bt_navigator
+    nav2_velocity_smoother
+    nav2_rviz_plugins
     nav2_costmap_2d
     nav2_map_server
     nav2_lifecycle_manager

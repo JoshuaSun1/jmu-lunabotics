@@ -1,0 +1,645 @@
+[INFO] [launch]: All log files can be found below /tmp/lb_mock_acceptance_final/ros_logs/2026-11-16-10-39-15-151093-jmu-lunabotics-56793
+[INFO] [launch]: Default logging verbosity is set to INFO
+[INFO] [launch.user]: Nav2 Batch 1 development boundary only: AprilTag fused-pose pass-through and /cmd_vel_nav gate. No Nav2 server, /cmd_vel, TF broadcaster, hardware, or motor output is started.
+[INFO] [launch.user]: TEST ONLY N3 TF enabled: apriltag_development_tf_bridge solely owns map->odom and odom->base_link; map=odom, no propagation, no motors.
+[INFO] [robot_state_publisher-1]: process started with pid [56798]
+[INFO] [ros2_control_node-2]: process started with pid [56799]
+[INFO] [spawner-3]: process started with pid [56800]
+[INFO] [navigation_mock_world.py-4]: process started with pid [56801]
+[INFO] [fused_pose_passthrough.py-5]: process started with pid [56802]
+[INFO] [navigation_command_gate.py-6]: process started with pid [56803]
+[INFO] [apriltag_development_tf_bridge.py-7]: process started with pid [56804]
+[INFO] [map_server-8]: process started with pid [56805]
+[INFO] [planner_server-9]: process started with pid [56806]
+[INFO] [controller_server-10]: process started with pid [56807]
+[INFO] [behavior_server-11]: process started with pid [56808]
+[INFO] [velocity_smoother-12]: process started with pid [56809]
+[INFO] [bt_navigator-13]: process started with pid [56810]
+[INFO] [lifecycle_manager-14]: process started with pid [56811]
+[INFO] [navigation_supervisor.py-15]: process started with pid [56812]
+[lifecycle_manager-14] [INFO] [1794843556.525413265] [lifecycle_manager_navigation]: Creating
+[lifecycle_manager-14] [INFO] [1794843556.588832161] [lifecycle_manager_navigation]: [34m[1mCreating and initializing lifecycle service clients[0m[0m
+[velocity_smoother-12] [INFO] [1794843556.680302797] [velocity_smoother]:
+[velocity_smoother-12] 	velocity_smoother lifecycle node launched.
+[velocity_smoother-12] 	Waiting on external lifecycle transitions to activate
+[velocity_smoother-12] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[ros2_control_node-2] [INFO] [1794843556.757419577] [controller_manager]: Using Steady (Monotonic) clock for triggering controller manager cycles.
+[controller_server-10] [INFO] [1794843556.794690174] [controller_server]:
+[controller_server-10] 	controller_server lifecycle node launched.
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[ros2_control_node-2] [INFO] [1794843556.849752057] [controller_manager]: Subscribing to '/robot_description' topic for robot description.
+[ros2_control_node-2] [INFO] [1794843556.849935330] [controller_manager]: update rate is 50 Hz
+[ros2_control_node-2] [INFO] [1794843556.849969513] [controller_manager]: Overruns handling is : enabled
+[ros2_control_node-2] [INFO] [1794843556.849999351] [controller_manager]: Spawning controller_manager RT thread with scheduler priority: 50
+[ros2_control_node-2] [WARN] [1794843556.850229245] [controller_manager]: Could not enable FIFO RT scheduling policy: with error number <1>(Operation not permitted). See [https://control.ros.org/master/doc/ros2_control/controller_manager/doc/userdoc.html] for details on how to enable realtime scheduling.
+[controller_server-10] [INFO] [1794843556.885870298] [controller_server]: Creating controller server
+[behavior_server-11] [INFO] [1794843557.027473018] [behavior_server]:
+[behavior_server-11] 	behavior_server lifecycle node launched.
+[behavior_server-11] 	Waiting on external lifecycle transitions to activate
+[behavior_server-11] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1794843557.054460432] [local_costmap.local_costmap]:
+[controller_server-10] 	local_costmap lifecycle node launched.
+[controller_server-10] 	Waiting on external lifecycle transitions to activate
+[controller_server-10] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[controller_server-10] [INFO] [1794843557.059296056] [local_costmap.local_costmap]: Creating Costmap
+[robot_state_publisher-1] [INFO] [1794843557.129815662] [robot_state_publisher]: Robot initialized
+[ros2_control_node-2] [INFO] [1794843557.136685329] [controller_manager]: Received robot description from topic.
+[ros2_control_node-2] [INFO] [1794843557.145634613] [controller_manager]: Enforcing command limits is disabled. Command limits from URDF will be ignored.
+[ros2_control_node-2] [INFO] [1794843557.598010088] [controller_manager]: Loading hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843557.611822597] [controller_manager]: Loaded hardware 'lb_mock_drive_system' from plugin 'lb_hardware/LunabotDriveHardware'
+[ros2_control_node-2] [INFO] [1794843557.611997523] [controller_manager]: Initialize hardware 'lb_mock_drive_system'
+[bt_navigator-13] [INFO] [1794843557.671996773] [bt_navigator]:
+[bt_navigator-13] 	bt_navigator lifecycle node launched.
+[bt_navigator-13] 	Waiting on external lifecycle transitions to activate
+[bt_navigator-13] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[bt_navigator-13] [INFO] [1794843557.696432591] [bt_navigator]: Creating
+[ros2_control_node-2] [INFO] [1794843557.736904232] [controller_manager]: Successful initialization of hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843557.737231340] [controller_manager]: Activating component 'lb_mock_drive_system'.
+[ros2_control_node-2] [INFO] [1794843557.737257378] [resource_manager]: 'configure' hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843557.737269360] [resource_manager]: Successful 'configure' of hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843557.737283149] [resource_manager]: 'activate' hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843557.737426403] [resource_manager]: Successful 'activate' of hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843557.737512928] [controller_manager]: Registering statistics for : lb_mock_drive_system
+[ros2_control_node-2] [INFO] [1794843557.737691993] [controller_manager]: Resource Manager has been successfully initialized. Starting Controller Manager services...
+[planner_server-9] [INFO] [1794843557.924504955] [planner_server]:
+[planner_server-9] 	planner_server lifecycle node launched.
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1794843557.948853673] [planner_server]: Creating
+[planner_server-9] [INFO] [1794843558.174419972] [global_costmap.global_costmap]:
+[planner_server-9] 	global_costmap lifecycle node launched.
+[planner_server-9] 	Waiting on external lifecycle transitions to activate
+[planner_server-9] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[planner_server-9] [INFO] [1794843558.182899851] [global_costmap.global_costmap]: Creating Costmap
+[map_server-8] [INFO] [1794843558.373460100] [map_server]:
+[map_server-8] 	map_server lifecycle node launched.
+[map_server-8] 	Waiting on external lifecycle transitions to activate
+[map_server-8] 	See https://design.ros2.org/articles/node_lifecycle.html for more information.
+[map_server-8] [INFO] [1794843558.376248108] [map_server]: Creating
+[fused_pose_passthrough.py-5] [WARN] [1794843560.413536741] [fused_pose_passthrough]: Development-only fused pose: direct AprilTag pass-through, 0.50 s timeout, no TF or propagation.
+[navigation_mock_world.py-4] [WARN] [1794843560.724067603] [navigation_mock_world]: TEST ONLY world: synthetic AprilTag pose, scan and hazard points; no physical use
+[ros2_control_node-2] [INFO] [1794843560.893147312] [controller_manager]: Loading controller : 'joint_state_broadcaster' of type 'joint_state_broadcaster/JointStateBroadcaster'
+[ros2_control_node-2] [INFO] [1794843560.893870414] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794843560.932051076] [controller_manager]: Controller 'joint_state_broadcaster' node arguments: --ros-args --params-file /tmp/launch_params_v0ltvi4g --params-file /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/config/mock_drive_controllers.yaml
+[apriltag_development_tf_bridge.py-7] [WARN] [1794843561.496074813] [apriltag_development_tf_bridge]: TEST ONLY: owns map->odom and odom->base_link from intermittent AprilTag pose; map=odom, no propagation, physical use prohibited.
+[navigation_supervisor.py-15] [WARN] [1794843561.601866046] [navigation_supervisor]: MOCK ONLY supervisor owns /cmd_vel; physical use prohibited
+[spawner-3] [INFO] [1794843561.617312050] [joint_state_broadcaster_spawner]: Loaded joint_state_broadcaster
+[ros2_control_node-2] [INFO] [1794843561.646370918] [controller_manager]: Configuring controller: 'joint_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794843561.646672307] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[navigation_command_gate.py-6] [WARN] [1794843561.680045891] [navigation_command_gate]: Development Nav2 command gate starts BLOCKED and publishes only /cmd_vel_nav; it has no /cmd_vel or motor connection.
+[ros2_control_node-2] [INFO] [1794843561.720920331] [controller_manager]: Activating controllers: [ joint_state_broadcaster ]
+[ros2_control_node-2] [INFO] [1794843561.734623766] [controller_manager]: Successfully switched controllers!
+[spawner-3] [INFO] [1794843561.758600040] [joint_state_broadcaster_spawner]: Configured and activated joint_state_broadcaster
+[INFO] [spawner-3]: process has finished cleanly [pid 56800]
+[INFO] [spawner-16]: process started with pid [57038]
+[spawner-16] [INFO] [1794843563.079818511] [drive_controller_spawner]: waiting for service /controller_manager/list_controllers to become available...
+[spawner-16] [INFO] [1794843563.751289793] [drive_controller_spawner]: Setting controller param "node_options_args" to "['-r', '/drive_controller/cmd_vel:=/cmd_vel', '-r', '/drive_controller/odom:=/odom/wheel']" for drive_controller
+[spawner-16] [INFO] [1794843563.773871567] [drive_controller_spawner]: Setting controller param "params_file" to "['/home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/config/mock_drive_controllers.yaml']" for drive_controller
+[ros2_control_node-2] [INFO] [1794843563.816484096] [controller_manager]: Loading controller : 'drive_controller' of type 'diff_drive_controller/DiffDriveController'
+[ros2_control_node-2] [INFO] [1794843563.816543910] [controller_manager]: Loading controller 'drive_controller'
+[ros2_control_node-2] [INFO] [1794843563.861275547] [controller_manager]: Controller 'drive_controller' node arguments: --ros-args --params-file /tmp/launch_params_v0ltvi4g --params-file /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/config/mock_drive_controllers.yaml --params-file /home/jsun3/dev_ws/install/lb_hardware/share/lb_hardware/config/mock_drive_controllers.yaml --ros-args -r /drive_controller/cmd_vel:=/cmd_vel -r /drive_controller/odom:=/odom/wheel
+[spawner-16] [INFO] [1794843563.956895087] [drive_controller_spawner]: Loaded drive_controller
+[ros2_control_node-2] [INFO] [1794843563.965318673] [controller_manager]: Configuring controller: 'drive_controller'
+[ros2_control_node-2] [WARN] [1794843563.984556083] [drive_controller]: Can't accept new commands. subscriber is inactive
+[ros2_control_node-2] [INFO] [1794843564.019607588] [controller_manager]: Activating controllers: [ drive_controller ]
+[ros2_control_node-2] [WARN] [1794843564.031008386] [drive_controller]: Can't accept new commands. subscriber is inactive
+[ros2_control_node-2] [INFO] [1794843564.035908737] [controller_manager]: Successfully switched controllers!
+[spawner-16] [INFO] [1794843564.058496265] [drive_controller_spawner]: Configured and activated drive_controller
+[lifecycle_manager-14] [INFO] [1794843564.137523212] [lifecycle_manager_navigation]: [34m[1mStarting managed nodes bringup...[0m[0m
+[lifecycle_manager-14] [INFO] [1794843564.137632514] [lifecycle_manager_navigation]: [34m[1mConfiguring map_server[0m[0m
+[map_server-8] [INFO] [1794843564.140286855] [map_server]: Configuring
+[map_server-8] [INFO] [1794843564.140776079] [map_io]: Loading yaml file: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation/maps/arena.yaml
+[map_server-8] [INFO] [1794843564.141835709] [map_io]: resolution: 0.05
+[map_server-8] [INFO] [1794843564.141869892] [map_io]: origin[0]: -0.05
+[map_server-8] [INFO] [1794843564.141886133] [map_io]: origin[1]: -0.05
+[map_server-8] [INFO] [1794843564.141901529] [map_io]: origin[2]: 0
+[map_server-8] [INFO] [1794843564.141914376] [map_io]: free_thresh: 0.196
+[map_server-8] [INFO] [1794843564.141930200] [map_io]: occupied_thresh: 0.65
+[map_server-8] [INFO] [1794843564.141984392] [map_io]: mode: trinary
+[map_server-8] [INFO] [1794843564.141998964] [map_io]: negate: 0
+[map_server-8] [INFO] [1794843564.144761294] [map_io]: Loading image_file: /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation/maps/arena.pgm
+[map_server-8] [INFO] [1794843564.146694650] [map_io]: Read map /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation/maps/arena.pgm: 139 X 102 map @ 0.05 m/cell
+[lifecycle_manager-14] [INFO] [1794843564.195292066] [lifecycle_manager_navigation]: [34m[1mConfiguring planner_server[0m[0m
+[planner_server-9] [INFO] [1794843564.197971881] [planner_server]: Configuring
+[planner_server-9] [INFO] [1794843564.198043933] [global_costmap.global_costmap]: Configuring
+[planner_server-9] [INFO] [1794843564.248293350] [global_costmap.global_costmap]: Using plugin "static_layer"
+[planner_server-9] [INFO] [1794843564.258471609] [global_costmap.global_costmap]: Subscribing to the map topic (/map) with transient local durability
+[planner_server-9] [INFO] [1794843564.265645871] [global_costmap.global_costmap]: Initialized plugin "static_layer"
+[planner_server-9] [INFO] [1794843564.265908385] [global_costmap.global_costmap]: Using plugin "obstacle_layer"
+[planner_server-9] [INFO] [1794843564.268475552] [global_costmap.global_costmap]: Subscribed to Topics: scan
+[planner_server-9] [INFO] [1794843564.284847234] [global_costmap.global_costmap]: Initialized plugin "obstacle_layer"
+[planner_server-9] [INFO] [1794843564.284911377] [global_costmap.global_costmap]: Using plugin "hazard_layer"
+[planner_server-9] [INFO] [1794843564.287819408] [global_costmap.global_costmap]: Subscribed to Topics: hazards
+[planner_server-9] [INFO] [1794843564.296155886] [global_costmap.global_costmap]: Initialized plugin "hazard_layer"
+[planner_server-9] [INFO] [1794843564.296240434] [global_costmap.global_costmap]: Using plugin "inflation_layer"
+[planner_server-9] [INFO] [1794843564.298575099] [global_costmap.global_costmap]: Initialized plugin "inflation_layer"
+[INFO] [spawner-16]: process has finished cleanly [pid 57038]
+[planner_server-9] [INFO] [1794843564.496953432] [planner_server]: Created global planner plugin GridBased of type nav2_navfn_planner::NavfnPlanner
+[planner_server-9] [INFO] [1794843564.497026183] [planner_server]: Configuring plugin GridBased of type NavfnPlanner
+[planner_server-9] [INFO] [1794843564.497641869] [planner_server]: Planner Server has GridBased  planners available.
+[lifecycle_manager-14] [INFO] [1794843564.579912346] [lifecycle_manager_navigation]: [34m[1mConfiguring controller_server[0m[0m
+[controller_server-10] [INFO] [1794843564.581512073] [controller_server]: Configuring controller interface
+[controller_server-10] [INFO] [1794843564.581555472] [controller_server]: getting progress checker plugins..
+[controller_server-10] [INFO] [1794843564.586135254] [controller_server]: getting goal checker plugins..
+[controller_server-10] [INFO] [1794843564.587526455] [controller_server]: Controller frequency set to 20.0000Hz
+[controller_server-10] [INFO] [1794843564.587782434] [local_costmap.local_costmap]: Configuring
+[controller_server-10] [INFO] [1794843564.627289761] [local_costmap.local_costmap]: Using plugin "static_layer"
+[controller_server-10] [INFO] [1794843564.641842051] [local_costmap.local_costmap]: Subscribing to the map topic (/map) with transient local durability
+[controller_server-10] [INFO] [1794843564.650236516] [local_costmap.local_costmap]: Initialized plugin "static_layer"
+[controller_server-10] [INFO] [1794843564.650287005] [local_costmap.local_costmap]: Using plugin "obstacle_layer"
+[controller_server-10] [INFO] [1794843564.651282864] [local_costmap.local_costmap]: Subscribed to Topics: scan
+[controller_server-10] [INFO] [1794843564.664239235] [local_costmap.local_costmap]: Initialized plugin "obstacle_layer"
+[controller_server-10] [INFO] [1794843564.664291634] [local_costmap.local_costmap]: Using plugin "hazard_layer"
+[controller_server-10] [INFO] [1794843564.664886322] [local_costmap.local_costmap]: Subscribed to Topics: hazards
+[controller_server-10] [INFO] [1794843564.680746224] [local_costmap.local_costmap]: Initialized plugin "hazard_layer"
+[controller_server-10] [INFO] [1794843564.680808771] [local_costmap.local_costmap]: Using plugin "inflation_layer"
+[controller_server-10] [INFO] [1794843564.686111578] [local_costmap.local_costmap]: Initialized plugin "inflation_layer"
+[controller_server-10] [INFO] [1794843564.855327065] [controller_server]: Created progress_checker : progress_checker of type nav2_controller::PoseProgressChecker
+[controller_server-10] [INFO] [1794843564.856365563] [controller_server]: Controller Server has progress_checker  progress checkers available.
+[controller_server-10] [INFO] [1794843564.858091552] [controller_server]: Created goal checker : general_goal_checker of type nav2_controller::SimpleGoalChecker
+[controller_server-10] [INFO] [1794843564.859606187] [controller_server]: Controller Server has general_goal_checker  goal checkers available.
+[controller_server-10] [INFO] [1794843564.862304232] [controller_server]: Created controller : FollowPath of type nav2_regulated_pure_pursuit_controller::RegulatedPurePursuitController
+[controller_server-10] [INFO] [1794843564.878929143] [controller_server]: Controller Server has FollowPath  controllers available.
+[lifecycle_manager-14] [INFO] [1794843564.914537863] [lifecycle_manager_navigation]: [34m[1mConfiguring behavior_server[0m[0m
+[behavior_server-11] [INFO] [1794843564.916280589] [behavior_server]: Configuring
+[behavior_server-11] [INFO] [1794843564.948440561] [behavior_server]: Creating behavior plugin wait of type nav2_behaviors::Wait
+[behavior_server-11] [INFO] [1794843564.997506723] [behavior_server]: Configuring wait
+[lifecycle_manager-14] [INFO] [1794843565.023114567] [lifecycle_manager_navigation]: [34m[1mConfiguring velocity_smoother[0m[0m
+[velocity_smoother-12] [INFO] [1794843565.025106158] [velocity_smoother]: Configuring velocity smoother
+[lifecycle_manager-14] [INFO] [1794843565.051907892] [lifecycle_manager_navigation]: [34m[1mConfiguring bt_navigator[0m[0m
+[bt_navigator-13] [INFO] [1794843565.052541910] [bt_navigator]: Configuring
+[bt_navigator-13] [INFO] [1794843565.083388965] [bt_navigator]: Creating navigator id navigate_to_pose of type nav2_bt_navigator::NavigateToPoseNavigator
+[lifecycle_manager-14] [INFO] [1794843565.383559367] [lifecycle_manager_navigation]: [34m[1mActivating map_server[0m[0m
+[map_server-8] [INFO] [1794843565.386496356] [map_server]: Activating
+[map_server-8] [INFO] [1794843565.386810068] [map_server]: Creating bond (map_server) to lifecycle manager.
+[controller_server-10] [INFO] [1794843565.387795133] [local_costmap.local_costmap]: StaticLayer: Resizing static layer to 139 X 102 at 0.050000 m/pix
+[planner_server-9] [INFO] [1794843565.388030184] [global_costmap.global_costmap]: StaticLayer: Resizing costmap to 139 X 102 at 0.050000 m/pix
+[lifecycle_manager-14] [INFO] [1794843565.503347597] [lifecycle_manager_navigation]: Server map_server connected with bond.
+[lifecycle_manager-14] [INFO] [1794843565.503397562] [lifecycle_manager_navigation]: [34m[1mActivating planner_server[0m[0m
+[planner_server-9] [INFO] [1794843565.503728203] [planner_server]: Activating
+[planner_server-9] [INFO] [1794843565.503780772] [global_costmap.global_costmap]: Activating
+[planner_server-9] [INFO] [1794843565.503798855] [global_costmap.global_costmap]: Checking transform
+[planner_server-9] [INFO] [1794843565.503966566] [global_costmap.global_costmap]: start
+[planner_server-9] [INFO] [1794843565.709856901] [planner_server]: Activating plugin GridBased of type NavfnPlanner
+[planner_server-9] [INFO] [1794843565.715159783] [planner_server]: Creating bond (planner_server) to lifecycle manager.
+[lifecycle_manager-14] [INFO] [1794843565.831025157] [lifecycle_manager_navigation]: Server planner_server connected with bond.
+[lifecycle_manager-14] [INFO] [1794843565.831085024] [lifecycle_manager_navigation]: [34m[1mActivating controller_server[0m[0m
+[controller_server-10] [INFO] [1794843565.831648652] [controller_server]: Activating
+[controller_server-10] [INFO] [1794843565.831692981] [local_costmap.local_costmap]: Activating
+[controller_server-10] [INFO] [1794843565.831709583] [local_costmap.local_costmap]: Checking transform
+[controller_server-10] [INFO] [1794843565.831894198] [local_costmap.local_costmap]: start
+[controller_server-10] [INFO] [1794843565.941326357] [controller_server]: Activating controller: FollowPath of type regulated_pure_pursuit_controller::RegulatedPurePursuitController
+[controller_server-10] [INFO] [1794843565.941408357] [controller_server]: Creating bond (controller_server) to lifecycle manager.
+[lifecycle_manager-14] [INFO] [1794843566.066200599] [lifecycle_manager_navigation]: Server controller_server connected with bond.
+[lifecycle_manager-14] [INFO] [1794843566.066261573] [lifecycle_manager_navigation]: [34m[1mActivating behavior_server[0m[0m
+[behavior_server-11] [INFO] [1794843566.068055228] [behavior_server]: Activating
+[behavior_server-11] [INFO] [1794843566.068114333] [behavior_server]: Activating wait
+[behavior_server-11] [INFO] [1794843566.068146786] [behavior_server]: Creating bond (behavior_server) to lifecycle manager.
+[lifecycle_manager-14] [INFO] [1794843566.193000019] [lifecycle_manager_navigation]: Server behavior_server connected with bond.
+[lifecycle_manager-14] [INFO] [1794843566.193060420] [lifecycle_manager_navigation]: [34m[1mActivating velocity_smoother[0m[0m
+[velocity_smoother-12] [INFO] [1794843566.194097238] [velocity_smoother]: Activating
+[velocity_smoother-12] [INFO] [1794843566.194195113] [velocity_smoother]: Creating bond (velocity_smoother) to lifecycle manager.
+[lifecycle_manager-14] [INFO] [1794843566.311680027] [lifecycle_manager_navigation]: Server velocity_smoother connected with bond.
+[lifecycle_manager-14] [INFO] [1794843566.311740011] [lifecycle_manager_navigation]: [34m[1mActivating bt_navigator[0m[0m
+[bt_navigator-13] [INFO] [1794843566.313107159] [bt_navigator]: Activating
+[bt_navigator-13] [INFO] [1794843566.461128368] [bt_navigator]: Creating bond (bt_navigator) to lifecycle manager.
+[lifecycle_manager-14] [INFO] [1794843566.593830050] [lifecycle_manager_navigation]: Server bt_navigator connected with bond.
+[lifecycle_manager-14] [INFO] [1794843566.593884797] [lifecycle_manager_navigation]: [34m[1mManaged nodes are active[0m[0m
+[lifecycle_manager-14] [INFO] [1794843566.593909201] [lifecycle_manager_navigation]: [34m[1mCreating bond timer...[0m[0m
+[bt_navigator-13] [INFO] [1794843567.187788588] [bt_navigator]: Begin navigating from current location (1.50, 1.50) to (2.00, 1.50)
+[controller_server-10] [INFO] [1794843567.209486677] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [WARN] [1794843567.209592438] [controller_server]: No progress checker was specified in parameter 'current_progress_checker'. Server will use only plugin loaded progress_checker . This warning will appear once.
+[controller_server-10] [INFO] [1794843568.259839152] [controller_server]: Passing new path to controller.
+[planner_server-9] [WARN] [1794843568.705747482] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.22 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843568.732451919] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.25 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843568.732577551] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.21 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843568.846129426] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is 11.9181 Hz.
+[controller_server-10] [INFO] [1794843569.297314368] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843570.297329415] [controller_server]: Passing new path to controller.
+[planner_server-9] [INFO] [1794843570.980605956] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843570.436 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843571.247378911] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843571.271509279] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843571.292538637] [bt_navigator]: Begin navigating from current location (1.90, 1.50) to (2.00, 2.00)
+[controller_server-10] [INFO] [1794843571.313333446] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843572.366219203] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843573.364213243] [controller_server]: Passing new path to controller.
+[planner_server-9] [INFO] [1794843574.227689130] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843573.674 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843574.414212041] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843575.416119730] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843576.467307799] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843577.464410914] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843578.422342039] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843577.875 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843578.464220343] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843579.514224440] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843580.514210659] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843581.564395756] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843582.565054180] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843582.964275619] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843582.992933036] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843583.529290531] [bt_navigator]: Begin navigating from current location (1.97, 1.93) to (4.00, 2.00)
+[bt_navigator-13] [INFO] [1794843583.539650825] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843583.539865111] [bt_navigator]: Goal canceled
+[bt_navigator-13] [INFO] [1794843584.581976406] [bt_navigator]: Begin navigating from current location (1.97, 1.93) to (4.00, 2.00)
+[controller_server-10] [INFO] [1794843584.593695181] [controller_server]: Received a goal, begin computing control effort.
+[planner_server-9] [WARN] [1794843584.904425633] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.24 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843584.904538658] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.24 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843584.932420977] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.26 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843584.932526185] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.26 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.032702955] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.36 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.032815074] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.36 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843585.104653236] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.44 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843585.104767833] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.44 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.132419065] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.46 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.132522724] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.46 seconds, and it should be updated every 0.20 seconds.
+[ros2_control_node-2] [WARN] [1794843585.154701190] [drive_controller]: Velocity command timed out. Braking.
+[planner_server-9] [INFO] [1794843585.166361544] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843584.635 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843585.167164265] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843584.635 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[bt_navigator-13] [ERROR] [1794843585.208155000] [bt_navigator_navigate_to_pose_rclcpp_node]: Failed to get result for follow_path in node halt!
+[bt_navigator-13] [INFO] [1794843585.208328387] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843585.208574572] [bt_navigator]: Goal canceled
+[controller_server-10] [INFO] [1794843585.219928014] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843584.696 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [INFO] [1794843585.220656570] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843584.696 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [WARN] [1794843585.232433272] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.56 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.232602473] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.56 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [ERROR] [1794843585.244039878] [controller_server]: Costmap timed out waiting for update
+[controller_server-10] [INFO] [1794843585.244537547] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[planner_server-9] [WARN] [1794843585.305100623] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.64 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843585.305240147] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.64 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.332429348] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.66 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.332605892] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.66 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.432459135] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.76 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.432615607] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.76 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843585.504426818] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.84 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843585.504534887] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.84 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.532423782] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.86 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.532566878] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.86 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.632429158] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.96 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.632583399] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.96 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843585.704421768] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 1.04 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843585.704583577] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 1.04 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.732432061] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 1.06 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843585.732587120] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 1.06 seconds, and it should be updated every 0.20 seconds.
+[bt_navigator-13] [INFO] [1794843586.830334748] [bt_navigator]: Begin navigating from current location (2.16, 1.93) to (4.00, 2.00)
+[controller_server-10] [INFO] [1794843586.851101951] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [WARN] [1794843587.232430443] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.26 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843587.305024314] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.33 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843587.332429465] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.36 seconds, and it should be updated every 0.20 seconds.
+[bt_navigator-13] [ERROR] [1794843587.404894453] [bt_navigator_navigate_to_pose_rclcpp_node]: Failed to get result for follow_path in node halt!
+[bt_navigator-13] [INFO] [1794843587.405043735] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843587.405436031] [bt_navigator]: Goal canceled
+[controller_server-10] [WARN] [1794843587.432546011] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.46 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843587.504465352] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.53 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843587.533266072] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.56 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [ERROR] [1794843587.551381505] [controller_server]: Costmap timed out waiting for update
+[controller_server-10] [INFO] [1794843587.551668773] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[controller_server-10] [WARN] [1794843587.632409276] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.66 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843587.704713117] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.73 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843587.732531591] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.76 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843587.832437448] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.86 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843587.904543131] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.93 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843587.932622997] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.96 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843588.033271659] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 1.06 seconds, and it should be updated every 0.20 seconds.
+[bt_navigator-13] [INFO] [1794843588.989123175] [bt_navigator]: Begin navigating from current location (2.35, 1.93) to (4.00, 2.00)
+[controller_server-10] [INFO] [1794843589.009863392] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843589.273277856] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843588.734 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[planner_server-9] [WARN] [1794843589.304795324] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.23 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843589.332687298] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.26 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843589.433093049] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.36 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843589.505501155] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.44 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843589.533916573] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.46 seconds, and it should be updated every 0.20 seconds.
+[ros2_control_node-2] [WARN] [1794843589.574415054] [drive_controller]: Velocity command timed out. Braking.
+[bt_navigator-13] [ERROR] [1794843589.601011483] [bt_navigator_navigate_to_pose_rclcpp_node]: Failed to get result for follow_path in node halt!
+[bt_navigator-13] [INFO] [1794843589.601195697] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843589.601432573] [bt_navigator]: Goal canceled
+[controller_server-10] [WARN] [1794843589.632793232] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.56 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [ERROR] [1794843589.660215018] [controller_server]: Costmap timed out waiting for update
+[controller_server-10] [INFO] [1794843589.660952322] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[planner_server-9] [WARN] [1794843589.705769799] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.64 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843589.734401055] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.66 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843589.837893784] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.76 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843589.904756340] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.83 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843589.932782544] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.86 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843590.033498838] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.96 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843590.109754020] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 1.04 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843590.132841294] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 1.06 seconds, and it should be updated every 0.20 seconds.
+[bt_navigator-13] [INFO] [1794843592.230963806] [bt_navigator]: Begin navigating from current location (1.50, 1.50) to (4.00, 1.50)
+[controller_server-10] [INFO] [1794843592.242898569] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [ERROR] [1794843592.898258201] [controller_server]: RegulatedPurePursuitController detected collision ahead!
+[controller_server-10] [WARN] [1794843592.898390175] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843592.912294801] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843592.917639974] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843592.924949254] [behavior_server]: Running wait
+[ros2_control_node-2] [WARN] [1794843593.154452395] [drive_controller]: Velocity command timed out. Braking.
+[behavior_server-11] [INFO] [1794843593.430554689] [behavior_server]: wait completed successfully
+[controller_server-10] [INFO] [1794843593.479897478] [controller_server]: Received a goal, begin computing control effort.
+[ros2_control_node-2] [WARN] [1794843593.494425899] [drive_controller]: Velocity command timed out. Braking.
+[controller_server-10] [INFO] [1794843593.731444233] [controller_server]: Cancellation was successful. Stopping the robot.
+[controller_server-10] [INFO] [1794843593.731510232] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843593.732645397] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843593.732855769] [bt_navigator]: Goal canceled
+[planner_server-9] [INFO] [1794843597.979596378] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[controller_server-10] [INFO] [1794843597.999849093] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[bt_navigator-13] [INFO] [1794843599.027810833] [bt_navigator]: Begin navigating from current location (1.63, 1.52) to (10.00, 10.00)
+[planner_server-9] [WARN] [1794843599.029140565] [planner_server]: GridBased plugin failed to plan from (1.63, 1.52) to (10.00, 10.00): "Goal Coordinates of(10.000000, 10.000000) was outside bounds"
+[planner_server-9] [WARN] [1794843599.029259974] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843599.038393302] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843599.042569109] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843599.046016659] [behavior_server]: Running wait
+[behavior_server-11] [INFO] [1794843599.546437360] [behavior_server]: wait completed successfully
+[planner_server-9] [WARN] [1794843599.558533279] [planner_server]: GridBased plugin failed to plan from (1.63, 1.52) to (10.00, 10.00): "Goal Coordinates of(10.000000, 10.000000) was outside bounds"
+[planner_server-9] [WARN] [1794843599.558615148] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843599.578319999] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843599.578852266] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843599.579792566] [behavior_server]: Running wait
+[behavior_server-11] [INFO] [1794843600.082366948] [behavior_server]: wait completed successfully
+[planner_server-9] [WARN] [1794843600.098461246] [planner_server]: GridBased plugin failed to plan from (1.63, 1.52) to (10.00, 10.00): "Goal Coordinates of(10.000000, 10.000000) was outside bounds"
+[planner_server-9] [WARN] [1794843600.098545804] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-13] [WARN] [1794843600.121336609] [bt_navigator]: [navigate_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-13] [ERROR] [1794843600.121569137] [bt_navigator]: Goal failed
+[bt_navigator-13] [INFO] [1794843600.741473517] [bt_navigator]: Begin navigating from current location (1.63, 1.52) to (4.00, 1.50)
+[controller_server-10] [INFO] [1794843600.753244706] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843601.805042255] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843602.853418271] [controller_server]: Passing new path to controller.
+[controller_server-10] [ERROR] [1794843603.753892116] [controller_server]: Failed to make progress
+[controller_server-10] [WARN] [1794843603.754042651] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843603.774667833] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843603.780679282] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843603.784448453] [behavior_server]: Running wait
+[ros2_control_node-2] [WARN] [1794843604.014421411] [drive_controller]: Velocity command timed out. Braking.
+[behavior_server-11] [INFO] [1794843604.285879167] [behavior_server]: wait completed successfully
+[controller_server-10] [INFO] [1794843604.318222073] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843605.370581872] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843606.420234372] [controller_server]: Passing new path to controller.
+[controller_server-10] [ERROR] [1794843607.318998337] [controller_server]: Failed to make progress
+[controller_server-10] [WARN] [1794843607.319162013] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843607.336677989] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843607.338319868] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843607.340274628] [behavior_server]: Running wait
+[ros2_control_node-2] [WARN] [1794843607.574737263] [drive_controller]: Velocity command timed out. Braking.
+[behavior_server-11] [INFO] [1794843607.840459336] [behavior_server]: wait completed successfully
+[controller_server-10] [INFO] [1794843607.877934409] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843608.928144023] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843609.978945551] [controller_server]: Passing new path to controller.
+[controller_server-10] [ERROR] [1794843610.878241349] [controller_server]: Failed to make progress
+[controller_server-10] [WARN] [1794843610.878435624] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[bt_navigator-13] [WARN] [1794843610.903430010] [bt_navigator]: [navigate_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-13] [ERROR] [1794843610.903847149] [bt_navigator]: Goal failed
+[bt_navigator-13] [INFO] [1794843614.085818954] [bt_navigator]: Begin navigating from current location (1.50, 1.49) to (4.00, 1.50)
+[planner_server-9] [WARN] [1794843614.102271012] [planner_server]: GridBased plugin failed to plan from (1.50, 1.49) to (4.00, 1.50): "Failed to create plan with tolerance of: 0.100000"
+[planner_server-9] [WARN] [1794843614.102372758] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843614.117382745] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843614.122168108] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843614.126986770] [behavior_server]: Running wait
+[behavior_server-11] [INFO] [1794843614.629088277] [behavior_server]: wait completed successfully
+[planner_server-9] [WARN] [1794843614.646842277] [planner_server]: GridBased plugin failed to plan from (1.50, 1.49) to (4.00, 1.50): "Failed to create plan with tolerance of: 0.100000"
+[planner_server-9] [WARN] [1794843614.646908605] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843614.673498478] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843614.676481958] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843614.682981637] [behavior_server]: Running wait
+[behavior_server-11] [INFO] [1794843615.183297179] [behavior_server]: wait completed successfully
+[planner_server-9] [WARN] [1794843615.198095253] [planner_server]: GridBased plugin failed to plan from (1.50, 1.49) to (4.00, 1.50): "Failed to create plan with tolerance of: 0.100000"
+[planner_server-9] [WARN] [1794843615.198343734] [planner_server]: [compute_path_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-13] [WARN] [1794843615.226026184] [bt_navigator]: [navigate_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-13] [ERROR] [1794843615.227165886] [bt_navigator]: Goal failed
+[planner_server-9] [INFO] [1794843615.901534048] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[controller_server-10] [INFO] [1794843615.913465375] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[bt_navigator-13] [INFO] [1794843616.963682611] [bt_navigator]: Begin navigating from current location (1.50, 1.50) to (4.00, 1.50)
+[controller_server-10] [INFO] [1794843616.985849724] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843618.036222243] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843619.086008878] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843620.086018744] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843620.421630320] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843619.874 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[ros2_control_node-2] [WARN] [1794843621.054561946] [drive_controller]: Velocity command timed out. Braking.
+[bt_navigator-13] [WARN] [1794843621.205032946] [bt_navigator_navigate_to_pose_rclcpp_node]: Timed out while waiting for action server to acknowledge goal request for follow_path
+[bt_navigator-13] [WARN] [1794843621.306071190] [bt_navigator_navigate_to_pose_rclcpp_node]: Node timed out while executing service call to local_costmap/clear_entirely_local_costmap.
+[bt_navigator-13] [WARN] [1794843621.313933196] [bt_navigator]: [navigate_to_pose] [ActionServer] Aborting handle.
+[bt_navigator-13] [ERROR] [1794843621.314544976] [bt_navigator]: Goal failed
+[controller_server-10] [WARN] [1794843621.831528071] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is 1215.8232 Hz.
+[controller_server-10] [WARN] [1794843621.832468292] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 1.01 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843621.832561756] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 1.01 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843621.833255514] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 1.01 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843621.833334328] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 1.01 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [INFO] [1794843621.842565845] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[controller_server-10] [INFO] [1794843621.941747071] [controller_server]: Passing new path to controller.
+[controller_server-10] [WARN] [1794843621.942808675] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is 16.3541 Hz.
+[controller_server-10] [INFO] [1794843623.123405059] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843622.574 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[bt_navigator-13] [INFO] [1794843624.469435584] [bt_navigator]: Begin navigating from current location (1.50, 1.50) to (2.00, 1.50)
+[controller_server-10] [INFO] [1794843624.492939276] [controller_server]: Passing new path to controller.
+[controller_server-10] [ERROR] [1794843624.943521122] [controller_server]: Failed to make progress
+[controller_server-10] [WARN] [1794843624.945574647] [controller_server]: [follow_path] [ActionServer] Aborting handle.
+[controller_server-10] [INFO] [1794843624.959963405] [local_costmap.local_costmap]: Received request to clear entirely the local_costmap
+[planner_server-9] [INFO] [1794843624.960890379] [global_costmap.global_costmap]: Received request to clear entirely the global_costmap
+[behavior_server-11] [INFO] [1794843624.962867702] [behavior_server]: Running wait
+[ros2_control_node-2] [WARN] [1794843625.194424787] [drive_controller]: Velocity command timed out. Braking.
+[behavior_server-11] [INFO] [1794843625.466005137] [behavior_server]: wait completed successfully
+[controller_server-10] [INFO] [1794843625.500225340] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843626.600416701] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843627.602232085] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843628.200537253] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843628.236608537] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843628.265133089] [bt_navigator]: Begin navigating from current location (1.90, 1.50) to (1.50, 1.50)
+[controller_server-10] [INFO] [1794843628.289476357] [controller_server]: Received a goal, begin computing control effort.
+[ros2_control_node-2] [WARN] [1794843628.955370443] [drive_controller]: Velocity command timed out. Braking.
+[ros2_control_node-2] [WARN] [1794843628.995844885] [drive_controller]: Velocity command timed out. Braking.
+[controller_server-10] [WARN] [1794843629.035295301] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.29 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843629.035398248] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.21 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843629.106279106] [global_costmap.global_costmap]: The /sim/scan observation buffer has not been updated for 0.36 seconds, and it should be updated every 0.20 seconds.
+[planner_server-9] [WARN] [1794843629.106383483] [global_costmap.global_costmap]: The /sim/hazards observation buffer has not been updated for 0.28 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843629.133701641] [local_costmap.local_costmap]: The /sim/scan observation buffer has not been updated for 0.39 seconds, and it should be updated every 0.20 seconds.
+[controller_server-10] [WARN] [1794843629.133807559] [local_costmap.local_costmap]: The /sim/hazards observation buffer has not been updated for 0.31 seconds, and it should be updated every 0.20 seconds.
+[bt_navigator-13] [ERROR] [1794843629.214713677] [bt_navigator_navigate_to_pose_rclcpp_node]: Failed to get result for follow_path in node halt!
+[bt_navigator-13] [INFO] [1794843629.214866299] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843629.215125992] [bt_navigator]: Goal canceled
+[controller_server-10] [WARN] [1794843629.241939083] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is 9.8838 Hz.
+[controller_server-10] [INFO] [1794843629.242006271] [controller_server]: Cancellation was successful. Stopping the robot.
+[controller_server-10] [INFO] [1794843629.242026851] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843630.786575316] [bt_navigator]: Begin navigating from current location (1.92, 1.50) to (1.50, 1.50)
+[controller_server-10] [INFO] [1794843630.809338755] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843631.860113998] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843632.909502837] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843633.909526949] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843634.373944716] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843633.835 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843634.959511134] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843635.959511531] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843637.009645122] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843638.009510023] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843639.059750114] [controller_server]: Passing new path to controller.
+[planner_server-9] [INFO] [1794843639.672655701] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843639.135 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843640.059497630] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843641.109504720] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843642.109535486] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843643.159518365] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843644.022261574] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843643.474 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843644.159674334] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843645.209502989] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843646.209501800] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843647.171137385] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843646.635 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843647.259796174] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843648.260834044] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843648.859552249] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843648.887953983] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843648.907868042] [bt_navigator]: Begin navigating from current location (1.58, 1.50) to (2.00, 1.50)
+[controller_server-10] [INFO] [1794843648.929716928] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843649.982266357] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843651.029909439] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843652.029905239] [controller_server]: Passing new path to controller.
+[planner_server-9] [INFO] [1794843652.317492633] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843651.774 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843652.679963668] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843652.708216548] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843652.731374746] [bt_navigator]: Begin navigating from current location (1.90, 1.49) to (1.50, 1.50)
+[controller_server-10] [INFO] [1794843652.742395535] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843653.424289224] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843652.874 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843653.792603963] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843654.848217280] [controller_server]: Passing new path to controller.
+[controller_server-10] [WARN] [1794843655.094699553] [controller_server]: Control loop missed its desired rate of 20.0000 Hz. Current loop rate is 19.4918 Hz.
+[controller_server-10] [INFO] [1794843655.895893054] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843656.894865598] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843656.925549035] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843656.374 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843657.894917720] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843658.945462724] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843659.946211305] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843660.995642267] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843661.995036117] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843663.044869578] [controller_server]: Passing new path to controller.
+[planner_server-9] [INFO] [1794843663.622341026] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843663.074 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843664.044871226] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843665.094986253] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843666.095427904] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843667.144874160] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843668.145955044] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843669.194925470] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843670.195158742] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843670.395503404] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843670.423552288] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843670.473045810] [bt_navigator]: Begin navigating from current location (1.58, 1.50) to (2.00, 1.50)
+[controller_server-10] [INFO] [1794843670.477575810] [controller_server]: Received a goal, begin computing control effort.
+[controller_server-10] [INFO] [1794843671.530582551] [controller_server]: Passing new path to controller.
+[planner_server-9] [INFO] [1794843672.420985489] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843671.876 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843672.580738105] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843673.580161046] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843674.230380511] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843674.253420876] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843674.288673175] [bt_navigator]: Begin navigating from current location (1.91, 1.49) to (1.50, 1.50)
+[controller_server-10] [INFO] [1794843674.299371164] [controller_server]: Received a goal, begin computing control effort.
+[planner_server-9] [INFO] [1794843675.173586091] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843674.634 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843675.349546028] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843676.349536015] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843677.399540789] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843678.399550898] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843679.449547733] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843680.449538340] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843681.499544391] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843682.499984633] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843683.549683353] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843684.549544470] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843685.599536779] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843685.676278450] [local_costmap.local_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843685.135 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843686.599544073] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843687.649532253] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843688.699545628] [controller_server]: Passing new path to controller.
+[planner_server-9] [INFO] [1794843689.670163069] [global_costmap.global_costmap]: Message Filter dropping message: frame 'base_link' at time 1794843689.134 for reason 'the timestamp on the message is earlier than all the data in the transform cache'
+[controller_server-10] [INFO] [1794843689.699535968] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843690.749548970] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843691.749551481] [controller_server]: Passing new path to controller.
+[controller_server-10] [INFO] [1794843692.199886365] [controller_server]: Reached the goal!
+[bt_navigator-13] [INFO] [1794843692.229041265] [bt_navigator]: Goal succeeded
+[bt_navigator-13] [INFO] [1794843692.248268757] [bt_navigator]: Begin navigating from current location (1.58, 1.50) to (4.00, 1.50)
+[controller_server-10] [INFO] [1794843692.270931106] [controller_server]: Received a goal, begin computing control effort.
+[ERROR] [planner_server-9]: process has died [pid 56806, exit code -9, cmd '/opt/ros/jazzy/lib/nav2_planner/planner_server --ros-args -r __node:=planner_server --params-file /home/jsun3/dev_ws/src/jmu-lunabotics/lb_navigation/config/nav2_mock_development.yaml --params-file /tmp/launch_params_gtudxjwd --params-file /tmp/launch_params_a6kt91yc'].
+[bt_navigator-13] [ERROR] [1794843693.361333167] [bt_navigator_navigate_to_pose_rclcpp_node]: Failed to get result for follow_path in node halt!
+[bt_navigator-13] [INFO] [1794843693.361457225] [bt_navigator]: [navigate_to_pose] [ActionServer] Client requested to cancel the goal. Cancelling.
+[bt_navigator-13] [INFO] [1794843693.361644519] [bt_navigator]: Goal canceled
+[controller_server-10] [INFO] [1794843693.373240523] [controller_server]: Cancellation was successful. Stopping the robot.
+[controller_server-10] [INFO] [1794843693.373300723] [controller_server]: [follow_path] [ActionServer] Client requested to cancel the goal. Cancelling.
+[WARNING] [launch]: user interrupted with ctrl-c (SIGINT)
+[INFO] [navigation_supervisor.py-15]: sending signal 'SIGINT' to process[navigation_supervisor.py-15]
+[INFO] [lifecycle_manager-14]: sending signal 'SIGINT' to process[lifecycle_manager-14]
+[INFO] [bt_navigator-13]: sending signal 'SIGINT' to process[bt_navigator-13]
+[INFO] [velocity_smoother-12]: sending signal 'SIGINT' to process[velocity_smoother-12]
+[INFO] [behavior_server-11]: sending signal 'SIGINT' to process[behavior_server-11]
+[INFO] [controller_server-10]: sending signal 'SIGINT' to process[controller_server-10]
+[INFO] [map_server-8]: sending signal 'SIGINT' to process[map_server-8]
+[INFO] [apriltag_development_tf_bridge.py-7]: sending signal 'SIGINT' to process[apriltag_development_tf_bridge.py-7]
+[INFO] [navigation_command_gate.py-6]: sending signal 'SIGINT' to process[navigation_command_gate.py-6]
+[INFO] [fused_pose_passthrough.py-5]: sending signal 'SIGINT' to process[fused_pose_passthrough.py-5]
+[INFO] [navigation_mock_world.py-4]: sending signal 'SIGINT' to process[navigation_mock_world.py-4]
+[INFO] [ros2_control_node-2]: sending signal 'SIGINT' to process[ros2_control_node-2]
+[INFO] [robot_state_publisher-1]: sending signal 'SIGINT' to process[robot_state_publisher-1]
+[lifecycle_manager-14] [INFO] [1794843693.898192095] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[lifecycle_manager-14] [INFO] [1794843693.898319990] [lifecycle_manager_navigation]: Running Nav2 LifecycleManager rcl preshutdown (lifecycle_manager_navigation)
+[lifecycle_manager-14] [INFO] [1794843693.898371611] [lifecycle_manager_navigation]: [34m[1mTerminating bond timer...[0m[0m
+[bt_navigator-13] [INFO] [1794843693.904871993] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[bt_navigator-13] [INFO] [1794843693.904940563] [bt_navigator]: Running Nav2 LifecycleNode rcl preshutdown (bt_navigator)
+[bt_navigator-13] [INFO] [1794843693.905007548] [bt_navigator]: Deactivating
+[bt_navigator-13] [INFO] [1794843693.905045419] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[velocity_smoother-12] [INFO] [1794843693.910194767] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[velocity_smoother-12] [INFO] [1794843693.910348985] [velocity_smoother]: Running Nav2 LifecycleNode rcl preshutdown (velocity_smoother)
+[velocity_smoother-12] [INFO] [1794843693.910492455] [velocity_smoother]: Deactivating
+[velocity_smoother-12] [INFO] [1794843693.910527938] [velocity_smoother]: Destroying bond (velocity_smoother) to lifecycle manager.
+[behavior_server-11] [INFO] [1794843693.919187517] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[behavior_server-11] [INFO] [1794843693.919263466] [behavior_server]: Running Nav2 LifecycleNode rcl preshutdown (behavior_server)
+[behavior_server-11] [INFO] [1794843693.919351627] [behavior_server]: Deactivating
+[behavior_server-11] [INFO] [1794843693.919394286] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[controller_server-10] [INFO] [1794843693.927325914] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[controller_server-10] [INFO] [1794843693.927403663] [controller_server]: Running Nav2 LifecycleNode rcl preshutdown (controller_server)
+[controller_server-10] [INFO] [1794843693.927493449] [controller_server]: Deactivating
+[controller_server-10] [INFO] [1794843693.927527315] [controller_server]: Deactivating controller: FollowPath of type regulated_pure_pursuit_controller::RegulatedPurePursuitController
+[controller_server-10] [INFO] [1794843693.927557306] [local_costmap.local_costmap]: Deactivating
+[map_server-8] [INFO] [1794843693.932196663] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[map_server-8] [INFO] [1794843693.932320540] [map_server]: Running Nav2 LifecycleNode rcl preshutdown (map_server)
+[map_server-8] [INFO] [1794843693.932451178] [map_server]: Deactivating
+[map_server-8] [INFO] [1794843693.932482553] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[controller_server-10] [INFO] [1794843693.933952379] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[bt_navigator-13] [INFO] [1794843694.005437878] [bt_navigator]: Cleaning up
+[velocity_smoother-12] [INFO] [1794843694.011373249] [velocity_smoother]: Cleaning up
+[velocity_smoother-12] [INFO] [1794843694.011441524] [velocity_smoother]: Destroying bond (velocity_smoother) to lifecycle manager.
+[ros2_control_node-2] [INFO] [1794843694.014511514] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-2] [INFO] [1794843694.014651022] [controller_manager]: Shutdown request received....
+[ros2_control_node-2] [INFO] [1794843694.017446077] [controller_manager]: Shutting down all controllers in the controller manager.
+[ros2_control_node-2] [INFO] [1794843694.017537362] [controller_manager]: Deactivating controller 'drive_controller'
+[ros2_control_node-2] [INFO] [1794843694.017641349] [controller_manager]: Shutting down controller 'drive_controller'
+[ros2_control_node-2] [INFO] [1794843694.017842729] [controller_manager]: Deactivating controller 'joint_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794843694.017900322] [controller_manager]: Shutting down controller 'joint_state_broadcaster'
+[ros2_control_node-2] [INFO] [1794843694.017976983] [resource_manager]: 'deactivate' hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843694.018033589] [resource_manager]: Successful 'deactivate' of hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843694.018043947] [resource_manager]: 'shutdown' hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843694.018052801] [resource_manager]: Successful 'shutdown' of hardware 'lb_mock_drive_system'
+[ros2_control_node-2] [INFO] [1794843694.018095408] [controller_manager]: Shutting down the controller manager.
+[ros2_control_node-2] [ERROR] [1794843694.018239971] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[ros2_control_node-2] [ERROR] [1794843694.019614584] [controller_manager.pal_statistics]: Exception in publisher thread: context cannot be slept with because it's invalid!. Aborting!
+[map_server-8] [INFO] [1794843694.016435529] [map_server]: Cleaning up
+[map_server-8] [INFO] [1794843694.016498061] [map_server]: Destroying bond (map_server) to lifecycle manager.
+[behavior_server-11] [INFO] [1794843694.019784889] [behavior_server]: Cleaning up
+[controller_server-10] [INFO] [1794843694.025703865] [controller_server]: Cleaning up
+[controller_server-10] [INFO] [1794843694.025753747] [controller_server]: Cleaning up controller: FollowPath of type regulated_pure_pursuit_controller::RegulatedPurePursuitController
+[controller_server-10] [INFO] [1794843694.025840112] [local_costmap.local_costmap]: Cleaning up
+[robot_state_publisher-1] [INFO] [1794843694.052628686] [rclcpp]: signal_handler(SIGINT/SIGTERM)
+[ros2_control_node-2] [INFO] [1794843694.081942226] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-2] [INFO] [1794843694.081969505] [controller_manager.pal_statistics]: publish_async_failures_ 1
+[map_server-8] [INFO] [1794843694.085949777] [map_server]: Destroying
+[velocity_smoother-12] [INFO] [1794843694.093715511] [velocity_smoother]: Destroying
+[behavior_server-11] [INFO] [1794843694.123863483] [behavior_server]: Destroying bond (behavior_server) to lifecycle manager.
+[behavior_server-11] [INFO] [1794843694.139285121] [behavior_server]: Destroying
+[ros2_control_node-2] [INFO] [1794843694.145776549] [controller_manager.pal_statistics]: Async messages lost 0
+[ros2_control_node-2] [INFO] [1794843694.145800448] [controller_manager.pal_statistics]: publish_async_failures_ 0
+[INFO] [robot_state_publisher-1]: process has finished cleanly [pid 56798]
+[INFO] [map_server-8]: process has finished cleanly [pid 56805]
+[lifecycle_manager-14] [INFO] [1794843694.447488885] [lifecycle_manager_navigation]: Destroying lifecycle_manager_navigation
+[INFO] [behavior_server-11]: process has finished cleanly [pid 56808]
+[INFO] [navigation_command_gate.py-6]: process has finished cleanly [pid 56803]
+[controller_server-10] [INFO] [1794843694.595664482] [controller_server]: Destroying bond (controller_server) to lifecycle manager.
+[INFO] [velocity_smoother-12]: process has finished cleanly [pid 56809]
+[controller_server-10] [INFO] [1794843694.624879148] [local_costmap.local_costmap]: Destroying
+[INFO] [lifecycle_manager-14]: process has finished cleanly [pid 56811]
+[INFO] [navigation_mock_world.py-4]: process has finished cleanly [pid 56801]
+[INFO] [apriltag_development_tf_bridge.py-7]: process has finished cleanly [pid 56804]
+[bt_navigator-13] [INFO] [1794843694.713667773] [bt_navigator]: Completed Cleaning up
+[bt_navigator-13] [INFO] [1794843694.713741180] [bt_navigator]: Destroying bond (bt_navigator) to lifecycle manager.
+[controller_server-10] [INFO] [1794843694.733214048] [controller_server]: Destroying
+[INFO] [fused_pose_passthrough.py-5]: process has finished cleanly [pid 56802]
+[bt_navigator-13] [INFO] [1794843694.749535535] [bt_navigator]: Destroying
+[INFO] [navigation_supervisor.py-15]: process has finished cleanly [pid 56812]
+[INFO] [controller_server-10]: process has finished cleanly [pid 56807]
+[INFO] [ros2_control_node-2]: process has finished cleanly [pid 56799]
+[INFO] [bt_navigator-13]: process has finished cleanly [pid 56810]

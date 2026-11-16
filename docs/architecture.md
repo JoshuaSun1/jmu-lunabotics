@@ -222,3 +222,17 @@ This is not a safety monitor or motion authorization; N5 must restore suitable
 monitoring when integrating planner/controller servers. Localization loss may
 leave costmaps active with retained data, but independently locks commands.
 See [recovery evidence](resources/evidence/2026-11-15-nav2-crash-recovery.md).
+
+## N5–N8 mock navigation profile
+
+`lb_sim/nav2_mock.launch.py` composes the Phase 2 in-memory transport,
+odometry-driven synthetic world, N1 pose/gate boundary, N3 test TF and Nav2.
+Planner/controller servers own their embedded costmaps; their lifecycle manager
+uses bonds, unlike the standalone N4 manager. NavFn, Regulated Pure Pursuit,
+PoseProgressChecker, SimpleGoalChecker, a velocity smoother and a bounded
+wait/clear BT provide navigation. The supervisor alone owns the public goal
+action and final command publisher. It checks localization, TF, odometry,
+synthetic sources and server liveness, and latches action cancellation on loss.
+Its watchdog uses steady time so paused simulation time cannot sustain output.
+No test source or TF bridge enters normal physical bringup. See
+[profile ownership and hardware replacement points](nav2_mock.md).

@@ -13,3 +13,9 @@ Acceptance targets include no OOM or sustained thermal throttling during a
 30-minute representative run, at least 10–15% shared-memory headroom, and
 depth-hazard latency below 150 ms. These are engineering targets pending
 measurement, not current guarantees.
+
+N8 now records desktop-only mock launch CPU, aggregate RSS, command age and
+fault response in the [mock acceptance evidence](resources/evidence/2026-11-16-nav2-mock-n5-n8.md).
+Its short repeat-navigation period uses synthetic sensors and in-memory drive
+hardware; it does not close the Jetson, thermal, shared-memory or 30-minute
+field acceptance targets above.
