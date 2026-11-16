@@ -68,3 +68,17 @@ runtime TF-authority integration tests for the local and global EKFs.
 Use `scripts/record_bag.sh --profile webcam_apriltag` to capture the
 source-scoped raw/rectified images, camera information, detections, and `/tf`
 for a Phase 4.1 bench run.
+
+## Nav2 crash recovery and N4 runtime checks
+
+CMake now registers all saved N0–N4 contracts and ROS runtime tests. Run the
+normal build/test workflow after sourcing ROS and the workspace. The N4 test
+requires `nav2_costmap_2d`, `nav2_map_server`, `nav2_lifecycle_manager`, and
+`nav2_msgs`, plus local DDS communication between processes. A sandbox that
+blocks UDP cannot validate this test; run it with local networking permitted.
+
+The test supplies a bounded synthetic pose stream, explicitly starts lifecycle
+nodes after TF is ready, checks grids, inflation, footprints and raw cell
+costs, then stops pose input and verifies gated commands become zero.
+It performs lifecycle shutdown before terminating the launch process group.
+No hardware is started. See [commands and results](resources/evidence/2026-11-15-nav2-crash-recovery.md).

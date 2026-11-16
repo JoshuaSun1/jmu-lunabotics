@@ -136,13 +136,13 @@ test-only opt-in and are never included from system bringup. See
 [`phase42_tag_localizer.md`](phase42_tag_localizer.md) for the full TF,
 fusion, failure, and remaining-hardware contract.
 
-## Planned fused-pose and Nav2 boundary
+## Fused-pose and Nav2 development boundary
 
 `/localization/fused_pose` is the stable application-facing global robot pose
 and uses `geometry_msgs/msg/PoseWithCovarianceStamped` in `map`. The initial
-development implementation will pass through each accepted
+development implementation passes through each accepted
 `/localization/apriltag_pose` sample without changing its timestamp, pose, or
-covariance. It will not interpolate, dead-reckon, refresh stale data, or publish
+covariance. It does not interpolate, dead-reckon, refresh stale data, or publish
 TF, and diagnostics will identify the AprilTag-only source.
 
 The future local/global EKF architecture remains authoritative. The local EKF
@@ -209,3 +209,16 @@ hardware. Its finite-lifetime markers and current path disappear on stale tag
 data; no motion is inferred through an observation gap. This is a development
 visualization bridge until wheel odometry, ZED IMU, surveyed tag poses, and a
 measured camera mount support the production localization architecture.
+
+## Recovered N0–N4 implementation
+
+The executable development chain is AprilTag pose -> fused-pose pass-through
+-> validity/command gate, with a separately opted-in test TF bridge.
+`nav2_n4_costmaps.launch.py` adds the map server and standalone global/local
+static-plus-inflation costmaps. Costmaps default to manual lifecycle startup;
+operators provide current TF before requesting startup. Standalone costmaps do
+not establish lifecycle bonds, so N4's manager disables bond monitoring.
+This is not a safety monitor or motion authorization; N5 must restore suitable
+monitoring when integrating planner/controller servers. Localization loss may
+leave costmaps active with retained data, but independently locks commands.
+See [recovery evidence](resources/evidence/2026-11-15-nav2-crash-recovery.md).

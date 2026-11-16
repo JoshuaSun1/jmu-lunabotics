@@ -231,3 +231,43 @@ the pose adapter. Do not feed these visualization topics into Nav2, an EKF, or
 robot control. Replace the tag pose and camera extrinsic only with documented
 survey/calibration values; production localization remains the C++ localizer
 plus the future local/global EKFs.
+
+## Nav2 N4 development costmaps
+
+After the normal build and workspace activation, run:
+
+```bash
+ros2 launch lb_navigation nav2_n4_costmaps.launch.py \
+  enable_costmaps:=true enable_development_tf:=true allow_test_only_tf:=true
+```
+
+Provide current accepted `/localization/apriltag_pose` samples from an explicit
+development source. The visualization-only bag replay adapter does not publish
+this canonical topic. Verify `/localization/valid` is true and the test TF
+chain is current, then start lifecycle nodes from a second sourced terminal:
+
+```bash
+ros2 service call /lifecycle_manager_n4/manage_nodes \
+  nav2_msgs/srv/ManageLifecycleNodes '{command: 0}'
+```
+
+Manual startup avoids racing Python localization startup against the existing
+2.0 s initial TF timeout. With no TF, activation fails closed; restart the
+profile and establish valid input before retrying. `autostart:=true` is only
+appropriate when localization/TF is already ready.
+
+The manager's bond monitoring is disabled for standalone costmaps, which do
+not create bonds. Monitor diagnostics and lifecycle state; this profile has
+no motion authority. Tag loss locks the command gate but may leave costmaps
+active and displaying retained data. N5 must establish monitored navigation
+servers before adding commands to mock drive output.
+
+For the automated headless synthetic-input check:
+
+```bash
+python3 -m pytest -q lb_navigation/test/test_nav2_n4_lifecycle_runtime.py
+```
+
+Run this from the repository root with local DDS networking available.
+RViz is optional (`use_rviz:=false` for headless operation); graphical visual
+acceptance remains pending. Physical operation remains prohibited.

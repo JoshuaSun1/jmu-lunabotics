@@ -184,7 +184,7 @@ def generate_launch_description() -> LaunchDescription:
             DeclareLaunchArgument(
                 "localization_profile", default_value="apriltag_development_only"
             ),
-            DeclareLaunchArgument("autostart", default_value="true"),
+            DeclareLaunchArgument("autostart", default_value="false"),
             DeclareLaunchArgument("use_rviz", default_value="true"),
             DeclareLaunchArgument("use_arena_scene", default_value="true"),
             DeclareLaunchArgument(

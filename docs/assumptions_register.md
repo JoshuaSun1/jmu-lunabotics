@@ -467,3 +467,13 @@ assumptions**. The broader dependency-oriented list remains in
 
 - None has yet been closed with the complete physical, field, or target-runtime
   evidence required by this register.
+
+### N4 crash-recovery runtime boundary — 2026-11-15
+
+The N4 standalone lifecycle manager uses `bond_timeout: 0.0` because standalone
+Costmap2DROS does not create bonds; manual startup follows current test TF.
+This is a development integration decision, not a watchdog implementation.
+It is prohibited for authorizing physical motion; N5 must establish monitoring
+for the planner/controller command path. Existing 0.50 s freshness, 2.0 s
+initial TF timeout, footprint and inflation assumptions remain untuned.
+Runtime evidence does not close their physical-validation requirements.

@@ -49,7 +49,10 @@ def test_global_and_local_geometry_matches_the_n4_decision() -> None:
     assert global_costmap["rolling_window"] is False
     assert local_costmap["global_frame"] == "odom"
     assert local_costmap["rolling_window"] is True
-    assert local_costmap["width"] == 4.0
+    # Nav2 declares dimensions as integer meters; float YAML fails at startup.
+    assert type(local_costmap["width"]) is int
+    assert type(local_costmap["height"]) is int
+    assert local_costmap["width"] == 4
     assert local_costmap["height"] == 4.0
     assert global_costmap["resolution"] == 0.05
     assert local_costmap["resolution"] == 0.05
@@ -75,6 +78,9 @@ def test_lifecycle_order_and_launch_are_fail_closed_and_non_actuating() -> None:
     manager = configuration["lifecycle_manager_n4"]["ros__parameters"]
     source = LAUNCH.read_text(encoding="utf-8")
 
+    assert manager["bond_timeout"] == 0.0
+    assert manager["autostart"] is False
+    assert 'DeclareLaunchArgument("autostart", default_value="false")' in source
     assert manager["node_names"] == [
         "map_server",
         "global_costmap/global_costmap",

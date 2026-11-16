@@ -10,6 +10,15 @@ establishes a physical robot or global pose.
 
 ## Current status
 
+Nav2 development stages N0–N3 are implemented; N4 now has headless runtime
+validation of lifecycle activation, grid geometry/inflation, published
+footprints, and command locking after AprilTag loss. There is no planner,
+controller, NavigateToPose server, or final drive connection yet. These are
+AprilTag-only, static-only development profiles, prohibited for physical use.
+See [crash recovery and N4 evidence](docs/resources/evidence/2026-11-15-nav2-crash-recovery.md)
+and the [N4 operator procedure](docs/operations.md#nav2-n4-development-costmaps).
+
+
 Phase 1 adds a parameterized Xacro, four-wheel skid-steer mock frame tree,
 upstream `ros2_control` `GenericSystem`, joint-state broadcaster, and
 `robot_state_publisher`. Phase 2 adds a protocol-neutral drive transport,

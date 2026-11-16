@@ -143,3 +143,24 @@ profile uses expiring/deleted markers for the visible current pose.
 
 `lifecycle_manager_map` manages only `map_server`. Neither node publishes
 `map -> odom`, `odom -> base_link`, a robot pose, a costmap, or a velocity.
+
+## Executable Nav2 development interfaces (N0–N4)
+
+- `/localization/fused_pose`: `geometry_msgs/msg/PoseWithCovarianceStamped`,
+  accepted AprilTag samples unchanged in `map`; no interpolation or TF.
+- `/localization/valid`: reliable, transient-local `std_msgs/msg/Bool`.
+- `/localization/status`: `diagnostic_msgs/msg/DiagnosticArray`.
+- `/cmd_vel_nav_raw` -> gate -> `/cmd_vel_nav`: `geometry_msgs/msg/TwistStamped`;
+  localization loss produces zero. There is no final `/cmd_vel` connection.
+- Explicit test TF: identity `map -> odom` and pose `odom -> base_link`, both
+  retaining the accepted measurement timestamp, mutually exclusive with EKFs.
+- `/global_costmap/costmap`, `/local_costmap/costmap`:
+  `nav_msgs/msg/OccupancyGrid`, reliable/transient-local, frames `map`/`odom`.
+- Each costmap publishes `geometry_msgs/msg/PolygonStamped` on its
+  `published_footprint` topic and serves `nav2_msgs/srv/GetCostmap` on its
+  `get_costmap` service.
+- `/lifecycle_manager_n4/manage_nodes`: `nav2_msgs/srv/ManageLifecycleNodes`;
+  startup is explicit by default after current test TF is available.
+
+No `/navigate_to_pose` action is implemented yet. See
+[recovery evidence](resources/evidence/2026-11-15-nav2-crash-recovery.md).

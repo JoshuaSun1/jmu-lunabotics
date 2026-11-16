@@ -1171,3 +1171,28 @@ motion remains prohibited pending every gate listed in the Nav2 specification.
 **Git evidence:** Uncommitted documentation update based on `5afa511` (`showing
 camera output prescene on the map, and modeling the attributes of the arena`);
 record the resulting commit after review.
+
+## 2026-11-15 — Nav2 crash recovery and N4 headless runtime validation
+
+Recovered build/install/test integration omitted from `0605ea4`: install the
+localization and safety scripts/configuration, register N0–N4 tests, declare
+runtime/test dependencies and check standalone costmap readiness. A clean
+separate build completed eight packages, and the normal four affected packages
+were rebuilt. Final affected-package tests reported 127 tests with zero
+errors, failures or skips, including live N4 DDS/lifecycle validation.
+
+Live testing exposed noninteger YAML dimension types and unsupported standalone
+costmap lifecycle bonds. Dimensions are integer meters; N4 disables bonds and
+defaults to manual startup after current development TF. No motion authority
+was added. The test checks active nodes, grid geometry, inflation/raw cell
+costs, both footprints, command permission while valid, and zero commands on
+pose loss. Main status/interface/testing/operator/traceability documents now
+record the executable development boundary.
+
+Geometry/timing remain assumptions; bond monitoring is not implemented for
+standalone N4 and must be addressed with N5 server integration. RViz graphical
+review, N5–N8, Humble/Jetson, continuous localization and all physical-validation
+gates remain open. See [recovery evidence](../docs/resources/evidence/2026-11-15-nav2-crash-recovery.md).
+
+Git evidence: uncommitted follow-up based on `0605ea4`; record the resulting
+commit after review.

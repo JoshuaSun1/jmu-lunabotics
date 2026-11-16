@@ -34,6 +34,8 @@ ament_target_dependencies(tag_localizer
   tf2_ros)
 
 install(PROGRAMS
+  scripts/fused_pose_passthrough.py
+  scripts/apriltag_development_tf_bridge.py
   scripts/tag_replay_visualizer.py
   scripts/tag_replay_robot_pose.py
   DESTINATION lib/${PROJECT_NAME})
@@ -65,6 +67,9 @@ if(BUILD_TESTING)
       tag_localizer_core_test
       PRIVATE TEST_FIXTURE_DIR="${CMAKE_CURRENT_SOURCE_DIR}/test/fixtures")
   endif()
+  ament_add_pytest_test(fused_pose_passthrough_test test/test_fused_pose_passthrough.py)
+  ament_add_pytest_test(apriltag_development_tf_bridge_test test/test_apriltag_development_tf_bridge.py)
+  ament_add_pytest_test(apriltag_development_tf_bridge_runtime_test test/test_apriltag_development_tf_bridge_runtime.py)
   ament_add_pytest_test(phase42_localizer_contract test/test_phase42_localizer_contract.py)
   ament_add_pytest_test(tag_replay_visualizer_test test/test_tag_replay_visualizer.py)
   ament_add_pytest_test(tag_replay_robot_pose_test test/test_tag_replay_robot_pose.py)
