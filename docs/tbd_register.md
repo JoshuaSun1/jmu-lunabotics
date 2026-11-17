@@ -35,12 +35,11 @@ MAX controllers, and an ODrive USB-to-CAN adapter. It does **not** select a
 2D LiDAR or microcontroller. The listed Jetson-Nano-labelled power adapter is
 not validated for the Orin until `POWER-01` closes.
 
-On 2026-08-10, the team confirmed that the chassis will have four driven
-wheels and a large scooping bucket. The other ordered motors are intended for
-the digging arm rather than additional drive wheels. This closes the six-wheel
-interpretation of the BOM. The 2026-08-10 design handoff and team confirmation
-also establish skid/tank steering. They do not establish dimensions, actuator
-interfaces, or calibrated drive values.
+On 2026-11-17, the team clarified the plan: four motors for four wheels, one
+or two scoop-arm motors (probably one), and two linear actuators for arm
+extension and retraction. The earlier team confirmation establishes skid/tank
+steering. Dimensions, controller mapping, actuator interfaces, scoop motor
+count, and calibrated drive values remain open.
 
 ## Phase 4.1 webcam baseline
 

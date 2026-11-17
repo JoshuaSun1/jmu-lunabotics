@@ -69,11 +69,11 @@ communications and drivetrain details are intentionally not assumed; see
 
 ## Chassis decision and Phase 1 implementation
 
-The planned chassis has four driven wheels and a large scooping bucket. The
-six motors listed in the BOM must not be interpreted as six drive motors; the
-non-drive motors are planned for the digging arm. Team confirmation and the
-design handoff establish four-wheel skid-steer/tank steering; the model has
-four continuous wheel joints and no steering joints.
+The planned chassis has four driven wheels, each with its own motor, and a
+large scooping bucket. The 2026-11-17 team update also plans one or two
+scoop-arm motors (probably one) and two linear actuators for arm extension and
+retraction. The chassis uses skid-steer/tank steering; the model has four
+continuous wheel joints and no steering joints. Controller mapping remains open.
 
 Phase 1 uses a clearly labelled synthetic geometry profile to exercise the
 four-wheel, conceptual-scoop, and sensor-mount frame tree. Its upstream

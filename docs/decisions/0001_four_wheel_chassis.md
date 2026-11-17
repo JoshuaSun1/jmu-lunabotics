@@ -3,6 +3,10 @@
 **Date:** 2026-08-10
 **Status:** Accepted
 
+**2026-11-17 update:** The team plans one motor per wheel, one or two
+scoop-arm motors (probably one), and two linear actuators for arm extension
+and retraction. Controller mapping and the final scoop motor count remain open.
+
 ## Context
 
 The BOM contains six NEO 2.0 motors and six SPARK MAX controllers. That count
@@ -13,8 +17,7 @@ does not establish the number of drive wheels or the drivetrain kinematics.
 The team confirmed that the robot will use four driven wheels with skid/tank
 steering and a large scooping bucket. The user-provided
 [`Current Lunabot Robot Design Codex Handoff`](../resources/Current_Lunabot_Robot_Design_Codex_Handoff.md)
-records the same current baseline. The remaining ordered motors are intended
-for the digging arm rather than extra drive wheels.
+records the original baseline. The later update above clarifies motor allocation.
 
 ## Decision
 

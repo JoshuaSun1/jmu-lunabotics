@@ -16,7 +16,7 @@ for every operation until `DRIVE-03` and `SAFE-01` are closed.
 This is a transport abstraction, not a protocol selection. In particular, the
 listed ODrive USB-to-CAN adapter does not resolve whether the Jetson talks to a
 microcontroller, whether a microcontroller talks to SPARK MAX controllers, or
-whether the controller topology is two or four drive channels.
+how the four planned wheel motors map to controllers and communication channels.
 
 The future drive interface must document:
 

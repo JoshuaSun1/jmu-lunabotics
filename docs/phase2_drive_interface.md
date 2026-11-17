@@ -33,10 +33,9 @@ The ROS/transport boundary is always SI:
 | Body yaw command | rad/s | `TwistStamped.twist.angular.z`. |
 
 There are four wheel slots at this boundary, ordered by the Xacro joint list:
-front-left, front-right, rear-left, rear-right. This is a software model of
-four wheel joints, not a statement that the final drivetrain uses four
-independent controller channels. The future MCU mapping may be two or four
-channels only after `DRIVE-03` closes.
+front-left, front-right, rear-left, rear-right. The 2026-11-17 team update
+plans one drive motor per wheel. The motor-controller and MCU mapping remain
+unselected until `DRIVE-03` closes; the mock does not validate physical hardware.
 
 ## Mock and real behavior
 

@@ -66,11 +66,13 @@ These values are design-study inputs, not finalized dimensions. In particular, a
 
 ### 3.3 Scoop linkage and actuators
 
-The May 2026 presentation describes:
+The team updated the planned hardware on 2026-11-17:
 
-- Two linear actuators driving the scoop lifting motion.
-- A third actuator controlling the dumping mechanism.
+- Two linear actuators for arm extension and retraction.
+- One or two motors for the scooping arm; one is considered likely, but the count is not final.
 - Two articulated structural arms connecting the scoop to the chassis.
+
+The earlier May presentation proposed two lift actuators and a third dump actuator. That proposal is superseded by the updated actuator count; the detailed linkage and dumping mechanism remain unresolved.
 
 Earlier concept drawings show a moving rear wall inside the scoop that pushes regolith out. Other descriptions imply that the scoop may rotate or tilt for dumping. Therefore, the exact dumping architecture remains unresolved.
 
@@ -106,16 +108,13 @@ Final wheel selection requires full-scale testing in representative material. Th
 
 ### 3.5 Drivetrain
 
-The current drivetrain concept uses one powered side on the left and one on the right, enabling differential/skid steering. Preliminary research assumes two main drivetrain motors with chain distribution to front and rear wheels.
+The team plans four drivetrain motors, one for each wheel, with differential/skid steering. This 2026-11-17 update supersedes the earlier two-motor, chain-distribution concept.
 
 Working drivetrain concept:
 
 - NEO 2.0 brushless motors.
 - Spark MAX motor controllers.
-- Approximately 5:1 planetary reduction at each drivetrain motor.
-- Approximately 10:1-15:1 additional chain/sprocket reduction.
-- Approximately 50:1-75:1 total reduction.
-- Preliminary target of approximately 10 N m per driven side before the final safety-factor and terrain analysis.
+- Earlier two-motor concept: approximately 5:1 planetary reduction, 10:1-15:1 additional chain reduction, and 50:1-75:1 total reduction, with a preliminary target of approximately 10 N m per driven side. These figures must be reassessed for the four-motor design.
 
 The reduction values are preliminary. Codex should preserve them as hypotheses until robot mass, wheel radius, target speed, rolling resistance, grade, sinkage, turning resistance, motor curves, controller limits, and drivetrain efficiency are known.
 
@@ -140,7 +139,7 @@ The progressive BOM and design documents identify the following baseline compone
 
 The current electrical block diagram is conceptual. A final schematic, wire sizing, fuse selection, grounding plan, power budget, connector plan, battery restraint, enclosure layout, and emergency-stop implementation are still required.
 
-The documents variously describe five or six motors/powered devices. Do not assume that six identical rotary motors are required: the final count depends on whether scoop functions use linear actuators, rotary motors, or both.
+The updated plan calls for four wheel motors, one or two scoop-arm motors (probably one), and two linear actuators. The six-motor and six-controller BOM counts do not establish the final installed quantities or actuator controller selection.
 
 ## 5. Sensors and autonomy-related physical provisions
 
@@ -221,7 +220,7 @@ Critical stability cases include:
 - Moving-wall versus tilting-scoop dumping.
 - Final wheel tread, width, material, and manufacturing method.
 - Final gearbox and sprocket ratios.
-- Exact motor/actuator count.
+- Scoop-arm motor count and motor/actuator models and interfaces.
 - Battery selection and runtime validation.
 - Electronics enclosure and cooling/dust strategy.
 - Sensor locations and mounts.
@@ -262,4 +261,4 @@ When using this document:
 
 ## 11. One-paragraph baseline summary
 
-The current JMU Lunabotics robot is planned as a four-wheeled skid-steer vehicle with a welded aluminum-tube chassis, large custom regolith wheels, and a front scoop that excavates, stores, transports, and dumps regolith. The scoop is supported by articulated arms, with two linear actuators planned for lifting and a third actuator planned for dumping; however, the final dumping method, linkage geometry, and actuator selection remain unresolved. The drivetrain is expected to use two NEO 2.0 brushless motors, Spark MAX controllers, planetary gearboxes, and chain reduction, while the onboard electrical and autonomy stack includes a 12 V battery system, protected power distribution, Jetson Orin Nano, ZED Mini, webcam, router, E-stop, and required power logger. This is a selected preliminary architecture rather than a completed detailed design, and major remaining work includes payload definition, wheel testing, drivetrain sizing, structural analysis, final CAD, mass and center-of-mass analysis, electrical schematics, sensor placement, dust protection, and compliance verification.
+The current JMU Lunabotics robot is planned as a four-wheeled skid-steer vehicle with a welded aluminum-tube chassis, large custom regolith wheels, and a front scoop. The updated plan has one drive motor per wheel, one or two scoop-arm motors (probably one), and two linear actuators for arm extension and retraction. NEO 2.0 motors and SPARK MAX controllers are planned; the final scoop motor count, actuator selection, drivetrain reduction, and dumping mechanism remain unresolved. The onboard stack includes a 12 V battery system, protected power distribution, Jetson Orin Nano, ZED Mini, webcam, router, E-stop, and required power logger. Detailed mechanical and electrical design remains in progress.
