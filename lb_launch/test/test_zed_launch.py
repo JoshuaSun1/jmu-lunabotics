@@ -32,9 +32,7 @@ def test_zed_switch_excludes_mock_bench(monkeypatch, tmp_path) -> None:
         ("true", False, True),
     ):
         context = LaunchContext()
-        context.launch_configurations.update(
-            {"enable_zed": enabled, "enable_apriltags": "false"}
-        )
+        context.launch_configurations.update({"enable_zed": enabled, "enable_apriltags": "false"})
         assert mock_group.condition.evaluate(context) is expect_mock
         assert zed_include.condition.evaluate(context) is expect_zed
 
@@ -51,9 +49,7 @@ def test_depth_switch_requires_zed_and_gates_detector(monkeypatch, tmp_path) -> 
         if isinstance(entity, OpaqueFunction)
     )
     context = LaunchContext()
-    context.launch_configurations.update(
-        {"enable_depth_perception": "true", "enable_zed": "false"}
-    )
+    context.launch_configurations.update({"enable_depth_perception": "true", "enable_zed": "false"})
     try:
         check.execute(context)
     except RuntimeError as error:
@@ -67,7 +63,8 @@ def test_depth_switch_requires_zed_and_gates_detector(monkeypatch, tmp_path) -> 
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     detector = next(
-        entity for entity in module.generate_launch_description().entities
+        entity
+        for entity in module.generate_launch_description().entities
         if isinstance(entity, Node)
     )
     context.launch_configurations["enable_depth_perception"] = "false"
