@@ -10,7 +10,23 @@ SDK just to view standard topics in RViz 2.
 
 The supplied `zed_mini.yaml` grabs HD720 at 30 Hz for local SDK processing,
 publishes half-size images and depth at up to 10 Hz, and caps the optional point
-cloud at 5 Hz. Image and depth data are published when subscribed. It leaves
+cloud at 5 Hz. Image and depth data are published when subscribed.
+
+The ZED Mini's IMU (accelerometer and gyroscope) is published at up to 100 Hz,
+also when subscribed:
+
+| Topic | Type | Content |
+|---|---|---|
+| `/zed/zed_node/imu/data` | `sensor_msgs/msg/Imu` | SDK-fused orientation, angular velocity, and linear acceleration, with covariances |
+| `/zed/zed_node/imu/data_raw` | `sensor_msgs/msg/Imu` | Uncorrected angular velocity and linear acceleration; orientation unset |
+| `/zed/zed_node/left_cam_imu_transform` | `geometry_msgs/msg/TransformStamped` | Factory calibration from the left camera to the IMU (transient local) |
+
+The launch also broadcasts that calibration as the static TF
+`zed_left_camera_frame -> zed_imu_link`, so IMU messages, which are stamped in
+`zed_imu_link`, can be transformed. It lies entirely inside the camera's own
+frames and does not touch `odom`, `map`, or the robot's `imu_link`. The ZED Mini
+has no magnetometer, barometer, or temperature sensor, so the wrapper's
+`imu/mag`, `atm_press`, and `temperature/*` topics stay off. It leaves
 SDK object detection, positional tracking, and mapping off. The separate,
 opt-in terrain node below detects obstacle geometry; it does not command a
 stop. The wrapper publishes the camera's own URDF/optical frames, but its

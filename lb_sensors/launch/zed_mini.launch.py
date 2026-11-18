@@ -37,7 +37,9 @@ def generate_launch_description() -> LaunchDescription:
                     "publish_urdf": "true",
                     "publish_tf": "false",
                     "publish_map_tf": "false",
-                    "publish_imu_tf": "false",
+                    # Static left camera -> IMU calibration, inside the camera's
+                    # own frames; IMU messages are stamped in the IMU frame.
+                    "publish_imu_tf": "true",
                     "enable_ipc": "false",
                 }.items(),
             ),

@@ -8,6 +8,16 @@
       pub_resolution: CUSTOM
       pub_downscale_factor: 2.0
       pub_frame_rate: 10.0
+    # The ZED Mini has an accelerometer and gyroscope only; it has no
+    # magnetometer, barometer, or temperature sensor, so those stay off.
+    sensors:
+      sensors_pub_rate: 100.0
+      publish_imu: true
+      publish_imu_raw: true
+      publish_cam_imu_transf: true
+      publish_mag: false
+      publish_baro: false
+      publish_temp: false
     depth:
       depth_mode: NEURAL_LIGHT
       point_cloud_freq: 5.0

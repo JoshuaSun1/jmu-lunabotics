@@ -71,3 +71,15 @@ def test_depth_switch_requires_zed_and_gates_detector(monkeypatch, tmp_path) -> 
     assert detector.condition.evaluate(context) is False
     context.launch_configurations["enable_depth_perception"] = "true"
     assert detector.condition.evaluate(context) is True
+
+
+def test_zed_profile_publishes_every_imu_output_the_zed_mini_has() -> None:
+    sensors_root = LAUNCH_FILE.parents[2] / "lb_sensors"
+    config = (sensors_root / "config" / "zed_mini.yaml").read_text(encoding="utf-8")
+    for enabled in ("publish_imu", "publish_imu_raw", "publish_cam_imu_transf"):
+        assert f"{enabled}: true" in config
+    # The ZED Mini has no magnetometer, barometer, or temperature sensor.
+    for absent in ("publish_mag", "publish_baro", "publish_temp"):
+        assert f"{absent}: false" in config
+    launch_source = (sensors_root / "launch" / "zed_mini.launch.py").read_text(encoding="utf-8")
+    assert '"publish_imu_tf": "true"' in launch_source
