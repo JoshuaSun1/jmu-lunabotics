@@ -6,10 +6,14 @@ headless, mock-first description/drive stack; it contains no real motor, Nav2,
 mission, or physical safety implementation. Phase 4.1 adds a non-actuating
 webcam AprilTag-observation bench pipeline, and Phase 4.2 adds a fail-closed,
 synthetic-test-covered known-tag localizer. A ZED Mini launch profile provides
-Jetson camera/depth topics and optional boot startup. An opt-in terrain hazard
+Jetson camera, depth, and IMU topics and optional boot startup. An opt-in terrain hazard
 node detects raised and negative obstacles from depth when measured mount and
-clearance settings are supplied. Neither camera profile establishes a physical
-robot/global pose. See [the ZED Mini guide](docs/zed_mini.md).
+clearance settings are supplied. It averages frames into a local height map in
+`odom`, which needs an `odom -> base_link` transform the repository does not
+publish yet; until local odometry exists, run it in single-frame `base_link`
+mode ([ADR 0003](docs/decisions/0003_terrain_fusion_in_odom.md)). Neither camera
+profile establishes a physical robot/global pose. See
+[the ZED Mini guide](docs/zed_mini.md).
 
 ## Current status
 
