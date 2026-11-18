@@ -43,11 +43,11 @@ void AddDiagnosticValue(DiagnosticStatus* status, const std::string& key,
   status->values.push_back(std::move(item));
 }
 
-PointCloud2 MakeCloud(const std::vector<TerrainPoint>& points,
-                      const std_msgs::msg::Header& header) {
+PointCloud2 MakeCloud(const std::vector<TerrainPoint>& points, const std_msgs::msg::Header& header,
+                      const std::string& frame_id) {
   PointCloud2 cloud;
   cloud.header = header;
-  cloud.header.frame_id = "base_link";
+  cloud.header.frame_id = frame_id;
   cloud.height = 1;
   cloud.width = static_cast<std::uint32_t>(points.size());
   cloud.is_bigendian = false;
@@ -156,6 +156,15 @@ public:
     max_rate_hz_ = declare_parameter<double>("max_rate_hz", 10.0);
     max_image_age_s_ = declare_parameter<double>("max_image_age_s", 0.3);
     min_valid_depth_fraction_ = declare_parameter<double>("min_valid_depth_fraction", 0.15);
+    fusion_frame_ = declare_parameter<std::string>("fusion_frame", "odom");
+    FusionConfig fusion;
+    fusion.min_observations = declare_parameter<int>("min_observations", 3);
+    fusion.window_frames = declare_parameter<int>("fusion_window_frames", 10);
+    fusion.cell_memory_s = declare_parameter<double>("cell_memory_s", 8.0);
+    fusion.map_radius_m = declare_parameter<double>("map_radius_m", 5.0);
+    fusion.confidence_sigma = declare_parameter<double>("confidence_sigma", 2.0);
+    fusion.min_hidden_frames = declare_parameter<int>("min_hidden_frames", 2);
+    fusion.occlusion_tolerance_m = declare_parameter<double>("occlusion_tolerance_m", 0.04);
     const std::string camera_name = declare_parameter<std::string>("camera_name", "zed");
     const std::string depth_topic = declare_parameter<std::string>(
         "depth_topic", "/" + camera_name + "/zed_node/depth/depth_registered");
@@ -171,6 +180,17 @@ public:
         min_valid_depth_fraction_ > 1.0) {
       throw std::invalid_argument("depth sampling, rate or coverage parameter is invalid");
     }
+    if (fusion_frame_.empty()) {
+      throw std::invalid_argument("fusion_frame is required");
+    }
+    // base_link moves with the robot, so its map is rebuilt from each frame alone.
+    // Multi-frame requirements could then never be met and would hide every hazard.
+    single_frame_ = fusion_frame_ == "base_link";
+    if (single_frame_ && (fusion.min_observations != 1 || fusion.min_hidden_frames != 1)) {
+      throw std::invalid_argument(
+          "fusion_frame base_link requires min_observations: 1 and min_hidden_frames: 1");
+    }
+    mapper_ = std::make_unique<TerrainMapper>(config_, fusion);
 
     tf_buffer_ = std::make_unique<tf2_ros::Buffer>(get_clock());
     tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_, this, true);
@@ -194,8 +214,9 @@ public:
         PublishDiagnostics(DiagnosticStatus::STALE, "no recent valid depth frame");
       }
     });
-    RCLCPP_INFO(get_logger(), "terrain hazard node ready for camera %s; calibration %s",
-                camera_name.c_str(), calibration_id.c_str());
+    RCLCPP_INFO(get_logger(),
+                "terrain hazard node ready for camera %s; calibration %s; fusion frame %s",
+                camera_name.c_str(), calibration_id.c_str(), fusion_frame_.c_str());
   }
 
 private:
@@ -230,19 +251,31 @@ private:
       PublishDiagnostics(DiagnosticStatus::ERROR, "depth image encoding or layout is invalid");
       return;
     }
-    geometry_msgs::msg::TransformStamped transform;
+    geometry_msgs::msg::TransformStamped camera_transform;
+    geometry_msgs::msg::TransformStamped base_transform;
     try {
-      transform = tf_buffer_->lookupTransform("base_link", image->header.frame_id, stamp,
-                                              rclcpp::Duration::from_seconds(0.03));
+      camera_transform = tf_buffer_->lookupTransform(fusion_frame_, image->header.frame_id, stamp,
+                                                     rclcpp::Duration::from_seconds(0.03));
+      base_transform = tf_buffer_->lookupTransform(fusion_frame_, "base_link", stamp,
+                                                   rclcpp::Duration::from_seconds(0.03));
     } catch (const tf2::TransformException&) {
-      PublishDiagnostics(DiagnosticStatus::ERROR, "measured camera-to-base_link TF unavailable");
+      PublishDiagnostics(DiagnosticStatus::ERROR,
+                         "camera or base_link TF to " + fusion_frame_ + " unavailable");
       return;
     }
-    std::vector<TerrainPoint> points;
+    TerrainFrame frame;
+    frame.stamp_s = stamp.seconds();
     std::size_t sampled = 0;
     std::size_t valid = 0;
     try {
-      const RigidTransform base_from_camera(transform);
+      const RigidTransform fusion_from_camera(camera_transform);
+      const RigidTransform fusion_from_base(base_transform);
+      frame.base.x = fusion_from_base.tx;
+      frame.base.y = fusion_from_base.ty;
+      frame.base.yaw = std::atan2(fusion_from_base.r10, fusion_from_base.r00);
+      frame.has_camera = true;
+      frame.camera = fusion_from_camera.Apply(0.0, 0.0, 0.0);
+      auto& points = frame.points;
       points.reserve(static_cast<std::size_t>(image->width / pixel_stride_ + 1) *
                      static_cast<std::size_t>(image->height / pixel_stride_ + 1));
       for (std::uint32_t row = 0; row < image->height; row += pixel_stride_) {
@@ -257,7 +290,7 @@ private:
           ++valid;
           const double x = (static_cast<double>(column) - info->k[2]) * depth / info->k[0];
           const double y = (static_cast<double>(row) - info->k[5]) * depth / info->k[4];
-          points.push_back(base_from_camera.Apply(x, y, depth));
+          points.push_back(fusion_from_camera.Apply(x, y, depth));
         }
       }
     } catch (const std::invalid_argument& error) {
@@ -269,16 +302,22 @@ private:
       PublishDiagnostics(DiagnosticStatus::ERROR, "insufficient valid depth coverage");
       return;
     }
-    const TerrainResult result = DetectTerrain(points, config_);
+    if (single_frame_) {
+      mapper_->Reset();
+    }
+    const TerrainResult result = mapper_->Integrate(frame);
     unobserved_cells_ = result.unobserved_ground_cells;
     ground_inlier_cells_ = result.ground_inlier_cells;
+    hidden_drop_cells_ = result.hidden_drop_cells;
+    map_cells_ = result.map_cells;
+    confident_cells_ = result.confident_cells;
     if (!result.ground_valid) {
       PublishDiagnostics(DiagnosticStatus::ERROR,
                          "insufficient observed ground for hazard detection");
       return;
     }
-    obstacle_publisher_->publish(MakeCloud(result.raised_obstacles, image->header));
-    hazard_publisher_->publish(MakeCloud(result.terrain_hazards, image->header));
+    obstacle_publisher_->publish(MakeCloud(result.raised_obstacles, image->header, fusion_frame_));
+    hazard_publisher_->publish(MakeCloud(result.terrain_hazards, image->header, fusion_frame_));
     last_valid_frame_ = std::chrono::steady_clock::now();
     processing_ms_ = std::chrono::duration<double, std::milli>(last_valid_frame_ - start).count();
     obstacle_count_ = result.raised_obstacles.size();
@@ -303,6 +342,10 @@ private:
     AddDiagnosticValue(&status, "depth_coverage_fraction", std::to_string(coverage_fraction_));
     AddDiagnosticValue(&status, "unobserved_ground_cells", std::to_string(unobserved_cells_));
     AddDiagnosticValue(&status, "ground_inlier_cells", std::to_string(ground_inlier_cells_));
+    AddDiagnosticValue(&status, "hidden_drop_cells", std::to_string(hidden_drop_cells_));
+    AddDiagnosticValue(&status, "map_cells", std::to_string(map_cells_));
+    AddDiagnosticValue(&status, "confident_cells", std::to_string(confident_cells_));
+    AddDiagnosticValue(&status, "fusion_frame", fusion_frame_);
     AddDiagnosticValue(&status, "raised_cells", std::to_string(obstacle_count_));
     AddDiagnosticValue(&status, "hazard_cells", std::to_string(hazard_count_));
     AddDiagnosticValue(&status, "processing_ms", std::to_string(processing_ms_));
@@ -311,6 +354,9 @@ private:
   }
 
   TerrainConfig config_;
+  std::unique_ptr<TerrainMapper> mapper_;
+  std::string fusion_frame_;
+  bool single_frame_ = false;
   int pixel_stride_ = 4;
   double max_rate_hz_ = 10.0;
   double max_image_age_s_ = 0.3;
@@ -319,6 +365,9 @@ private:
   double processing_ms_ = 0.0;
   std::size_t unobserved_cells_ = 0;
   std::size_t ground_inlier_cells_ = 0;
+  std::size_t hidden_drop_cells_ = 0;
+  std::size_t map_cells_ = 0;
+  std::size_t confident_cells_ = 0;
   std::size_t obstacle_count_ = 0;
   std::size_t hazard_count_ = 0;
   rclcpp::Time last_processed_stamp_{0, 0, RCL_SYSTEM_TIME};

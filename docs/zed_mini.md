@@ -93,17 +93,48 @@ cannot be opened by two wrapper processes.
 ## Terrain hazard detector
 
 The opt-in `terrain_hazard_node` runs on the Jetson. It samples the registered
-depth image and its `CameraInfo`, transforms samples to `base_link` at the image
-timestamp, fits nearby ground, and publishes two stamped `PointCloud2` topics:
-`/perception/depth_obstacles` for measured raised rock cells and
-`/perception/terrain_hazards` for measured drops, steep terrain, and corroborated
-unsafe rims. Its synthetic hazard points are placed just above the estimated
-ground surface so a future costmap can mark them. Missing depth is counted in
-`/diagnostics`; an isolated invalid pixel is not a crater. It publishes empty
-clouds only after a fresh frame with matching calibration, measured TF, enough
-depth coverage, and a valid ground estimate. Stale, sparse, or untransformable
-frames produce diagnostics without new clouds. A later costmap consumer must
-handle hazard clearing and expiry explicitly.
+depth image and its `CameraInfo`, transforms samples into `fusion_frame`
+(default `odom`) at the image timestamp, fits ground in the first 1.2 m of the
+window, and publishes two `PointCloud2` topics stamped in `fusion_frame`:
+`/perception/depth_obstacles` for raised rock cells and
+`/perception/terrain_hazards` for drops, steep terrain, rims, and hidden crater
+interiors. Its synthetic hazard points are placed just above the estimated
+ground surface so a future costmap can mark them.
+
+Each frame's cell heights, measured relative to that frame's own ground plane,
+are averaged into a local height map (5 cm cells, `cell_memory_s` and
+`map_radius_m` bound its age and size). Measuring against each frame's plane
+keeps robot pitch and odometry height drift out of the average. A cell is
+classified only after `min_observations` frames, and only when it clears the
+rock, drop, or slope threshold by `confidence_sigma` standard errors, so
+single-frame stereo noise does not become a hazard. Hazards stay in the map
+after they leave the camera's view, until the cell expires.
+
+Depth missing between two measurements is counted in `/diagnostics`. It becomes
+a hidden-drop hazard only when the geometry proves it: the sight line from the
+camera over the nearer terrain already passes more than `drop_depth_m` below
+ground there, and the far side of the gap is measured at or below that sight
+line. That is what a crater whose floor is hidden by its near rim looks like. A
+stereo dropout on visible ground fails the second test (its far side sits above
+the sight line), and a rock shadow fails the first (the sight line over a rock
+does not drop below ground before the shadow ends). An unseen cell needs
+`min_hidden_frames` frames of such evidence; frames with a clear sight line
+across it count against it, and once the cell itself has been measured
+`min_observations` times the measurement decides.
+
+`fusion_frame: odom` needs a continuous `odom -> base_link` TF. The repository
+does not publish one yet (it waits for Phase 3 local odometry), so in odom mode
+the detector reports a TF error and publishes nothing. Until then, set
+`fusion_frame: base_link`, `min_observations: 1`, and `min_hidden_frames: 1`:
+each frame is then judged alone, as in the original single-frame detector,
+without noise averaging or memory. The node refuses `base_link` with
+multi-frame requirements, which could never be met.
+
+It publishes empty clouds only after a fresh frame with matching calibration,
+measured TF, enough depth coverage, and a valid ground estimate. Stale, sparse,
+or untransformable frames produce diagnostics without new clouds. A large
+odometry jump or a timestamp rewind (for example, a looping bag) clears the
+map. A later costmap consumer must still handle hazard clearing and expiry.
 
 There are no measured mount or robot clearance settings in this repository.
 Copy `lb_sensors/config/terrain_hazard.template.yaml` to a robot-specific file
@@ -142,7 +173,8 @@ processing-latency target is 150 ms. This phase does not alter a static map,
 configure Nav2, or turn an empty depth frame into a clear path.
 
 For replay, record the registered depth image, matching `CameraInfo`, and the
-surveyed `/tf` and `/tf_static` chain. Start only the detector with the measured
+surveyed `/tf` and `/tf_static` chain, including `odom -> base_link` in odom
+mode. Start only the detector with the measured
 parameter file and simulated time, then play that bag with a clock:
 
 ```bash

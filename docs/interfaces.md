@@ -91,9 +91,10 @@ multi-tag requirement. It never publishes `/tag_detections`, `/odometry/global`,
 |---|---|---|---|---|
 | `/zed/zed_node/depth/depth_registered` | `sensor_msgs/msg/Image` | Stereolabs wrapper | `terrain_hazard_node` | Registered depth in meters by default, with image timestamp and optical frame. |
 | `/zed/zed_node/depth/camera_info` | `sensor_msgs/msg/CameraInfo` | Stereolabs wrapper | `terrain_hazard_node` | Must match image dimensions, timestamp, and optical frame. |
-| `/perception/depth_obstacles` | `sensor_msgs/msg/PointCloud2` | `terrain_hazard_node` | Future local costmap | Measured raised obstacle cells, stamped in `base_link`. |
-| `/perception/terrain_hazards` | `sensor_msgs/msg/PointCloud2` | `terrain_hazard_node` | Future local costmap | Synthetic points near measured unsafe terrain/rims, stamped in `base_link`. |
-| `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | `terrain_hazard_node` | Operator/logger | Depth coverage, unobserved ground cells, hazard counts, latency, and stale/TF/calibration failures. |
+| `/perception/depth_obstacles` | `sensor_msgs/msg/PointCloud2` | `terrain_hazard_node` | Future local costmap | Raised obstacle cells from the fused local height map, stamped in `fusion_frame` (default `odom`). |
+| `/perception/terrain_hazards` | `sensor_msgs/msg/PointCloud2` | `terrain_hazard_node` | Future local costmap | Synthetic points near unsafe terrain, rims, and occlusion-inferred hidden drops, stamped in `fusion_frame`. |
+| `/tf` `odom -> base_link` | `tf2_msgs/msg/TFMessage` | Future local EKF | `terrain_hazard_node` | Required in the default odom fusion mode; not required with `fusion_frame: base_link`. |
+| `/diagnostics` | `diagnostic_msgs/msg/DiagnosticArray` | `terrain_hazard_node` | Operator/logger | Depth coverage, unobserved and hidden-drop cells, map and confident cell counts, hazard counts, latency, and stale/TF/calibration failures. |
 
 The detector is opt-in and requires measured mount and robot clearance settings.
 It does not publish a map, change Nav2, command a stop, or treat an invalid

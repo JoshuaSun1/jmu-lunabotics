@@ -18,3 +18,22 @@ terrain_hazard_node:
     max_rate_hz: 10.0
     max_image_age_s: 0.3
     min_valid_depth_fraction: 0.15
+    # Frames are accumulated into a local height map in this frame, which needs
+    # a continuous odom -> base_link TF. Until local odometry exists, use
+    # base_link with min_observations: 1 and min_hidden_frames: 1 (single-frame
+    # mode, no averaging).
+    fusion_frame: odom
+    # Frames that must see a cell before it is classified.
+    min_observations: 3
+    # Exponential averaging window, in frames.
+    fusion_window_frames: 10
+    # Forget cells not refreshed for this long, which bounds odometry drift.
+    cell_memory_s: 8.0
+    # Forget cells farther than this from base_link. Must cover the window.
+    map_radius_m: 5.0
+    # Standard errors by which a cell must clear a height or slope threshold.
+    confidence_sigma: 2.0
+    # Frames of occlusion evidence before an unseen cell is a hidden drop.
+    min_hidden_frames: 2
+    # Height tolerance when checking that a depth gap is a line-of-sight shadow.
+    occlusion_tolerance_m: 0.04
